@@ -1,18 +1,21 @@
 import React from 'react';
-import { Link } from '../../customs';
-import { NavbarBody, NavbarContainer, NavButton, NavIcons } from '../themed';
+import { NavbarBody, NavbarContainer, NavButton, NavIcons, NavLink, NavToggle } from '../themed';
+import { toggleNavbar } from '../utils';
+import type * as enums from '../../../enums';
 
 const Navbar: React.FC<{
+  setAppActive: React.Dispatch<React.SetStateAction<enums.EAppState>>;
+  appActive: enums.EAppState;
   setSettings: React.Dispatch<React.SetStateAction<boolean>>;
   settings: boolean;
-}> = ({ setSettings, settings }) => {
+}> = ({ setSettings, settings, appActive, setAppActive }) => {
   return (
-    <NavbarContainer>
+    <NavbarContainer id="NavbarContainer" onClick={(e): void => toggleNavbar(setAppActive, appActive, e)}>
       <NavbarBody $justify="flex-start">
         <NavButton>
-          <Link to="/" replace>
+          <NavLink to="/" replace>
             <h4>Home</h4>
-          </Link>
+          </NavLink>
         </NavButton>
 
         <NavIcons>
@@ -21,6 +24,7 @@ const Navbar: React.FC<{
           </NavButton>
         </NavIcons>
       </NavbarBody>
+      <NavToggle id="NavToggle" onClick={(e): void => toggleNavbar(setAppActive, appActive, e)} />
     </NavbarContainer>
   );
 };

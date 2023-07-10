@@ -1,25 +1,28 @@
 import React from 'react';
 import type { DefaultTheme } from 'styled-components';
 import { useTheme } from 'styled-components';
-import * as customs from '../../customs';
-import { Button, PanelHeader } from '../../customs';
+import { Button, Header } from '../../customs';
 import * as animation from '../../../animation';
 import changeTheme from '../utils';
 import { SettingsBody, SettingsContainer } from '../themed';
 
 const Settings: React.FC<{
-  disablePanel: () => void;
+  disablePanel: (e) => void;
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
 }> = ({ disablePanel, setTheme }) => {
   const theme = useTheme();
 
   return (
-    <SettingsContainer variants={animation.slideRight} initial="init" animate="visible" exit="exit">
-      <customs.ExitButton onClick={(): void => disablePanel()}>
-        <i className="icon-left-open-outline navIcon" />
-      </customs.ExitButton>
+    <SettingsContainer
+      onClick={(e): void => disablePanel(e)}
+      id="SettingsContainer"
+      variants={animation.opacity}
+      initial="init"
+      animate="visible"
+      exit="exit"
+    >
       <SettingsBody $justify="flex-start">
-        <PanelHeader>Settings</PanelHeader>
+        <Header>Theme:</Header>
         <Button onClick={(): void => changeTheme(setTheme, theme)}>Change theme</Button>
       </SettingsBody>
     </SettingsContainer>

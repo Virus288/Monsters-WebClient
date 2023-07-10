@@ -1,5 +1,5 @@
 {
-  "name": "monsters-docs",
+  "name": "monsters-client",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -42,9 +42,9 @@
     ]
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.3",
     "framer-motion": "^10.12.12",
     "normalize.css": "^8.0.1",
-    "protobufjs": "^7.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",

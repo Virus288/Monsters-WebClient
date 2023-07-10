@@ -26,7 +26,7 @@ export const Input = styled(motion.input)<localTypes.IDefaultChildren>`
   }
 
   &:focus {
-    max-width: 300px;
+    max-width: 220px;
     border-bottom: 1px solid ${(props): string => props.theme.colors.ohOrange};
     transition: ${(props): string => props.theme.transition.semiSlow};
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import type { DefaultTheme } from 'styled-components';
 import { ThemeProvider } from 'styled-components';
+import type * as enums from '../../enums';
 
 export * from './buttons';
 export * from './generic';
@@ -11,8 +12,9 @@ export * from './text';
 const Theme: React.FC<{
   children: React.ReactNode;
   theme: DefaultTheme;
-}> = ({ children, theme }) => {
-  const th = { ...theme };
+  appState: enums.EAppState;
+}> = ({ children, theme, appState }) => {
+  const th = { ...theme, appState };
   return <ThemeProvider theme={th}>{children}</ThemeProvider>;
 };
 

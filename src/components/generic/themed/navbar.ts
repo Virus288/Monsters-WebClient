@@ -1,26 +1,54 @@
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { ContainerBody, OverlayContainer } from '../../customs';
+import { ContainerBody, Link, OverlayContainer } from '../../customs';
 import type { IDefaultChildren } from '../../../types';
+import * as enums from '../../../enums';
 
 export const NavbarContainer = styled(OverlayContainer)<IDefaultChildren>`
-  width: fit-content;
   height: 100vh;
   overflow-y: hidden;
   overflow-x: hidden;
+
+  @media (min-width: 768px) {
+    width: fit-content;
+  }
+
+  @media (max-width: 767px) {
+    left: ${(props): number => (props.theme.appState === enums.EAppState.Active ? 0 : -100)}%;
+    width: 100%;
+    background: ${(props): string =>
+      props.theme.appState === enums.EAppState.Active ? 'rgba(100, 100, 100, 0.6)' : 'rgba(100, 100, 100, 0)'};
+    transition: ${(props): string => props.theme.transition.semiSlow};
+  }
 `;
 
 export const NavbarBody = styled(ContainerBody)<IDefaultChildren>`
   height: 100%;
-  width: 200px;
-  border-right: 1px solid grey;
+
+  @media (min-width: 768px) {
+    width: 200px;
+    border-right: 1px solid grey;
+  }
+
+  @media (max-width: 767px) {
+    width: 80%;
+    left: ${(props): number => (props.theme.appState === enums.EAppState.Active ? 0 : -100)}%;
+  }
 `;
 
 export const NavIcons = styled(motion.div)<IDefaultChildren>`
   position: fixed;
   bottom: 0;
-  left: 75px;
-  z-index: 9;
+  z-index: 7;
+
+  @media (min-width: 768px) {
+    left: 75px;
+  }
+
+  @media (max-width: 767px) {
+    left: ${(props): number => (props.theme.appState === enums.EAppState.Active ? 30 : -100)}%;
+    transition: ${(props): string => props.theme.transition.semiSlow};
+  }
 `;
 
 export const NavButton = styled(motion.button)<IDefaultChildren>`
@@ -37,5 +65,36 @@ export const NavButton = styled(motion.button)<IDefaultChildren>`
     color: ${(props): string => props.theme.colors.ohOrange};
     border-radius: 50%;
     background-size: 100% 100%;
+  }
+`;
+
+export const NavLink = styled(Link).attrs({
+  className: 'NavButton',
+})<IDefaultChildren>``;
+
+export const NavToggle = styled(motion.div)<IDefaultChildren>`
+  position: fixed;
+  bottom: 5%;
+  background: ${(props): string => props.theme.colors.ohAlmostOrange};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 50px;
+  height: 50px;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  z-index: 7;
+
+  @media (min-width: 768px) {
+    display: none;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  @media (max-width: 767px) {
+    left: ${(props): number => (props.theme.appState === enums.EAppState.Active ? 100 : 0)}%;
+    transition: ${(props): string => props.theme.transition.semiSlow};
   }
 `;

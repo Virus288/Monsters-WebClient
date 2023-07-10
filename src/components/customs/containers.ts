@@ -19,7 +19,7 @@ export const OverlayContainer = styled(motion.div)<localTypes.IDefaultChildren>`
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 9;
+  z-index: 6;
 `;
 
 /**

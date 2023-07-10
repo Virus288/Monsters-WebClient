@@ -7,7 +7,7 @@ const FourOhFour: React.FC = () => {
     <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
       <ContainerBody $justify="center" $direction="row" $align="center">
         <Header>
-          Got lost ? Go <Link to="/">Home</Link>
+          Got lost ?<Link to="/">Go Home</Link>
         </Header>
       </ContainerBody>
     </Container>

@@ -3,3 +3,9 @@ export enum EThemes {
   Dark = 'dark',
   Light = 'light',
 }
+
+export enum EAppState {
+  Active = 'active',
+  SemiActive = 'semiActive',
+  Inactive = 'inactive',
+}
