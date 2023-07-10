@@ -11,6 +11,18 @@
       "css": "cog",
       "code": 59392,
       "src": "websymbols"
+    },
+    {
+      "uid": "d870630ff8f81e6de3958ecaeac532f2",
+      "css": "left-open",
+      "code": 59393,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "17ebadd1e3f274ff0205601eef7b9cc4",
+      "css": "help-circled",
+      "code": 59394,
+      "src": "fontawesome"
     }
   ]
 }

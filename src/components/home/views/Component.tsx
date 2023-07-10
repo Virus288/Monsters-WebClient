@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, ContainerBody, Header, Orange } from '../../customs';
+import { Container, ContainerBody, Header, OneLine, Orange } from '../../customs';
 import * as animation from '../../../animation';
 
 const Home: React.FC = () => {
@@ -7,7 +7,10 @@ const Home: React.FC = () => {
     <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
       <ContainerBody>
         <Header $full>
-          <Orange>Monsters</Orange> - opensource backend for j-rpg games
+          <OneLine>
+            <Orange>Monsters</Orange>
+          </OneLine>
+          opensource backend for j-rpg games
         </Header>
       </ContainerBody>
     </Container>

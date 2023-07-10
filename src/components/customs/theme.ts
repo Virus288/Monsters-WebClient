@@ -5,6 +5,7 @@ const theme = {
   colors: {
     ohOrange: 'rgb(249, 103, 59)',
     ohAlmostOrange: 'rgba(249, 103, 59, 0.7)',
+    justGray: 'rgba(100,100,100, 1)',
   },
   fontSizes: {
     small: '1em',
@@ -21,6 +22,7 @@ const theme = {
     default: '#888888',
     black: '#000000',
   },
+  appState: enums.EAppState.Inactive,
 };
 
 export const lightTheme: DefaultTheme = {

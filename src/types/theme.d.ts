@@ -5,10 +5,12 @@ import type * as enums from '../enums';
 declare module 'styled-components' {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   interface DefaultTheme {
+    appState: enums.EAppState;
     themeState: enums.EThemes;
     colors: {
       ohOrange: string;
       ohAlmostOrange: string;
+      justGray: string;
       default: string;
       semiDefault: string;
       opposite: string;

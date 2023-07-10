@@ -22,10 +22,12 @@ const BaseButton = styled(motion.button)<localTypes.IDefaultChildren>`
   letter-spacing: 0.9px;
   cursor: pointer;
 
-  &:hover {
-    box-shadow: none;
-    transition: ${(props): string => props.theme.transition.default};
-    background-size: 30000% 100%;
+  @media (min-width: 768px) {
+    &:hover {
+      box-shadow: none;
+      transition: ${(props): string => props.theme.transition.default};
+      background-size: 30000% 100%;
+    }
   }
 `;
 
@@ -37,18 +39,27 @@ export const Button = styled(BaseButton)<localTypes.IDefaultChildren>`
   height: 45px;
 `;
 
-export const ExitButton = styled(motion.button)<localTypes.IDefaultChildren>`
-  position: fixed;
-  top: 0;
-  left: 0;
+const FunctionButton = styled(motion.button)<localTypes.IDefaultChildren>`
   font-size: 2.3em;
   color: ${(props): string => props.theme.colors.ohOrange};
   background: none;
   border: none;
-  margin: 5px;
-  padding: 0.25em 1em;
+  padding: 2px;
+  margin: 0.5em 2em;
   cursor: pointer;
   z-index: 9;
+`;
+
+export const ExitButton = styled(FunctionButton)<localTypes.IDefaultChildren>`
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
+
+export const HelpButton = styled(FunctionButton)<localTypes.IDefaultChildren>`
+  position: fixed;
+  top: 0;
+  right: 0;
 `;
 
 export const ButtonLink = styled(ReactLink)<localTypes.IDefaultChildren>`
@@ -59,7 +70,11 @@ export const ButtonLink = styled(ReactLink)<localTypes.IDefaultChildren>`
 `;
 
 export const Link = styled(ButtonLink)<localTypes.IDefaultChildren>`
-  &:hover {
-    color: ${(props): string => props.theme.colors.ohOrange};
+  color: ${(props): string => props.theme.colors.ohOrange};
+
+  @media (min-width: 768px) {
+    &:hover {
+      color: ${(props): string => props.theme.colors.ohOrange};
+    }
   }
 `;
