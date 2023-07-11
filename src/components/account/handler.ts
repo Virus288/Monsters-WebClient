@@ -39,3 +39,19 @@ export const register = (
       setError(error.message);
     });
 };
+
+export const preLogin = (
+  setPreReady: React.Dispatch<React.SetStateAction<boolean>>,
+  setReady: React.Dispatch<React.SetStateAction<boolean>>,
+): void => {
+  controllers
+    .preLogin()
+    .then((data): void => {
+      if (data.id) {
+        setReady(true);
+        setPreReady(true);
+      }
+      return undefined;
+    })
+    .catch(() => setPreReady(true));
+};

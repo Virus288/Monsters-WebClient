@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { DefaultTheme } from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 import Router from '../../../Rotuer';
@@ -8,6 +8,8 @@ import Settings from '../../settings/views/Component';
 import { toggleSettings } from '../utils';
 import type * as enums from '../../../enums';
 import { Login, Register } from '../../index';
+import { preLogin } from '../../account/handler';
+import Loading from './Loading';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
@@ -43,6 +45,15 @@ const ViewsController: React.FC<{
   const [settings, setSettings] = useState<boolean>(false);
   const [ready, setReady] = useState<boolean>(false);
   const [view, setView] = useState<string>('login');
+  const [preReady, setPreReady] = useState<boolean>(false);
+
+  useEffect(() => {
+    preLogin(setPreReady, setReady);
+  }, []);
+
+  if (!preReady) {
+    return <Loading finished={preReady} />;
+  }
 
   return !ready ? (
     <Account view={view} setView={setView} setReady={setReady} />

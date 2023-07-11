@@ -12,7 +12,7 @@ const Loading: React.FC<{ finished: boolean }> = ({ finished }) => {
         ) : (
           <>
             <Header>Loading</Header>
-            <icons.LoadingPill />
+            <icons.LoadingCircle />
           </>
         )}
       </ContainerBody>
