@@ -12,6 +12,11 @@ export interface IHeaderProps extends IDefaultChildren {
   $center?: boolean;
 }
 
-export interface ITextChildren extends IDefaultChildren {
+export interface ITextProps extends IDefaultChildren {
   $full?: boolean;
+}
+
+export interface IInputProps extends IDefaultChildren {
+  $full?: boolean;
+  $centerText?: boolean;
 }
