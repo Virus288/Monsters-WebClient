@@ -24,7 +24,9 @@ const Navbar: React.FC<{
           </NavButton>
         </NavIcons>
       </NavbarBody>
-      <NavToggle id="NavToggle" onClick={(e): void => toggleNavbar(setAppActive, appActive, e)} />
+      <NavToggle id="NavToggle" onClick={(e): void => toggleNavbar(setAppActive, appActive, e)}>
+        |||
+      </NavToggle>
     </NavbarContainer>
   );
 };

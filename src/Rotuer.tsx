@@ -10,6 +10,7 @@ const Routers: React.FC = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Components.Home />} />
+        <Route path="/chat" element={<Components.ChatOverlay />} />
         <Route path="*" element={<Components.FourOhFour />} />
       </Routes>
     </AnimatePresence>

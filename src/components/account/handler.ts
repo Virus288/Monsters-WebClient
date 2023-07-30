@@ -27,7 +27,12 @@ export const register = (
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
 ): void => {
   e.preventDefault();
-  const { username, password, email } = e.target as IRegisterForm;
+  const { username, password, email, password2 } = e.target as IRegisterForm;
+
+  if (password2.value !== password.value) {
+    setError('Passwords are not the same');
+    return;
+  }
 
   controllers
     .register(username.value, password.value, email.value)

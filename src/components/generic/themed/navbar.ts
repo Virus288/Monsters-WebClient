@@ -74,23 +74,22 @@ export const NavLink = styled(Link).attrs({
 
 export const NavToggle = styled(motion.div)<IDefaultChildren>`
   position: fixed;
-  bottom: 5%;
-  background: ${(props): string => props.theme.colors.ohAlmostOrange};
+  top: 0;
+  width: 75px;
+  height: 75px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
-  width: 50px;
-  height: 50px;
-  border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
+  transform: rotate(90deg);
+  font-size: 1.5rem;
+  cursor: default;
+  border: 1px solid grey;
   z-index: 7;
 
   @media (min-width: 768px) {
     display: none;
-    pointer-events: none;
-    cursor: default;
   }
 
   @media (max-width: 767px) {

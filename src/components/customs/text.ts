@@ -6,7 +6,7 @@ export const Orange = styled(motion.span)<localTypes.IDefaultChildren>`
   color: ${(props): string => props.theme.colors.ohOrange};
 `;
 
-export const Header = styled(motion.header)<localTypes.ITextChildren>`
+export const Header = styled(motion.header)<localTypes.ITextProps>`
   width: ${(props): number => (props.$full ? 100 : 50)}%;
   text-align: center;
   font-size: 2rem;
@@ -30,15 +30,15 @@ export const OneLine = styled(motion.span)<localTypes.IHeaderProps>`
   letter-spacing: 0.9px;
 `;
 
-export const ErrorText = styled(motion.header)<localTypes.ITextChildren>`
-  width: ${(props): number => (props.$full ? 100 : 50)}%;
-  font-size: 1.3rem;
+export const ErrorText = styled(motion.header)<localTypes.ITextProps>`
+  width: ${(props): number => (props.$full ? 100 : 75)}%;
+  font-size: 1.2rem;
   text-align: center;
   color: red;
 `;
 
-export const SuccessText = styled(motion.header)<localTypes.ITextChildren>`
-  width: ${(props): number => (props.$full ? 100 : 50)}%;
+export const SuccessText = styled(motion.header)<localTypes.ITextProps>`
+  width: ${(props): number => (props.$full ? 100 : 75)}%;
   font-size: 1.3rem;
   text-align: center;
   color: green;

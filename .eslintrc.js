@@ -13,7 +13,6 @@ module.exports = {
   extends: [
     'airbnb',
     'erb',
-    'eslint-config-prettier',
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',

@@ -21,6 +21,6 @@ Your app is ready to be deployed!
 ### Prepare environment
 
 ```shell
-npm run prepare / yarn prepare
+npm run prepareHooks / yarn prepareHooks
 chmod +x .husky/pre-commit
 ```

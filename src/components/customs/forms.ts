@@ -9,11 +9,11 @@ export const Checkbox = styled(motion.input)<localTypes.IDefaultChildren>`
   border: none;
 `;
 
-export const Input = styled(motion.input)<localTypes.IDefaultChildren>`
+export const Input = styled(motion.input)<localTypes.IInputProps>`
   border: none;
   outline: none;
   width: 90%;
-  max-width: 200px;
+  max-width: ${(props): string => (props.$full ? '100%' : '200px')};
   font-size: 1.1em;
   background: none;
   color: ${(props): string => props.theme.colors.default};
@@ -26,7 +26,8 @@ export const Input = styled(motion.input)<localTypes.IDefaultChildren>`
   }
 
   &:focus {
-    max-width: 220px;
+    width: ${(props): string => (props.$full ? '100%' : '90%')};
+    max-width: ${(props): string => (props.$full ? '100%' : '220px')};
     border-bottom: 1px solid ${(props): string => props.theme.colors.ohOrange};
     transition: ${(props): string => props.theme.transition.semiSlow};
 
