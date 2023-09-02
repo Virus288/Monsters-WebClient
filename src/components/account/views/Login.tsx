@@ -3,11 +3,13 @@ import { Button, Container, ContainerBody, ErrorText, Form, Header, Input, Label
 import * as animation from '../../../animation';
 import { logIn } from '../handler';
 import type { ILoginForm } from '../../../types';
+import { animateExit } from '../utils';
 
 const Login: React.FC<{
   setReady: React.Dispatch<React.SetStateAction<boolean>>;
   setView: React.Dispatch<React.SetStateAction<string>>;
-}> = ({ setReady, setView }) => {
+  setExit: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setReady, setView, setExit }) => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   return (
@@ -28,7 +30,7 @@ const Login: React.FC<{
           <Button type="submit">Send</Button>
         </Form>
 
-        <Button onClick={(): void => setView('register')}>Register</Button>
+        <Button onClick={(): void => animateExit(setExit, () => setView('register'))}>Register</Button>
       </ContainerBody>
     </Container>
   );
