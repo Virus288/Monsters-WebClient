@@ -4,8 +4,12 @@ import { Button, Container, ContainerBody, ErrorText, Form, Header, Input, Label
 import * as animation from '../../../animation';
 import type { IRegisterForm } from '../../../types';
 import { register } from '../handler';
+import { animateExit } from '../utils';
 
-const Register: React.FC<{ setView: React.Dispatch<React.SetStateAction<string>> }> = ({ setView }) => {
+const Register: React.FC<{
+  setView: React.Dispatch<React.SetStateAction<string>>;
+  setExit: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setView, setExit }) => {
   const [error, setError] = useState<string | undefined>(undefined);
   const [success, setSuccess] = useState<boolean>(false);
 
@@ -46,7 +50,7 @@ const Register: React.FC<{ setView: React.Dispatch<React.SetStateAction<string>>
           <Button type="submit">Send</Button>
         </Form>
 
-        <Button onClick={(): void => setView('login')}>Log in</Button>
+        <Button onClick={(): void => animateExit(setExit, () => setView('login'))}>Log in</Button>
       </ContainerBody>
     </Container>
   );

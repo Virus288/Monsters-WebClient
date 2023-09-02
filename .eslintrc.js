@@ -62,6 +62,7 @@ module.exports = {
     'no-console': [2, { allow: ['info', 'trace'] }],
     'no-constructor-return': 0,
     'no-invalid-this': 2,
+    'no-nested-ternary': 0,
     'no-non-null-assertion': 0,
     'no-unused-vars': 2,
     'no-param-reassign': [2, { props: false }],
@@ -169,7 +170,6 @@ module.exports = {
     ],
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/prefer-nullish-coalescing': 2,
-    '@typescript-eslint/semi': ['error'],
     '@typescript-eslint/typedef': 2,
     quotes: [
       2,

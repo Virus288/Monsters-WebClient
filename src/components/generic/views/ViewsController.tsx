@@ -29,10 +29,18 @@ const Account: React.FC<{
   view: string;
   setView: React.Dispatch<React.SetStateAction<string>>;
   setReady: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ view, setView, setReady }) => {
+  setExit: React.Dispatch<React.SetStateAction<boolean>>;
+  exit: boolean;
+}> = ({ view, setView, setReady, exit, setExit }) => {
   return (
     <AnimatePresence mode="wait">
-      {view === 'login' ? <Login setReady={setReady} setView={setView} /> : <Register setView={setView} />}
+      {view === 'login' ? (
+        exit ? (
+          <Login setReady={setReady} setView={setView} setExit={setExit} />
+        ) : null
+      ) : exit ? (
+        <Register setView={setView} setExit={setExit} />
+      ) : null}
     </AnimatePresence>
   );
 };
@@ -46,6 +54,7 @@ const ViewsController: React.FC<{
   const [ready, setReady] = useState<boolean>(false);
   const [view, setView] = useState<string>('login');
   const [preReady, setPreReady] = useState<boolean>(false);
+  const [exit, setExit] = useState<boolean>(true);
 
   useEffect(() => {
     preLogin(setPreReady, setReady);
@@ -56,7 +65,7 @@ const ViewsController: React.FC<{
   }
 
   return !ready ? (
-    <Account view={view} setView={setView} setReady={setReady} />
+    <Account view={view} setView={setView} setReady={setReady} exit={exit} setExit={setExit} />
   ) : (
     <App>
       <StaticHandlers setTheme={setTheme} settings={settings} setSettings={setSettings} />
