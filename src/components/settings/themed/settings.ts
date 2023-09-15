@@ -6,7 +6,7 @@ import type * as localTypes from '../../../types';
 export const SettingsContainer = styled(motion.div)<localTypes.IDefaultChildren>`
   width: 100%;
   height: 100vh;
-  background: rgba(100, 100, 100, 0.6);
+  background: rgba(100, 100, 100, 0.7);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -30,16 +30,16 @@ export const SettingsContainer = styled(motion.div)<localTypes.IDefaultChildren>
 
 export const SettingsBody = styled(ContainerBody)<localTypes.IDefaultChildren>`
   border-left: 1px solid grey;
-  border-radius: 20px;
   background: ${(props): string => props.theme.background.semiTransparent};
 
   @media (min-width: 768px) {
     height: 300px;
     width: 500px;
+    border-radius: 20px;
   }
 
   @media (max-width: 767px) {
     height: 100%;
-    width: 80%;
+    width: 100%;
   }
 `;

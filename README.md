@@ -1,3 +1,7 @@
+# Monsters - Testing client
+
+Project is simple website for backend tests
+
 ## Available Scripts
 
 In the project directory, you can run:
