@@ -51,9 +51,16 @@ const FunctionButton = styled(motion.button)<localTypes.IDefaultChildren>`
 `;
 
 export const ExitButton = styled(FunctionButton)<localTypes.IDefaultChildren>`
+  background: ${(props): string => props.theme.colors.ohOrange};
+  color: ${(props): string => props.theme.colors.default};
+  border-radius: 5px;
+  width: 50px;
+  height: 50px;
   position: fixed;
+  margin: 0.5rem;
   top: 0;
   left: 0;
+  transition: ${(props): string => props.theme.transition.default};
 `;
 
 export const HelpButton = styled(FunctionButton)<localTypes.IDefaultChildren>`

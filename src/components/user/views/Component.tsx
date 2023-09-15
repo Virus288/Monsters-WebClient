@@ -1,13 +1,13 @@
 import React from 'react';
-import * as animation from '../../../animation';
 import { Container, ContainerBody } from '../../customs';
+import * as animation from '../../../animation';
 
-const Chat: React.FC = () => {
+const User: React.FC = () => {
   return (
     <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
-      <ContainerBody>Game chat</ContainerBody>
+      <ContainerBody>User</ContainerBody>
     </Container>
   );
 };
 
-export default Chat;
+export default User;

@@ -2,25 +2,23 @@ import React, { useEffect, useState } from 'react';
 import type { DefaultTheme } from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 import Router from '../../../Rotuer';
-import Navbar from './Navbar';
 import { App } from '../../customs';
 import Settings from '../../settings/views/Component';
 import { toggleSettings } from '../utils';
-import type * as enums from '../../../enums';
 import { Login, Register } from '../../index';
 import { preLogin } from '../../account/handler';
 import Loading from './Loading';
+import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
-  setSettings: React.Dispatch<React.SetStateAction<boolean>>;
-  settings: boolean;
-}> = ({ setTheme, settings, setSettings }) => {
+}> = ({ setTheme }) => {
+  const dispatch = useMainDispatch();
+  const { settings } = useMainSelector((states) => states.statics);
+
   return (
     <AnimatePresence mode="wait">
-      {settings ? (
-        <Settings setTheme={setTheme} disablePanel={(e: React.MouseEvent): void => toggleSettings(e, setSettings)} />
-      ) : null}
+      {settings ? <Settings setTheme={setTheme} disablePanel={(): void => toggleSettings(dispatch, settings)} /> : null}
     </AnimatePresence>
   );
 };
@@ -47,10 +45,7 @@ const Account: React.FC<{
 
 const ViewsController: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
-  setAppActive: React.Dispatch<React.SetStateAction<enums.EAppState>>;
-  appActive: enums.EAppState;
-}> = ({ setTheme, appActive, setAppActive }) => {
-  const [settings, setSettings] = useState<boolean>(false);
+}> = ({ setTheme }) => {
   const [ready, setReady] = useState<boolean>(false);
   const [view, setView] = useState<string>('login');
   const [preReady, setPreReady] = useState<boolean>(false);
@@ -68,8 +63,7 @@ const ViewsController: React.FC<{
     <Account view={view} setView={setView} setReady={setReady} exit={exit} setExit={setExit} />
   ) : (
     <App>
-      <StaticHandlers setTheme={setTheme} settings={settings} setSettings={setSettings} />
-      <Navbar setSettings={setSettings} appActive={appActive} setAppActive={setAppActive} settings={settings} />
+      <StaticHandlers setTheme={setTheme} />
       <Router />
     </App>
   );
