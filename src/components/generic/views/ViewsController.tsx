@@ -9,6 +9,7 @@ import { Login, Register } from '../../index';
 import { preLogin } from '../../account/handler';
 import Loading from './Loading';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
+import SocketCommunicator from '../../communicator/views/Component';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
@@ -19,6 +20,7 @@ const StaticHandlers: React.FC<{
   return (
     <AnimatePresence mode="wait">
       {settings ? <Settings setTheme={setTheme} disablePanel={(): void => toggleSettings(dispatch, settings)} /> : null}
+      <SocketCommunicator />
     </AnimatePresence>
   );
 };

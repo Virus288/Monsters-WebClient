@@ -10,6 +10,7 @@ declare module 'styled-components' {
     colors: {
       ohOrange: string;
       ohAlmostOrange: string;
+      justBlue: string;
       justGray: string;
       default: string;
       semiDefault: string;
@@ -18,6 +19,7 @@ declare module 'styled-components' {
     background: {
       default: string;
       semiTransparent: string;
+      semiDefault: string;
       opposite: string;
     };
     fontSizes: {
