@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { MainDispatch } from '../../store/types';
+import type { MainDispatch } from '../../redux/types';
 import * as hooks from '../../redux';
 import { ESocketAction } from '../../enums';
 

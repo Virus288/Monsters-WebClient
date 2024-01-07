@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import * as themes from './components/customs/theme';
 import Theme, { GlobalStyle } from './components/customs';
 import ViewsController from './components/generic/views/ViewsController';
-import store from './store';
+import store from './redux/store';
 
 const App: React.FC = () => {
   const [theme, setTheme] = useState<DefaultTheme>(themes.lightTheme);

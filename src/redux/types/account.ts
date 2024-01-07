@@ -1,11 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface IAccountState {
-  logged: boolean;
+  userName: string | undefined;
 }
 
 interface IAccountBody {
-  logged: boolean;
+  userName: string;
 }
 
 export type IAccountAction = PayloadAction<IAccountBody>;

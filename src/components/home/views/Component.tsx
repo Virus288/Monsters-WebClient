@@ -1,26 +1,26 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Container, ContainerBody } from '../../customs';
+import { Button, Container, ContainerBody, Header } from '../../customs';
 import * as animation from '../../../animation';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
 import * as hooks from '../../../redux';
 import { toggleSettings } from '../../generic/utils';
+import { logout, sendToLoginPage } from '../handler';
 
 const Home: React.FC = () => {
   const dispatch = useMainDispatch();
   const { settings } = useMainSelector(hooks.staticState);
-  const navigate = useNavigate();
+  const { userName } = useMainSelector(hooks.accountState);
 
   return (
     <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
       <ContainerBody>
-        <Button onClick={(): void => navigate('/chat')}>Chat</Button>
-        <Button onClick={(): void => navigate('/messages')}>Messages</Button>
-        <Button onClick={(): void => navigate('/party')}>Party</Button>
-        <Button onClick={(): void => navigate('/inventory')}>Inventory</Button>
-        <Button onClick={(): void => navigate('/profile')}>Profile</Button>
-        <Button onClick={(): void => navigate('/user')}>User</Button>
+        <Header>{userName ? `User is logged in as ${userName}` : 'User is not logged in'}</Header>
         <Button onClick={(): void => toggleSettings(dispatch, settings)}>Settings</Button>
+        {userName ? (
+          <Button onClick={(): void => logout(dispatch)}>Log out</Button>
+        ) : (
+          <Button onClick={(): void => sendToLoginPage()}>Log in</Button>
+        )}
       </ContainerBody>
     </Container>
   );

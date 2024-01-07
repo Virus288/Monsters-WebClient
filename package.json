@@ -7,7 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "cross-env NODE_ENV=development eslint . --ext .ts,.tsx --fix",
     "listErrors": "node_modules/.bin/tsc --noEmit --skipLibCheck",
     "lintStaged": "npx lint-staged",
     "prepareHooks": "husky install"

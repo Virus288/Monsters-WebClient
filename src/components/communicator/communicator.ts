@@ -1,8 +1,7 @@
 import type { ISocketMessage } from '../../types/websocket';
 import { EMessageSubTargets, ESocketTargets } from '../../enums';
-import type { MainDispatch } from '../../store/types';
+import type { ISocketAuction, MainDispatch } from '../../redux/types';
 import * as hooks from '../../redux';
-import type { ISocketAuction } from '../../redux/types';
 
 export default class Communicator {
   client: WebSocket | undefined;
