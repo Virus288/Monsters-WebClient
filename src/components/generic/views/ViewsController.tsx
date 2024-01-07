@@ -5,10 +5,10 @@ import Router from '../../../Rotuer';
 import { App } from '../../customs';
 import Settings from '../../settings/views/Component';
 import { toggleSettings } from '../utils';
-import { Login, Register } from '../../index';
 import { preLogin } from '../../account/handler';
 import Loading from './Loading';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
+import SocketCommunicator from '../../communicator/views/Component';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
@@ -19,26 +19,7 @@ const StaticHandlers: React.FC<{
   return (
     <AnimatePresence mode="wait">
       {settings ? <Settings setTheme={setTheme} disablePanel={(): void => toggleSettings(dispatch, settings)} /> : null}
-    </AnimatePresence>
-  );
-};
-
-const Account: React.FC<{
-  view: string;
-  setView: React.Dispatch<React.SetStateAction<string>>;
-  setReady: React.Dispatch<React.SetStateAction<boolean>>;
-  setExit: React.Dispatch<React.SetStateAction<boolean>>;
-  exit: boolean;
-}> = ({ view, setView, setReady, exit, setExit }) => {
-  return (
-    <AnimatePresence mode="wait">
-      {view === 'login' ? (
-        exit ? (
-          <Login setReady={setReady} setView={setView} setExit={setExit} />
-        ) : null
-      ) : exit ? (
-        <Register setView={setView} setExit={setExit} />
-      ) : null}
+      <SocketCommunicator />
     </AnimatePresence>
   );
 };
@@ -46,22 +27,20 @@ const Account: React.FC<{
 const ViewsController: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
 }> = ({ setTheme }) => {
-  const [ready, setReady] = useState<boolean>(false);
-  const [view, setView] = useState<string>('login');
+  const dispatch = useMainDispatch();
   const [preReady, setPreReady] = useState<boolean>(false);
-  const [exit, setExit] = useState<boolean>(true);
 
   useEffect(() => {
-    preLogin(setPreReady, setReady);
-  }, []);
+    preLogin(dispatch)
+      .then(() => setPreReady(true))
+      .catch(() => setPreReady(true));
+  }, [dispatch]);
 
   if (!preReady) {
     return <Loading finished={preReady} />;
   }
 
-  return !ready ? (
-    <Account view={view} setView={setView} setReady={setReady} exit={exit} setExit={setExit} />
-  ) : (
+  return (
     <App>
       <StaticHandlers setTheme={setTheme} />
       <Router />

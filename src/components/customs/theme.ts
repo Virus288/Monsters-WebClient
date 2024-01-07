@@ -4,6 +4,7 @@ import * as enums from '../../enums';
 const theme = {
   colors: {
     ohOrange: 'rgb(249, 103, 59)',
+    justBlue: 'rgba(0, 255, 255, 0.5)',
     ohAlmostOrange: 'rgba(249, 103, 59, 0.7)',
     justGray: 'rgba(100,100,100, 1)',
   },
@@ -36,6 +37,7 @@ export const lightTheme: DefaultTheme = {
   background: {
     default: '#ffffff',
     semiTransparent: 'rgba(255,255,255, 0.99)',
+    semiDefault: 'rgba(230,230,230, 1)',
     opposite: 'rgba(95, 95, 95, 0.99)',
   },
   themeState: enums.EThemes.Light,
@@ -52,6 +54,7 @@ export const darkTheme: DefaultTheme = {
   background: {
     default: '#333333',
     semiTransparent: 'rgba(95, 95, 95, 0.99)',
+    semiDefault: 'rgba(105, 105, 105, 1)',
     opposite: 'rgba(255,255,255, 0.99)',
   },
   themeState: enums.EThemes.Dark,

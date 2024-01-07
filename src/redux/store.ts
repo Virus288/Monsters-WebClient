@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import account from '../redux/reducers/account';
-import statics from '../redux/reducers/static';
+import account from './reducers/account';
+import statics from './reducers/static';
+import websocket from './reducers/websocket';
 
 const mainStore = configureStore({
   reducer: {
     account,
     statics,
+    websocket,
   },
 });
 

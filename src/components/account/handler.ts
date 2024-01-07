@@ -1,25 +1,10 @@
 import type React from 'react';
-import type { IFullError, ILoginForm, IRegisterForm } from '../../types';
+import type { IFullError, IRegisterForm } from '../../types';
 import * as controllers from './controller';
-
-export const logIn = (
-  e: React.FormEvent<ILoginForm>,
-  setError: React.Dispatch<React.SetStateAction<string | undefined>>,
-  setReady: React.Dispatch<React.SetStateAction<boolean>>,
-): void => {
-  e.preventDefault();
-  const { username, password } = e.target as ILoginForm;
-
-  controllers
-    .logIn(username.value, password.value)
-    .then((): void => {
-      return setReady(true);
-    })
-    .catch((err) => {
-      const error = err as IFullError;
-      setError(error.message);
-    });
-};
+import { refreshAccessToken } from './controller';
+import * as hooks from '../../redux';
+import type { MainDispatch } from '../../redux/types';
+import Cookies from '../../tools/cookies';
 
 export const register = (
   e: React.FormEvent<IRegisterForm>,
@@ -45,18 +30,38 @@ export const register = (
     });
 };
 
-export const preLogin = (
-  setPreReady: React.Dispatch<React.SetStateAction<boolean>>,
-  setReady: React.Dispatch<React.SetStateAction<boolean>>,
-): void => {
-  controllers
-    .preLogin()
-    .then((data): void => {
-      if (data.id) {
-        setReady(true);
-        setPreReady(true);
-      }
-      return undefined;
-    })
-    .catch(() => setPreReady(true));
+export const preLogin = async (dispatch: MainDispatch): Promise<void> => {
+  if (window.location.pathname === '/login') return;
+
+  const cookies = new Cookies();
+  const accessToken = cookies.getToken('monsters.uid');
+  const refreshToken = cookies.getToken('monsters.ref');
+  if (!accessToken && !refreshToken) return;
+
+  if (!accessToken) {
+    try {
+      await refreshAccessToken(refreshToken as string);
+    } catch (err) {
+      console.log("Couldn't refresh user token");
+      console.log(err);
+      cookies.removeToken('monsters.ref');
+      throw err;
+    }
+  }
+
+  const data = await controllers.getUserLogin();
+  if (data?.login) {
+    dispatch(hooks.logIn({ userName: data?.login }));
+  }
+};
+
+export const logIn = async (code: string, dispatch: MainDispatch): Promise<void> => {
+  const data = await controllers.login(code);
+  new Cookies().addLoginToken(data?.access_token as string, data?.expires_in as number);
+  new Cookies().addRefreshToken(data?.refresh_token as string, (data?.expires_in as number) * 2); // #TODO RefreshToken has no 'expires in' in req. Using access_token value'
+
+  const userLogin = await controllers.getUserLogin();
+  if (userLogin?.login) {
+    dispatch(hooks.logIn({ userName: userLogin?.login }));
+  }
 };

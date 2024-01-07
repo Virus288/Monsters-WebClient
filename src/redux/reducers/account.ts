@@ -3,14 +3,18 @@ import type * as types from '../types';
 
 const account = createSlice({
   name: 'account',
-  initialState: { logged: false } as types.IAccountState,
+  initialState: { userName: undefined } as types.IAccountState,
   reducers: {
-    updateLocked(state, action: types.IAccountAction) {
-      state.logged = Boolean(action.payload.logged);
+    logIn(state, action: types.IAccountAction) {
+      state.userName = action.payload.userName;
+      return state;
+    },
+    logOut(state) {
+      state.userName = undefined;
       return state;
     },
   },
 });
 
-export const { updateLocked } = account.actions;
+export const { logIn, logOut } = account.actions;
 export default account.reducer;

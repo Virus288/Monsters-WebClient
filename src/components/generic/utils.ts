@@ -1,4 +1,4 @@
-import type { MainDispatch } from '../../store/types';
+import type { MainDispatch } from '../../redux/types';
 import * as hooks from '../../redux';
 
 // eslint-disable-next-line import/prefer-default-export

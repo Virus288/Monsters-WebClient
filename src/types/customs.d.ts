@@ -20,3 +20,7 @@ export interface IInputProps extends IDefaultChildren {
   $full?: boolean;
   $centerText?: boolean;
 }
+
+export interface IChatMessageProps extends IDefaultChildren {
+  $sender?: boolean;
+}

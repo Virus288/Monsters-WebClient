@@ -1,6 +1,6 @@
 # Monsters - Testing client
 
-Project is simple website for backend tests
+Project is simple client made in react
 
 ## Available Scripts
 
@@ -22,9 +22,21 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-### Prepare environment
+## Prepare environment
 
 ```shell
 npm run prepareHooks / yarn prepareHooks
 chmod +x .husky/pre-commit
 ```
+
+## Required params in .env file
+
+```env
+REACT_APP_BACKEND = Server's http address
+REACT_APP_WS_BACKEND = Server's websocket address
+REACT_APP_REDIRECT_URL = Redirect url for oidc login. Currently, server has hardcodded url `http://localhost:3005/login`, which is where I host my react app for development. This WILL change in the future
+REACT_APP_CLIENT_SECRET = Oidc client's secret
+REACT_APP_CLIENT_ID = Oidc client's id
+```
+
+You can edit example.env, since it includes all required params

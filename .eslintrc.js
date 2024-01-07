@@ -59,7 +59,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'max-classes-per-file': 2,
     'no-await-in-loop': 2,
-    'no-console': [2, { allow: ['info', 'trace'] }],
+    'no-console': 0,
     'no-constructor-return': 0,
     'no-invalid-this': 2,
     'no-nested-ternary': 0,
