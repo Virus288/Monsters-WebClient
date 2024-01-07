@@ -3,14 +3,9 @@ import { motion } from 'framer-motion';
 import type * as localTypes from '../../types';
 
 /**
- * Container of elements used to cover space
+ * Animated entry container
  */
-export const Container = styled(motion.div)<localTypes.IDefaultChildren>`
-  width: 100%;
-  height: 100vh;
-  overflow-y: hidden;
-  overflow-x: hidden;
-`;
+export const AnimateEntry = styled(motion.div)<localTypes.IDefaultChildren>``;
 
 /**
  * Container used as overlay
@@ -23,9 +18,11 @@ export const OverlayContainer = styled(motion.div)<localTypes.IDefaultChildren>`
 `;
 
 /**
- * Container's body user to center elements inside
+ * Basic container to cover space
  */
-export const ContainerBody = styled(Container)<localTypes.IContainerProps>`
+export const Container = styled('div')<localTypes.IContainerProps>`
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: ${(props): string => props.$direction ?? 'column'};
   justify-content: ${(props): string => props.$justify ?? 'center'};

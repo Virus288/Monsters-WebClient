@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { ContainerBody } from '../../customs';
+import { Container } from '../../customs';
 import type * as localTypes from '../../../types';
 
-export const SettingsContainer = styled(motion.div)<localTypes.IDefaultChildren>`
+export const SettingsContainer = styled(Container)<localTypes.IDefaultChildren>`
   width: 100%;
   height: 100vh;
   background: rgba(100, 100, 100, 0.7);
@@ -28,9 +27,19 @@ export const SettingsContainer = styled(motion.div)<localTypes.IDefaultChildren>
   }
 `;
 
-export const SettingsBody = styled(ContainerBody)<localTypes.IDefaultChildren>`
+export const SettingsBody = styled('div')<localTypes.IDefaultChildren>`
   border-left: 1px solid grey;
   background: ${(props): string => props.theme.background.semiTransparent};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+  transition: ${(props): string => props.theme.transition.semiSlow};
+
+  * {
+    margin: 10px auto;
+  }
 
   @media (min-width: 768px) {
     height: 300px;

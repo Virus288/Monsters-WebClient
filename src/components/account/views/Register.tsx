@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Button, Container, ContainerBody, ErrorText, Form, Header, Input, Label, SuccessText } from '../../customs';
+import { AnimateEntry, Button, Container, Form, Header, Input, Label } from '../../customs';
 import * as animation from '../../../animation';
 import type { IRegisterForm } from '../../../types';
 import { register } from '../handler';
@@ -14,22 +14,16 @@ const Register: React.FC<{
   const [success, setSuccess] = useState<boolean>(false);
 
   return (
-    <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
-      <ContainerBody $justify="space-around" $wrap="nowrap">
+    <AnimateEntry variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
+      <Container $justify="space-around" $wrap="nowrap">
         <Header>Register in</Header>
+        <AnimatePresence mode="wait">{error ?? null}</AnimatePresence>
         <AnimatePresence mode="wait">
-          {error ? (
-            <ErrorText variants={animation.opacity} initial="init" animate="visible" exit="exit">
-              {error}
-            </ErrorText>
-          ) : null}
-        </AnimatePresence>
-        <AnimatePresence mode="wait">
-          {success ? (
-            <SuccessText variants={animation.opacity} initial="init" animate="visible" exit="exit">
-              Success. Please log in
-            </SuccessText>
-          ) : null}
+          {success
+            ? // <SuccessText variants={animation.opacity} initial="init" animate="visible" exit="exit">
+              'Success. Please log in'
+            : // {/*</SuccessText> */}
+              null}
         </AnimatePresence>
         <Form
           onSubmit={(e: React.FormEvent<IRegisterForm>): void => register(e, setError, setSuccess)}
@@ -51,8 +45,8 @@ const Register: React.FC<{
         </Form>
 
         <Button onClick={(): void => animateExit(setExit, () => setView('login'))}>Log in</Button>
-      </ContainerBody>
-    </Container>
+      </Container>
+    </AnimateEntry>
   );
 };
 

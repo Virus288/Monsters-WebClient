@@ -29,7 +29,7 @@ npm run prepareHooks / yarn prepareHooks
 chmod +x .husky/pre-commit
 ```
 
-## Required params in .env file
+## Required params in .env and .prod.env files
 
 ```env
 REACT_APP_BACKEND = Server's http address

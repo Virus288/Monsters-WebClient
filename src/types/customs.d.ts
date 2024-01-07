@@ -13,7 +13,7 @@ export interface IHeaderProps extends IDefaultChildren {
 }
 
 export interface ITextProps extends IDefaultChildren {
-  $full?: boolean;
+  $width?: number | string;
 }
 
 export interface IInputProps extends IDefaultChildren {
