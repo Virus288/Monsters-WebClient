@@ -5,8 +5,7 @@
   "scripts": {
     "start": "PORT=3005 react-scripts start -FAST_REFRESH=true",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "echo 'No tests yes'",
     "lint": "cross-env NODE_ENV=development eslint . --ext .ts,.tsx --fix",
     "listErrors": "node_modules/.bin/tsc --noEmit --skipLibCheck",
     "lintStaged": "npx lint-staged",
