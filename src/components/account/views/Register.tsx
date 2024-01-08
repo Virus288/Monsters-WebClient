@@ -13,7 +13,7 @@ const Register: React.FC = () => {
 
   return (
     <AnimateEntry variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
-      <Container $justify="space-evenly" $height={50}>
+      <Container $justify="space-evenly" $height={50} $spacer>
         <Header>Register</Header>
         <ContainText $width={50}>
           <AnimatePresence mode="wait">{error ? <RedText>{error}</RedText> : null}</AnimatePresence>

@@ -23,6 +23,7 @@ export const Container = styled('div')<localTypes.IContainerProps>`
   background: ${(props): string => props.theme.background.semiTransparent};
   color: ${(props): string => props.theme.colors.default};
   transition: ${(props): string => props.theme.transition.semiSlow};
+  padding-top: ${(props): number => (props.$spacer ? 60 : 0)}px;
 
   &::-webkit-scrollbar {
     width: 15px;

@@ -36,6 +36,4 @@ export const App = styled(motion.div)<localTypes.IDefaultChildren>`
   color: ${(props): string => props.theme.colors.default};
   transition: ${(props): string => props.theme.transition.slow};
   width: 100%;
-
-  padding-top: 60px;
 `;

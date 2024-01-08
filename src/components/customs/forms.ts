@@ -21,8 +21,8 @@ export const Input = styled(motion.input)<localTypes.IInputProps>`
   transition: ${(props): string => props.theme.transition.semiSlow};
 
   &::placeholder {
-    transition: ${(props): string => props.theme.transition.semiSlow};
     color: ${(props): string => props.theme.colors.semiDefault};
+    transition: ${(props): string => props.theme.transition.semiSlow};
   }
 
   &:focus {
@@ -32,8 +32,8 @@ export const Input = styled(motion.input)<localTypes.IInputProps>`
     transition: ${(props): string => props.theme.transition.semiSlow};
 
     &::placeholder {
-      transition: ${(props): string => props.theme.transition.semiSlow};
       color ${(props): string => props.theme.colors.ohOrange};
+      transition: ${(props): string => props.theme.transition.semiSlow};
     }
   }
 `;
@@ -58,6 +58,7 @@ export const Form = styled(motion.form)<localTypes.IDefaultChildren>`
     margin: 1rem;
   }
 `;
+
 export const Select = styled(motion.select)<localTypes.IDefaultChildren>`
   min-width: 200px;
   max-width: 300px;

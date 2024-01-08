@@ -7,6 +7,7 @@ export interface IContainerProps extends IDefaultChildren {
   $wrap?: string;
   $noScroll?: boolean;
   $height?: number;
+  $spacer?: boolean;
 }
 
 export interface IHeaderProps extends IDefaultChildren {
