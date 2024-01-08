@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import 'normalize.css';
 import { NoRoot } from './errors';
-import './styles/fontello/css/fontello.css';
+import './style/fontello/css/fontello.css';
 
 const target = document.getElementById('root');
 if (!target) throw new NoRoot();

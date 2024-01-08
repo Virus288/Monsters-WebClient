@@ -3,29 +3,16 @@ import { motion } from 'framer-motion';
 import type * as localTypes from '../../types';
 
 /**
- * Container of elements used to cover space
+ * Animated entry container
  */
-export const Container = styled(motion.div)<localTypes.IDefaultChildren>`
+export const AnimateEntry = styled(motion.div)<localTypes.IDefaultChildren>``;
+
+/**
+ * Basic container to cover space
+ */
+export const Container = styled('div')<localTypes.IContainerProps>`
   width: 100%;
-  height: 100vh;
-  overflow-y: hidden;
-  overflow-x: hidden;
-`;
-
-/**
- * Container used as overlay
- */
-export const OverlayContainer = styled(motion.div)<localTypes.IDefaultChildren>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 6;
-`;
-
-/**
- * Container's body user to center elements inside
- */
-export const ContainerBody = styled(Container)<localTypes.IContainerProps>`
+  min-height: ${(props): number => props.$height ?? 100}vh;
   display: flex;
   flex-direction: ${(props): string => props.$direction ?? 'column'};
   justify-content: ${(props): string => props.$justify ?? 'center'};
@@ -53,15 +40,15 @@ export const ContainerBody = styled(Container)<localTypes.IContainerProps>`
   }
 `;
 
-export const Inline = styled(motion.span)<localTypes.IDefaultChildren>`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: nowrap;
-  width: fit-content;
+/**
+ * Container to limit text width
+ */
+export const ContainText = styled('span')<localTypes.ISpanProps>`
+  @media (min-width: 768px) {
+    width: ${(props): number => props.$width ?? 100}%;
+  }
 
-  * {
-    margin: 5px;
+  @media (max-width: 767px) {
+    width: ${(props): number => props.$mobileWidth ?? 100}%;
   }
 `;

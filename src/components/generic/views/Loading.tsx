@@ -1,12 +1,12 @@
 import React from 'react';
 import * as animation from '../../../animation';
-import { Container, ContainerBody, Header } from '../../customs';
+import { AnimateEntry, Container, Header } from '../../customs';
 import * as icons from '../../customs/icons';
 
 const Loading: React.FC<{ finished: boolean }> = ({ finished }) => {
   return (
-    <Container variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
-      <ContainerBody>
+    <AnimateEntry variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
+      <Container>
         {finished ? (
           <Header>Loaded</Header>
         ) : (
@@ -15,8 +15,8 @@ const Loading: React.FC<{ finished: boolean }> = ({ finished }) => {
             <icons.LoadingCircle />
           </>
         )}
-      </ContainerBody>
-    </Container>
+      </Container>
+    </AnimateEntry>
   );
 };
 

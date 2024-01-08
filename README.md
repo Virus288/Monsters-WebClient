@@ -29,7 +29,7 @@ npm run prepareHooks / yarn prepareHooks
 chmod +x .husky/pre-commit
 ```
 
-## Required params in .env file
+## Required params in .env and .prod.env files
 
 ```env
 REACT_APP_BACKEND = Server's http address
@@ -40,3 +40,5 @@ REACT_APP_CLIENT_ID = Oidc client's id
 ```
 
 You can edit example.env, since it includes all required params
+
+## This project is using fontello icons. They can be found in /src/style/fontello. All credits go to their original authors
