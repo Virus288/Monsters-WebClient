@@ -40,3 +40,5 @@ REACT_APP_CLIENT_ID = Oidc client's id
 ```
 
 You can edit example.env, since it includes all required params
+
+## This project is using fontello icons. They can be found in /src/style/fontello. All credits go to their original authors

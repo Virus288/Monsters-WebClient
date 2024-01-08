@@ -9,6 +9,7 @@ import { preLogin } from '../../account/handler';
 import Loading from './Loading';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
 import SocketCommunicator from '../../communicator/views/Component';
+import Navbar from './Navbar';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
@@ -41,10 +42,13 @@ const ViewsController: React.FC<{
   }
 
   return (
-    <App>
-      <StaticHandlers setTheme={setTheme} />
-      <Router />
-    </App>
+    <>
+      <Navbar />
+      <App>
+        <StaticHandlers setTheme={setTheme} />
+        <Router />
+      </App>
+    </>
   );
 };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { AnimateEntry } from '../../customs';
-import HomeHeader from './Header';
 import { useMainSelector } from '../../../redux/hooks';
 import * as hooks from '../../../redux';
 import * as animation from '../../../animation';
@@ -11,8 +10,6 @@ const Home: React.FC = () => {
 
   return (
     <AnimateEntry variants={animation.opacity} initial="init" animate="visible" exit="exit">
-      <HomeHeader />
-
       {userName ? <RenderInitializedUi /> : <RenderUninitializedUi />}
     </AnimateEntry>
   );

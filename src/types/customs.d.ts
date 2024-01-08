@@ -6,10 +6,16 @@ export interface IContainerProps extends IDefaultChildren {
   $align?: string;
   $wrap?: string;
   $noScroll?: boolean;
+  $height?: number;
 }
 
 export interface IHeaderProps extends IDefaultChildren {
   $center?: boolean;
+}
+
+export interface ISpanProps extends IDefaultChildren {
+  $width?: number;
+  $mobileWidth?: number;
 }
 
 export interface ITextProps extends IDefaultChildren {

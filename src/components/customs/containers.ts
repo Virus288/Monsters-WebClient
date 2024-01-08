@@ -8,21 +8,11 @@ import type * as localTypes from '../../types';
 export const AnimateEntry = styled(motion.div)<localTypes.IDefaultChildren>``;
 
 /**
- * Container used as overlay
- */
-export const OverlayContainer = styled(motion.div)<localTypes.IDefaultChildren>`
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 6;
-`;
-
-/**
  * Basic container to cover space
  */
 export const Container = styled('div')<localTypes.IContainerProps>`
   width: 100%;
-  min-height: 100vh;
+  min-height: ${(props): number => props.$height ?? 100}vh;
   display: flex;
   flex-direction: ${(props): string => props.$direction ?? 'column'};
   justify-content: ${(props): string => props.$justify ?? 'center'};
@@ -50,15 +40,15 @@ export const Container = styled('div')<localTypes.IContainerProps>`
   }
 `;
 
-export const Inline = styled(motion.span)<localTypes.IDefaultChildren>`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: nowrap;
-  width: fit-content;
+/**
+ * Container to limit text width
+ */
+export const ContainText = styled('span')<localTypes.ISpanProps>`
+  @media (min-width: 768px) {
+    width: ${(props): number => props.$width ?? 100}%;
+  }
 
-  * {
-    margin: 5px;
+  @media (max-width: 767px) {
+    width: ${(props): number => props.$mobileWidth ?? 100}%;
   }
 `;
