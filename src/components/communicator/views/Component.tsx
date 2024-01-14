@@ -11,7 +11,8 @@ const SocketCommunicator: React.FC = () => {
   const { actions } = useMainSelector(hooks.websocketState);
 
   useEffect(() => {
-    communicator.init();
+    console.log('Websocket connection is disabled.');
+    // communicator.init();
   }, [communicator]);
 
   useEffect(() => {

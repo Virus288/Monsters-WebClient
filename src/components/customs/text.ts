@@ -8,6 +8,7 @@ export const Header = styled(motion.header)<localTypes.ITextProps>`
   font-weight: lighter;
   letter-spacing: 0.9px;
   padding: 1rem;
+  color: ${(props): string => props.theme.colors.default};
 `;
 
 export const GreenText = styled(motion.header)<localTypes.ITextProps>`
