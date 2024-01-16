@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   return (
     <AnimateEntry variants={animation.slowSlideRight} initial="init" animate="visible" exit="exit">
       <Container $justify="space-around" $wrap="nowrap">
-        <Header>Login</Header>
+        <Header>Logging in...</Header>
       </Container>
     </AnimateEntry>
   );
