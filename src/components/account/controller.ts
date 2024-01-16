@@ -68,7 +68,7 @@ export const register = async (login: string, password: string, email: string): 
 
 export const login = async (code: string): Promise<ILoginBody | undefined> => {
   const server = process.env.REACT_APP_BACKEND!;
-  const redirectUrl = process.env.REACT_APP_REDIRECT_URL!;
+  const redirectUrl = process.env.REACT_APP_REDIRECT_LOGIN_URL!;
   const clientSecret = process.env.REACT_APP_CLIENT_SECRET!;
   const clientId = process.env.REACT_APP_CLIENT_ID!;
 

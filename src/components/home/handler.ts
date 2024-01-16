@@ -1,26 +1,29 @@
 import Cookies from '../../tools/cookies';
 import * as controller from './controller';
-import { ETokenType } from '../../enums';
-import type { MainDispatch } from '../../redux/types';
-import * as hooks from '../../redux';
+import { ETokenNames, ETokenType } from '../../enums';
 
 export const sendToLoginPage = (): void => {
   return controller.sendToLoginPage();
 };
 
-const removeTokens = async (): Promise<void> => {
+const removeTokens = async (): Promise<string> => {
   const cookies = new Cookies();
-  const accessToken = cookies.getToken('monsters.uid');
-  const refreshToken = cookies.getToken('monsters.ref');
+  const accessToken = cookies.getToken(ETokenNames.Access);
+  const refreshToken = cookies.getToken(ETokenNames.Refresh);
 
   await controller.revokeToken(accessToken as string, ETokenType.Access);
   await controller.revokeToken(refreshToken as string, ETokenType.Refresh);
+
+  cookies.removeToken(ETokenNames.Access);
+  cookies.removeToken(ETokenNames.Refresh);
+
+  return accessToken as string;
 };
 
-export const logout = (dispatch: MainDispatch): void => {
+export const logout = (): void => {
   removeTokens()
-    .then(() => {
-      dispatch(hooks.logOut());
+    .then((accessToken) => {
+      controller.sendToLogoutPage(accessToken);
       return undefined;
     })
     .catch((err) => {

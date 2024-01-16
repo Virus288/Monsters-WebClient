@@ -1,5 +1,6 @@
 export interface IPreLoginBody {
   login: string;
+  sub: string;
 }
 
 export interface ILoginBody {

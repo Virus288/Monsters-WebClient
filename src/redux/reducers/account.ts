@@ -7,6 +7,7 @@ const account = createSlice({
   reducers: {
     logIn(state, action: types.IAccountAction) {
       state.userName = action.payload.userName;
+      state.id = action.payload.id;
       return state;
     },
     logOut(state) {

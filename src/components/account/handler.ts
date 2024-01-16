@@ -51,7 +51,7 @@ export const preLogin = async (dispatch: MainDispatch): Promise<void> => {
 
   const data = await controllers.getUserLogin();
   if (data?.login) {
-    dispatch(hooks.logIn({ userName: data?.login }));
+    dispatch(hooks.logIn({ userName: data?.login, id: data?.sub }));
   }
 };
 
@@ -62,6 +62,6 @@ export const logIn = async (code: string, dispatch: MainDispatch): Promise<void>
 
   const userLogin = await controllers.getUserLogin();
   if (userLogin?.login) {
-    dispatch(hooks.logIn({ userName: userLogin?.login }));
+    dispatch(hooks.logIn({ userName: userLogin?.login, id: userLogin?.sub }));
   }
 };

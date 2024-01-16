@@ -5,7 +5,7 @@ import type { IFullError } from '../../types';
 export const sendToLoginPage = (): void => {
   // #TODO This should generate nonce, which should be validated back by response. Nonce should be saved in cookies for max of 10 min. If user won't manage to log in after that time, login should not be validated
   const server = process.env.REACT_APP_BACKEND!;
-  const redirectUrl = process.env.REACT_APP_REDIRECT_URL!;
+  const redirectUrl = process.env.REACT_APP_REDIRECT_LOGIN_URL!;
   const clientId = process.env.REACT_APP_CLIENT_ID!;
 
   const params = new URLSearchParams({
@@ -17,6 +17,20 @@ export const sendToLoginPage = (): void => {
   }).toString();
 
   window.location.href = `${server}/auth?${params}`;
+};
+
+export const sendToLogoutPage = (token: string): void => {
+  const server = process.env.REACT_APP_BACKEND!;
+  const redirectUrl = process.env.REACT_APP_HOME!;
+  const clientId = process.env.REACT_APP_CLIENT_ID!;
+
+  const params = new URLSearchParams({
+    id_token_hint: token,
+    post_logout_redirect_uri: redirectUrl,
+    client_id: clientId,
+  }).toString();
+
+  window.location.href = `${server}/session/end?${params}`;
 };
 
 export const revokeToken = async (token: string, type: ETokenType): Promise<void> => {

@@ -102,10 +102,10 @@ export default class Cookies {
   }
 
   addLoginToken(token: string, ttl: number): void {
-    new CookieGenerator(token, 'monsters.uid').secure(true).expires(ttl).sameSite(ESameSiteParams.Strict).create();
+    new CookieGenerator(token, 'monsters.uid').secure(false).expires(ttl).sameSite(ESameSiteParams.Strict).create();
   }
 
   addRefreshToken(token: string, ttl: number): void {
-    new CookieGenerator(token, 'monsters.ref').secure(true).expires(ttl).sameSite(ESameSiteParams.Strict).create();
+    new CookieGenerator(token, 'monsters.ref').secure(false).expires(ttl).sameSite(ESameSiteParams.Strict).create();
   }
 }
