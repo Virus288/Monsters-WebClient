@@ -7,9 +7,21 @@
   "ascent": 850,
   "glyphs": [
     {
-      "uid": "bczb7qup4axmc490xmuuv8qdhcnbgeyf",
+      "uid": "bbd66ef66bb8fa9edde54d9a90b89150",
       "css": "user",
       "code": 59392,
+      "src": "entypo"
+    },
+    {
+      "uid": "6zhrgcf3co77hnljttd3b2mrc8z5fiq5",
+      "css": "right-open",
+      "code": 59394,
+      "src": "typicons"
+    },
+    {
+      "uid": "dpxunrtmigvk6jm0ieo7axfsgzx4awll",
+      "css": "cog",
+      "code": 59395,
       "src": "typicons"
     }
   ]

@@ -1,6 +1,8 @@
 import { generateRandomName } from '../../tools';
 import type { ETokenType } from '../../enums';
 import type { IFullError } from '../../types';
+import type { MainDispatch } from '../../redux/types';
+import * as hooks from '../../redux';
 
 export const sendToLoginPage = (): void => {
   // #TODO This should generate nonce, which should be validated back by response. Nonce should be saved in cookies for max of 10 min. If user won't manage to log in after that time, login should not be validated
@@ -54,4 +56,14 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<void
   if (res.ok) return;
   const err = (await res.json()) as IFullError;
   throw err;
+};
+
+export const generateNewUserLogs = (dispatch: MainDispatch): void => {
+  const newUserMessages = [
+    'Hi. My name is Jessica. Welcome to our adventure guild. In order to register as an adventurer, I need you to provide me with some information. Please fill out this form.',
+    '[You pick up the registration form and start reading]',
+    'Please provide your race: ',
+  ];
+
+  newUserMessages.forEach((message) => dispatch(hooks.addLog({ message })));
 };

@@ -18,7 +18,10 @@ export const RenderAccountPopup: React.FC<{ show: boolean }> = ({ show }) => {
       {show ? (
         <AccountPopup variants={animations.opacity} initial="init" animate="visible" exit="exit">
           {userName ? (
-            <Button onClick={(): void => logout()}>Log out</Button>
+            <>
+              <Button onClick={(): void => navigate('/account')}>Account</Button>
+              <Button onClick={(): void => logout()}>Log out</Button>
+            </>
           ) : (
             <>
               <Button onClick={(): void => sendToLoginPage()}>Log in</Button>

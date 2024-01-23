@@ -3,7 +3,7 @@ import type * as types from '../types';
 
 const account = createSlice({
   name: 'account',
-  initialState: { userName: undefined } as types.IAccountState,
+  initialState: { userName: undefined, id: undefined } as types.IAccountState,
   reducers: {
     logIn(state, action: types.IAccountAction) {
       state.userName = action.payload.userName;

@@ -12,6 +12,7 @@ const Routers: React.FC = () => {
         <Route path="/" element={<Components.Home />} />
         <Route path="/login" element={<Components.Login />} />
         <Route path="/register" element={<Components.Register />} />
+        <Route path="/account" element={<Components.Account />} />
         <Route path="*" element={<Components.FourOhFour />} />
       </Routes>
     </AnimatePresence>

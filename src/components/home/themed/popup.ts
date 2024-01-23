@@ -17,9 +17,8 @@ export const AccountPopup = styled(motion.div)<localTypes.IDefaultChildren>`
   padding: 10px;
   margin: 5px;
   border-radius: 5px;
-  border: 1px solid ${(props): string => props.theme.colors.default};
   background: ${(props): string => props.theme.background.semiTransparent};
-  box-shadow: ${(props): string => `1px 1px 1px ${props.theme.colors.default}`};
+  box-shadow: ${(props): string => `1px 1px 1px ${props.theme.shadows.default}`};
   color: ${(props): string => props.theme.colors.default};
   z-index: 9;
 `;
