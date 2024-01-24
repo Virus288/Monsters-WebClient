@@ -70,6 +70,42 @@ export const LogBottomContainer = styled(motion.div)<ILogProps>`
   }
 `;
 
+export const HintsContainer = styled(motion.div)<ILogProps>`
+  height: fit-content;
+  max-height: 130px;
+  overflow: scroll;
+
+  @media (min-width: 768px) {
+    width: ${(props): number => props.$width}px;
+  }
+
+  @media (max-width: 767px) {
+    width: 98%;
+  }
+`;
+
+export const HintBody = styled(motion.div)<IDefaultComponentProps>`
+  border: 2px solid ${(props): string => props.theme.colors.ohOrange};
+  border-radius: 5%;
+  box-shadow: 1px 1px 1px ${(props): string => props.theme.shadows.black};
+  font-weight: 200;
+  letter-spacing: 0.9px;
+  font-size: 1.1em;
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px;
+  height: fit-content;
+  width: fit-content;
+  display: inline-block;
+
+  @media (min-width: 768px) {
+    &:hover {
+      box-shadow: none;
+      transition: ${(props): string => props.theme.transition.default};
+    }
+  }
+`;
+
 export const LogInput = styled(motion.input)<IDefaultComponentProps>`
   flex-grow: 1;
   border: none;

@@ -3,6 +3,8 @@ import { ECharacterState } from '../enums/characterStates';
 import type { MainDispatch } from '../redux/types';
 import * as hooks from '../redux';
 import Handler from './handler';
+import { EUserRace } from '../enums/commands/races';
+import type { IFullError } from '../types';
 
 export default class LogsController {
   private readonly _handler: Handler;
@@ -39,7 +41,7 @@ export default class LogsController {
   getAvailableCommands(): string[] {
     switch (this.characterState) {
       case ECharacterState.Registration:
-        return Object.values(ECharacterState);
+        return Object.values(EUserRace);
       default:
         return [''];
     }
@@ -57,22 +59,24 @@ export default class LogsController {
   sendLog(input: string, canWrite: boolean, setMessage: React.Dispatch<React.SetStateAction<string>>): void {
     if (!canWrite) return;
 
-    console.log('Send logs');
-    console.log(canWrite);
-    console.log('input');
-    console.log(input);
     setMessage('');
     this.dispatch(hooks.addLog({ message: input, author: 0 }));
-    // const availableCommands = this.getAvailableCommands().map((c) => c.toLowerCase());
-    //
-    // if (!availableCommands.includes(command.toLowerCase())) {
-    //   this.dispatch(hooks.addLog({ message: 'Invalid input' }));
-    //   return;
-    // }
-    //
-    // this.handler.handleUserCommand(command, this.characterState).catch((err) => {
-    //   this.dispatch(hooks.addLog({ message: (err as IFullError).message }));
-    // });
+
+    const availableCommands = this.getAvailableCommands().map((c) => c.toLowerCase());
+
+    if (!availableCommands.includes(input.toLowerCase())) {
+      this.dispatch(
+        hooks.addLog({
+          message: "Invalid input. You can use 'help' to gain more information about available commands",
+          author: 1,
+        }),
+      );
+      return;
+    }
+
+    this.handler.handleUserCommand(input.toLowerCase(), this.characterState).catch((err) => {
+      this.dispatch(hooks.addLog({ message: (err as IFullError).message, author: 1 }));
+    });
   }
 
   async init(logs: { log: string; author: string | number }[]): Promise<void> {

@@ -2,11 +2,21 @@ import type { ReactElement } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { Container } from '../../../shared/styled';
-import { LogAnimationContainer, LogBottomContainer, LogButton, LogInput, LogsContainer, UserLog } from '../styled/logs';
+import {
+  HintBody,
+  HintsContainer,
+  LogAnimationContainer,
+  LogBottomContainer,
+  LogButton,
+  LogInput,
+  LogsContainer,
+  UserLog,
+} from '../styled/logs';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
 import * as hooks from '../../../redux';
 import LogsController from '../../../logs';
 import { scrollBottom } from '../handler';
+import * as animation from '../../../style/animation';
 
 export const renderLogsBody = (
   logs: { log: string; author: number | string; id: number; animate: boolean }[],
@@ -126,19 +136,53 @@ export const RenderLogsInput: React.FC<{
   logsController: LogsController;
 }> = ({ width, canWrite, logsController }) => {
   const [message, setMessage] = useState<string>('');
+  const [availableCommands, setAvailableCommands] = useState<string[]>([]);
+  const [hints, setHints] = useState<string[]>([]);
+
+  useEffect(() => {
+    const prepared: string[] = [];
+
+    availableCommands.forEach((e) => {
+      if (message !== '' && e.includes(message.toLowerCase())) prepared.push(e.charAt(0).toUpperCase() + e.slice(1));
+    });
+    setHints(prepared);
+  }, [availableCommands, message]);
+
+  useEffect(() => {
+    if (message === '') setAvailableCommands(logsController.getAvailableCommands());
+  }, [logsController, message]);
 
   return (
-    <LogBottomContainer $width={width}>
-      <LogInput
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => logsController.sendLogOnEnter(e, canWrite, setMessage)}
-        placeholder="Write your command..."
-      />
-      <LogButton onClick={() => logsController.sendLog(message, canWrite, setMessage)}>
-        <i className="icon-right-open" />
-      </LogButton>
-    </LogBottomContainer>
+    <>
+      <HintsContainer $width={width}>
+        {hints.map((h) => {
+          return (
+            <HintBody
+              onClick={() => setMessage(h)}
+              variants={animation.opacity}
+              initial="init"
+              animate="visible"
+              exit="exit"
+              key={h}
+            >
+              {h}
+            </HintBody>
+          );
+        })}
+      </HintsContainer>
+      <LogBottomContainer $width={width}>
+        <LogInput
+          id="logsInput"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => logsController.sendLogOnEnter(e, canWrite, setMessage)}
+          placeholder="Write your command..."
+        />
+        <LogButton onClick={() => logsController.sendLog(message, canWrite, setMessage)}>
+          <i className="icon-right-open" />
+        </LogButton>
+      </LogBottomContainer>
+    </>
   );
 };
 
