@@ -10,12 +10,8 @@ const account = createSlice({
       state.id = action.payload.id;
       return state;
     },
-    logOut(state) {
-      state.userName = undefined;
-      return state;
-    },
   },
 });
 
-export const { logIn, logOut } = account.actions;
+export const { logIn } = account.actions;
 export default account.reducer;
