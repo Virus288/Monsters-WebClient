@@ -31,3 +31,9 @@ export const logout = (): void => {
       console.log(err);
     });
 };
+
+export const scrollBottom = (): void => {
+  const body = document.querySelector('#logAnimationContainer');
+  if (!body) return;
+  body.scrollTop = body.scrollHeight;
+};

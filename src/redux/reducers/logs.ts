@@ -6,7 +6,7 @@ const logs = createSlice({
   initialState: { logs: [] } as types.ILogsState,
   reducers: {
     addLog(state, action: types.IAddLogAction) {
-      state.logs.push(action.payload.message);
+      state.logs.push({ log: action.payload.message, author: action.payload.author });
       return state;
     },
   },

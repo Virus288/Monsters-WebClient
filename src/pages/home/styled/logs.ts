@@ -10,13 +10,11 @@ export const LogsContainer = styled(motion.div)<ILogProps>`
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-start;
-  padding: 5px;
   color: #ffffff;
   flex-wrap: wrap;
-  overflow-y: scroll;
-  overflow-x: hidden;
   transition: ${(props): string => props.theme.transition.semiSlow};
-  padding-top: 60px;
+  padding: 60px 5px 5px 5px;
+  max-height: calc(100vh - 70px);
 
   &::-webkit-scrollbar {
     width: 15px;
@@ -35,6 +33,7 @@ export const LogsContainer = styled(motion.div)<ILogProps>`
 
   div {
     margin: 5px 2px 5px 2px;
+    word-break: break-word;
   }
 
   @media (min-width: 768px) {
@@ -42,8 +41,17 @@ export const LogsContainer = styled(motion.div)<ILogProps>`
   }
 
   @media (max-width: 767px) {
-    width: 100%;
+    width: 98%;
   }
+`;
+
+export const LogAnimationContainer = styled(motion.div)<IDefaultComponentProps>`
+  overflow: scroll;
+  scroll-behavior: smooth;
+`;
+
+export const UserLog = styled(motion.div)<IDefaultComponentProps>`
+  text-align: right;
 `;
 
 export const LogBottomContainer = styled(motion.div)<ILogProps>`
@@ -58,7 +66,7 @@ export const LogBottomContainer = styled(motion.div)<ILogProps>`
   }
 
   @media (max-width: 767px) {
-    width: 100%;
+    width: 98%;
   }
 `;
 
