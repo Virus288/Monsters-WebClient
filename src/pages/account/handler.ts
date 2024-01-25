@@ -1,7 +1,7 @@
 import type React from 'react';
 import type { IFullError, IRegisterForm } from '../../types';
 import * as controllers from './controller';
-import { refreshAccessToken } from './controller';
+import { getProfile, refreshAccessToken } from './controller';
 import * as hooks from '../../redux';
 import type { MainDispatch } from '../../redux/types';
 import Cookies from '../../tools/cookies';
@@ -51,6 +51,8 @@ export const preLogin = async (dispatch: MainDispatch): Promise<void> => {
 
   const data = await controllers.getUserLogin();
   if (data?.login) {
+    const profile = await getProfile(data?.sub);
+    dispatch(hooks.addProfile(profile));
     dispatch(hooks.logIn({ userName: data?.login, id: data?.sub }));
   }
 };
@@ -62,6 +64,8 @@ export const logIn = async (code: string, dispatch: MainDispatch): Promise<void>
 
   const userLogin = await controllers.getUserLogin();
   if (userLogin?.login) {
+    const profile = await getProfile(userLogin?.sub);
+    dispatch(hooks.addProfile(profile));
     dispatch(hooks.logIn({ userName: userLogin?.login, id: userLogin?.sub }));
   }
 };

@@ -27,16 +27,16 @@ const ViewsController: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
 }> = ({ setTheme }) => {
   const dispatch = useMainDispatch();
-  const [preReady, setPreReady] = useState<boolean>(false);
+  const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
     preLogin(dispatch)
-      .then(() => setPreReady(true))
-      .catch(() => setPreReady(true));
+      .then(() => setReady(true))
+      .catch(() => setReady(true));
   }, [dispatch]);
 
-  if (!preReady) {
-    return <Loading finished={preReady} />;
+  if (!ready) {
+    return <Loading finished={ready} />;
   }
 
   return (

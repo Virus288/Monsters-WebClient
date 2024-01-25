@@ -1,4 +1,4 @@
-import type { IFullError, ILoginBody, IPreLoginBody } from '../../types';
+import type { IFullError, ILoginBody, IPreLoginBody, IUserProfile } from '../../types';
 import Cookies from '../../tools/cookies';
 
 export const refreshAccessToken = async (token: string): Promise<void> => {
@@ -43,6 +43,25 @@ export const getUserLogin = async (): Promise<IPreLoginBody | undefined> => {
   });
   if (res.ok) {
     return (await res.json()) as IPreLoginBody;
+  }
+  const err = (await res.json()) as IFullError;
+  throw err;
+};
+
+export const getProfile = async (id: string): Promise<IUserProfile> => {
+  const accessToken = new Cookies().getToken('monsters.uid');
+  const server = process.env.REACT_APP_BACKEND!;
+
+  const res = await fetch(`${server}/profile?id=${id}`, {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  });
+  if (res.ok) {
+    return (await res.json()) as IUserProfile;
   }
   const err = (await res.json()) as IFullError;
   throw err;

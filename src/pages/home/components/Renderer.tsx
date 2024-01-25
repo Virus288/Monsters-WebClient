@@ -189,11 +189,12 @@ export const RenderLogsInput: React.FC<{
 export const RenderInitializedUi: React.FC = () => {
   const [width, setWidth] = useState<number>(200);
   const [canWrite, setCanWrite] = useState<boolean>(false);
+  const { profile } = useMainSelector(hooks.profileState);
 
   const dispatch = useMainDispatch();
   const logsController = useMemo(() => {
-    return new LogsController(dispatch);
-  }, [dispatch]);
+    return new LogsController(dispatch, profile);
+  }, [dispatch, profile]);
 
   useEffect(() => {
     setWidth(500);

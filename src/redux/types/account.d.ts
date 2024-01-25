@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface IAccountState {
   userName: string | undefined;
   id: string | undefined;
+  registered: boolean;
 }
 
 interface IAccountBody {

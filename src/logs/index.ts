@@ -4,15 +4,18 @@ import type { MainDispatch } from '../redux/types';
 import * as hooks from '../redux';
 import Handler from './handler';
 import { EUserRace } from '../enums/commands/races';
-import type { IFullError } from '../types';
+import type { IFullError, IUserProfile } from '../types';
 
 export default class LogsController {
   private readonly _handler: Handler;
 
   private readonly _dispatch: MainDispatch;
 
-  constructor(dispatch: MainDispatch) {
+  private readonly _profile: IUserProfile;
+
+  constructor(dispatch: MainDispatch, profile: IUserProfile) {
     this._dispatch = dispatch;
+    this._profile = profile;
     this._handler = new Handler(dispatch);
   }
 
@@ -28,6 +31,10 @@ export default class LogsController {
 
   private set characterState(value: ECharacterState) {
     this._characterState = value;
+  }
+
+  private get profile(): IUserProfile {
+    return this._profile;
   }
 
   private get dispatch(): MainDispatch {
@@ -74,22 +81,50 @@ export default class LogsController {
       return;
     }
 
-    this.handler.handleUserCommand(input.toLowerCase(), this.characterState).catch((err) => {
-      this.dispatch(hooks.addLog({ message: (err as IFullError).message, author: 1 }));
-    });
+    this.handler
+      .handleUserCommand(input.toLowerCase(), this.characterState)
+      .then(() => {
+        switch (this.characterState) {
+          case ECharacterState.Registration:
+            return this.finishRegistration();
+          default:
+            // #TODO Add some kind of help menu, which will allow user to send debug code if this happened
+            return this.dispatch(
+              hooks.addLog({
+                message: 'Your character seems to be in unknown state. This should never happened',
+                author: 1,
+              }),
+            );
+        }
+      })
+      .catch((err) => {
+        this.dispatch(hooks.addLog({ message: (err as IFullError).message, author: 1 }));
+      });
   }
 
   async init(logs: { log: string; author: string | number }[]): Promise<void> {
     console.log(`All logs: ${logs.length}`);
     return new Promise((resolve) => {
-      // Placeholder for now. Backend is not yet ready
-      this.handler.getRegisterLogs();
-      this.changeCharacterState(ECharacterState.Registration);
+      if (!this.profile.initialized) {
+        this.handler.getRegisterLogs();
+        this.changeCharacterState(ECharacterState.Registration);
+      } else {
+        // Placeholder for now. Backend is not yet ready
+        // await this.fetchLogs();
+      }
+
       resolve();
     });
-    // if (logs.length === 0) {
-    //   await this.fetchLogs();
-    // }
+  }
+
+  private finishRegistration(): void {
+    const data = [
+      "It seems I got everything I need. Here's your adventurer plate.",
+      '[Your receive bronze adventurer plate]',
+      'Whenever you are free, you can undertake quests to earn valuable rewards and coins. Quests come and go, but you should be able to find something for yourself. Good luck and take care of yourself. We lost too many people this year',
+    ];
+
+    data.forEach((message) => this.dispatch(hooks.addLog({ message, author: 1 })));
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
