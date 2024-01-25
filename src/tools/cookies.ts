@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { ESameSiteParams } from '../enums/cookies';
+import { ESameSiteParams } from '../enums';
 
 class CookieGenerator {
   private readonly _value: string;

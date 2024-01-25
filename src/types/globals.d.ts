@@ -1,4 +1,4 @@
-import type mainStore from '../store';
+import type mainStore from '../redux/store';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/naming-convention

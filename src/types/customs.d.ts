@@ -1,6 +1,6 @@
-import type { IDefaultChildren } from './theme';
+import type { IDefaultComponentProps } from './theme';
 
-export interface IContainerProps extends IDefaultChildren {
+export interface IContainerProps extends IDefaultComponentProps {
   $direction?: string;
   $justify?: string;
   $align?: string;
@@ -10,24 +10,16 @@ export interface IContainerProps extends IDefaultChildren {
   $spacer?: boolean;
 }
 
-export interface IHeaderProps extends IDefaultChildren {
-  $center?: boolean;
-}
-
-export interface ISpanProps extends IDefaultChildren {
+export interface ISpanProps extends IDefaultComponentProps {
   $width?: number;
   $mobileWidth?: number;
 }
 
-export interface ITextProps extends IDefaultChildren {
+export interface ITextProps extends IDefaultComponentProps {
   $width?: number | string;
 }
 
-export interface IInputProps extends IDefaultChildren {
+export interface IInputProps extends IDefaultComponentProps {
   $full?: boolean;
   $centerText?: boolean;
-}
-
-export interface IChatMessageProps extends IDefaultChildren {
-  $sender?: boolean;
 }
