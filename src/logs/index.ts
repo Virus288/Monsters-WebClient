@@ -1,56 +1,126 @@
 import type React from 'react';
-import { ECharacterState } from '../enums/characterStates';
 import type { MainDispatch } from '../redux/types';
 import * as hooks from '../redux';
+import * as enums from '../enums';
+import { EMessageComponentActions } from '../enums';
 import Handler from './handler';
-import { EUserRace } from '../enums/commands/races';
+import * as commands from '../enums/commands';
 import type { IFullError, IUserProfile } from '../types';
+import type { IGetMessages } from '../types/messages';
 
 export default class LogsController {
   private readonly _handler: Handler;
 
   private readonly _dispatch: MainDispatch;
 
-  private readonly _profile: IUserProfile;
+  private readonly _user: {
+    profile: IUserProfile;
+    userName: string;
+  };
 
-  constructor(dispatch: MainDispatch, profile: IUserProfile) {
+  private readonly _setCanWrite: (canWrite: boolean) => void;
+
+  constructor(
+    dispatch: MainDispatch,
+    setCanWrite: (data: boolean) => void,
+    user: {
+      profile: IUserProfile;
+      userName: string;
+    },
+  ) {
     this._dispatch = dispatch;
-    this._profile = profile;
-    this._handler = new Handler(dispatch);
+    this._setCanWrite = setCanWrite;
+    this._user = user;
+    this._handler = new Handler(dispatch, (state: enums.ECharacterState) => {
+      this.characterState = state;
+    });
+  }
+
+  private _messagesComponentAction:
+    | ((
+        params:
+          | {
+              action: enums.EMessageComponentActions;
+              params: string | number;
+            }
+          | undefined,
+      ) => void)
+    | undefined = undefined;
+
+  private get messagesComponentAction(): (
+    params:
+      | {
+          action: enums.EMessageComponentActions;
+          params: string | number;
+        }
+      | undefined,
+  ) => void {
+    return this._messagesComponentAction as (
+      params:
+        | {
+            action: enums.EMessageComponentActions;
+            params: string | number;
+          }
+        | undefined,
+    ) => void;
+  }
+
+  private set messagesComponentAction(
+    value: (
+      params:
+        | {
+            action: enums.EMessageComponentActions;
+            params: string | number;
+          }
+        | undefined,
+    ) => void,
+  ) {
+    this._messagesComponentAction = value;
+  }
+
+  private _characterState: enums.ECharacterState | null = null;
+
+  private get characterState(): enums.ECharacterState {
+    return this._characterState as enums.ECharacterState;
+  }
+
+  private set characterState(value: enums.ECharacterState) {
+    this._characterState = value;
   }
 
   private get handler(): Handler {
     return this._handler;
   }
 
-  private _characterState: ECharacterState | null = null;
-
-  private get characterState(): ECharacterState {
-    return this._characterState as ECharacterState;
+  private get setCanWrite(): (canWrite: boolean) => void {
+    return this._setCanWrite;
   }
 
-  private set characterState(value: ECharacterState) {
-    this._characterState = value;
-  }
-
-  private get profile(): IUserProfile {
-    return this._profile;
+  private get user(): {
+    profile: IUserProfile;
+    userName: string;
+  } {
+    return this._user;
   }
 
   private get dispatch(): MainDispatch {
     return this._dispatch;
   }
 
-  changeCharacterState(state: ECharacterState): void {
+  changeCharacterState(state: enums.ECharacterState): void {
     this.characterState = state;
   }
 
   getAvailableCommands(): string[] {
     switch (this.characterState) {
-      case ECharacterState.Registration:
-        return Object.values(EUserRace);
+      case enums.ECharacterState.Registration:
+        return Object.values(commands.EUserRace);
+      case enums.ECharacterState.GetMessage:
+      case enums.ECharacterState.SendMessageTo:
+      case enums.ECharacterState.SendMessageValue:
+        return [];
       default:
-        return [''];
+        return Object.values(commands.EGenericActions);
     }
   }
 
@@ -66,12 +136,11 @@ export default class LogsController {
   sendLog(input: string, canWrite: boolean, setMessage: React.Dispatch<React.SetStateAction<string>>): void {
     if (!canWrite) return;
 
-    setMessage('');
     this.dispatch(hooks.addLog({ message: input, author: 0 }));
+    this.setCanWrite(false);
 
     const availableCommands = this.getAvailableCommands().map((c) => c.toLowerCase());
-
-    if (!availableCommands.includes(input.toLowerCase())) {
+    if (availableCommands.length > 0 && !availableCommands.includes(input.toLowerCase())) {
       this.dispatch(
         hooks.addLog({
           message: "Invalid input. You can use 'help' to gain more information about available commands",
@@ -81,50 +150,103 @@ export default class LogsController {
       return;
     }
 
-    this.handler
-      .handleUserCommand(input.toLowerCase(), this.characterState)
+    this.handleLog(input)
       .then(() => {
-        switch (this.characterState) {
-          case ECharacterState.Registration:
-            return this.finishRegistration();
-          default:
-            // #TODO Add some kind of help menu, which will allow user to send debug code if this happened
-            return this.dispatch(
-              hooks.addLog({
-                message: 'Your character seems to be in unknown state. This should never happened',
-                author: 1,
-              }),
-            );
-        }
+        setMessage('');
+        return this.setCanWrite(true);
       })
       .catch((err) => {
+        console.log('err');
+        console.log(err);
+        setMessage('');
+        this.setCanWrite(true);
         this.dispatch(hooks.addLog({ message: (err as IFullError).message, author: 1 }));
+
+        // #TODO This WILL break things. Add handler for errors
+        this.handler.restorePreviousCharacterState();
+      });
+  }
+
+  initLoadData(): void {
+    const actions = [enums.ECharacterState.GetMessages];
+
+    Promise.all(
+      actions.map(async (a) => {
+        await this.handleDataLoad(a);
+      }),
+    )
+      .then(() => this.setCanWrite(true))
+      .catch((err) => {
+        console.log('err');
+        console.log(err);
+        this.setCanWrite(true);
+        this.dispatch(hooks.addLog({ message: 'We have encountered an issue while fetching your data', author: 1 }));
       });
   }
 
   async init(logs: { log: string; author: string | number }[]): Promise<void> {
     console.log(`All logs: ${logs.length}`);
     return new Promise((resolve) => {
-      if (!this.profile.initialized) {
+      if (!this.user.profile.initialized) {
         this.handler.getRegisterLogs();
-        this.changeCharacterState(ECharacterState.Registration);
+        this.changeCharacterState(enums.ECharacterState.Registration);
       } else {
         // Placeholder for now. Backend is not yet ready
         // await this.fetchLogs();
+        // Backend should respond with character's status and current action. Since this is not yet available, adding generic state
+        this.changeCharacterState(enums.ECharacterState.Map);
       }
 
       resolve();
     });
   }
 
-  private finishRegistration(): void {
-    const data = [
-      "It seems I got everything I need. Here's your adventurer plate.",
-      '[Your receive bronze adventurer plate]',
-      'Whenever you are free, you can undertake quests to earn valuable rewards and coins. Quests come and go, but you should be able to find something for yourself. Good luck and take care of yourself. We lost too many people this year',
-    ];
+  setMessagesComponentAction(
+    action: (params: { action: enums.EMessageComponentActions; params: string | number } | undefined) => void,
+  ): void {
+    this.messagesComponentAction = action;
+  }
 
-    data.forEach((message) => this.dispatch(hooks.addLog({ message, author: 1 })));
+  private async handleLog(input: string): Promise<void> {
+    // Handle generic actions
+    if (Object.values(commands.EGenericActions).includes(input.toLowerCase() as commands.EGenericActions)) {
+      switch (input.toLowerCase() as commands.EGenericActions) {
+        case commands.EGenericActions.GetMessage:
+          this.handler.savePreviousCharacterState(this.characterState);
+          this.changeCharacterState(enums.ECharacterState.GetMessage);
+          this.dispatch(hooks.addLog({ message: 'Message from who would you like to read ?', author: 1 }));
+          break;
+        case commands.EGenericActions.SendMessage:
+          this.handler.savePreviousCharacterState(this.characterState);
+          this.changeCharacterState(enums.ECharacterState.SendMessageTo);
+          this.dispatch(hooks.addLog({ message: 'Who would you like to send a message to ?', author: 1 }));
+          break;
+        case commands.EGenericActions.GetMessages:
+          this.messagesComponentAction({ action: enums.EMessageComponentActions.RenderAllConversations, params: 1 });
+          break;
+        default:
+          this.dispatch(hooks.addLog({ message: 'This action is not yet finished. Come back later', author: 1 }));
+          break;
+      }
+
+      return;
+    }
+
+    // Handle sync actions
+    switch (this.characterState) {
+      case enums.ECharacterState.SendMessageTo:
+        this.handler.addActionParam(this.characterState, input);
+        this.changeCharacterState(enums.ECharacterState.SendMessageValue);
+        this.dispatch(hooks.addLog({ message: 'What message would you like to send ?', author: 1 }));
+        return;
+      case enums.ECharacterState.GetMessage:
+        this.messagesComponentAction({ action: EMessageComponentActions.GetMessage, params: input });
+        this.handler.restorePreviousCharacterState();
+        return;
+      default:
+        // Handle async actions
+        await this.handleAction(input);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -135,5 +257,35 @@ export default class LogsController {
     return new Promise((resolve) => {
       resolve();
     });
+  }
+
+  private async handleAction(input: string): Promise<void> {
+    const callback = await this.handler.handleAsyncCommand(input, this.characterState);
+    console.log('callback');
+    console.log(callback);
+
+    switch (this.characterState) {
+      case enums.ECharacterState.Registration:
+        this.handler.finishRegistration();
+        return this.changeCharacterState(enums.ECharacterState.Map);
+      case enums.ECharacterState.SendMessageValue:
+        this.handler.removeActionParam(this.characterState);
+        this.dispatch(hooks.addLog({ message: 'Message sent', author: 1 }));
+        return this.handler.restorePreviousCharacterState();
+      default:
+        return undefined;
+    }
+  }
+
+  private async handleDataLoad(characterState: enums.ECharacterState): Promise<void> {
+    const callback = await this.handler.handleAsyncCommand('', characterState);
+
+    switch (characterState) {
+      case enums.ECharacterState.GetMessages:
+        this.dispatch(hooks.addChats({ chats: callback as Record<string, IGetMessages> }));
+        break;
+      default:
+        break;
+    }
   }
 }
