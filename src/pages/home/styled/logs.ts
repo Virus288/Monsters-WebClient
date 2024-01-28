@@ -46,6 +46,7 @@ export const LogsContainer = styled(motion.div)<ILogProps>`
 `;
 
 export const LogAnimationContainer = styled(motion.div)<IDefaultComponentProps>`
+  width: 100%;
   overflow: scroll;
   scroll-behavior: smooth;
 `;

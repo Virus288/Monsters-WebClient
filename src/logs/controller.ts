@@ -1,5 +1,6 @@
-import type { EUserRace } from '../enums/commands/races';
+import type { EUserRace } from '../enums/commands';
 import type { IFullError } from '../types';
+import type { IGetMessages } from '../types/messages';
 
 export default class Controller {
   async createProfile(race: EUserRace): Promise<void> {
@@ -17,6 +18,42 @@ export default class Controller {
     });
 
     if (res.ok) return;
+    const err = (await res.json()) as IFullError;
+    throw err;
+  }
+
+  async sendMessage(body: string, receiver: string): Promise<void> {
+    const server = process.env.REACT_APP_BACKEND!;
+
+    const res = await fetch(`${server}/message/send`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        receiver,
+        body,
+      }),
+    });
+
+    if (res.ok) return;
+    const err = (await res.json()) as IFullError;
+    throw err;
+  }
+
+  async getMessages(): Promise<Record<string, IGetMessages>> {
+    const server = process.env.REACT_APP_BACKEND!;
+
+    const res = await fetch(`${server}/message?page=1`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.ok) return (await res.json()) as Record<string, IGetMessages>;
     const err = (await res.json()) as IFullError;
     throw err;
   }
