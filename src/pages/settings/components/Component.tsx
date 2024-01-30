@@ -1,11 +1,10 @@
 import React from 'react';
 import type { DefaultTheme } from 'styled-components';
 import { useTheme } from 'styled-components';
-import { AnimateEntry, Button, Header } from '../../../shared/styled';
+import { AnimateEntry, Button, Header, OverlayContainer, OverlayContainerBody } from '../../../shared/styled';
 
 import * as animation from '../../../style/animation';
 import changeTheme from '../utils';
-import { SettingsBody, SettingsContainer } from '../styled';
 
 const Settings: React.FC<{
   disablePanel: (e) => void;
@@ -15,13 +14,13 @@ const Settings: React.FC<{
 
   return (
     <AnimateEntry variants={animation.opacity} initial="init" animate="visible" exit="exit">
-      <SettingsContainer>
-        <SettingsBody>
+      <OverlayContainer>
+        <OverlayContainerBody>
           <Header>Theme:</Header>
           <Button onClick={(): void => changeTheme(setTheme, theme)}>Change theme</Button>
           <Button onClick={(e): void => disablePanel(e)}>Close</Button>
-        </SettingsBody>
-      </SettingsContainer>
+        </OverlayContainerBody>
+      </OverlayContainer>
     </AnimateEntry>
   );
 };

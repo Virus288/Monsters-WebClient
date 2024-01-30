@@ -22,3 +22,9 @@ export const RedText = styled(motion.header)<localTypes.ITextProps>`
   font-size: 1.5rem;
   color: red;
 `;
+
+export const ThemedText = styled(motion.span)<localTypes.ITextProps>`
+  text-align: center;
+  font-size: 1.5rem;
+  color: ${(props): string => props.theme.colors.ohOrange};
+`;
