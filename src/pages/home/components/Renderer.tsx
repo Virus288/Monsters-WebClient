@@ -18,6 +18,7 @@ import LogsController from '../../../logs';
 import { scrollBottom } from '../handler';
 import * as animation from '../../../style/animation';
 import Messages from '../../messages/components/Messages';
+import Help from '../../help/components/Help';
 
 export const renderLogsBody = (
   logs: { log: string; author: number | string; id: number; animate: boolean }[],
@@ -192,6 +193,7 @@ export const RenderInitializedUi: React.FC = () => {
   const [canWrite, setCanWrite] = useState<boolean>(false);
   const { profile } = useMainSelector(hooks.profileState);
   const { userName } = useMainSelector(hooks.accountState);
+  const { help } = useMainSelector((states) => states.statics);
 
   const dispatch = useMainDispatch();
   const logsController = useMemo(() => {
@@ -207,6 +209,7 @@ export const RenderInitializedUi: React.FC = () => {
 
   return (
     <Container>
+      {help ? <Help availableCommands={logsController.getAvailableCommandsKeys()} /> : null}
       <Messages logsController={logsController} setCanWrite={setCanWrite} />
       <RenderLogs width={width} setCanWrite={setCanWrite} logsController={logsController} />
       <RenderLogsInput width={width} canWrite={canWrite} logsController={logsController} />

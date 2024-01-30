@@ -124,6 +124,19 @@ export default class LogsController {
     }
   }
 
+  getAvailableCommandsKeys(): string[] {
+    switch (this.characterState) {
+      case enums.ECharacterState.Registration:
+        return Object.keys(commands.EUserRace);
+      case enums.ECharacterState.GetMessage:
+      case enums.ECharacterState.SendMessageTo:
+      case enums.ECharacterState.SendMessageValue:
+        return [];
+      default:
+        return Object.keys(commands.EGenericActions);
+    }
+  }
+
   sendLogOnEnter(
     e: React.KeyboardEvent<HTMLInputElement>,
     canWrite: boolean,
@@ -211,6 +224,9 @@ export default class LogsController {
     // Handle generic actions
     if (Object.values(commands.EGenericActions).includes(input.toLowerCase() as commands.EGenericActions)) {
       switch (input.toLowerCase() as commands.EGenericActions) {
+        case commands.EGenericActions.Help:
+          this.dispatch(hooks.openHelpPanel());
+          break;
         case commands.EGenericActions.GetMessage:
           this.handler.savePreviousCharacterState(this.characterState);
           this.changeCharacterState(enums.ECharacterState.GetMessage);
