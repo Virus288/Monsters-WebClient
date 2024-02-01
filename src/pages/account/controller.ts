@@ -49,7 +49,6 @@ export const getUserLogin = async (): Promise<IPreLoginBody | undefined> => {
 };
 
 export const getProfile = async (id: string): Promise<IUserProfile> => {
-  const accessToken = new Cookies().getToken('monsters.uid');
   const server = process.env.REACT_APP_BACKEND!;
   const home = process.env.REACT_APP_HOME!;
 
@@ -57,7 +56,6 @@ export const getProfile = async (id: string): Promise<IUserProfile> => {
     method: 'GET',
     credentials: 'include',
     headers: {
-      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': home,
     },
@@ -94,6 +92,7 @@ export const login = async (code: string): Promise<ILoginBody | undefined> => {
   const redirectUrl = process.env.REACT_APP_REDIRECT_LOGIN_URL!;
   const clientSecret = process.env.REACT_APP_CLIENT_SECRET!;
   const clientId = process.env.REACT_APP_CLIENT_ID!;
+  const home = process.env.REACT_APP_HOME!;
 
   const res = await fetch(`${server}/token`, {
     method: 'POST',
@@ -107,7 +106,7 @@ export const login = async (code: string): Promise<ILoginBody | undefined> => {
     }),
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-      'Access-Control-Allow-Origin': 'https://kiszczyc.pl',
+      'Access-Control-Allow-Origin': home,
     },
   });
   if (res.ok) {
