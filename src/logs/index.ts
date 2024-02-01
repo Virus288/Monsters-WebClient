@@ -147,7 +147,7 @@ export default class LogsController {
   }
 
   sendLog(input: string, canWrite: boolean, setMessage: React.Dispatch<React.SetStateAction<string>>): void {
-    if (!canWrite) return;
+    if (!canWrite || input.length === 0) return;
 
     this.dispatch(hooks.addLog({ message: input, author: 0 }));
     this.setCanWrite(false);

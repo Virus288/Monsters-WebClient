@@ -17,7 +17,9 @@ const Help: React.FC<{ availableCommands: string[] }> = ({ availableCommands }) 
     const prepared: Record<string, string> = {};
 
     availableCommands.forEach((c) => {
-      prepared[c] = allCommands[c] as string;
+      if (typeof allCommands[c] === 'string') {
+        prepared[c] = allCommands[c] as string;
+      }
     });
 
     setToRender(prepared);
@@ -36,5 +38,3 @@ const Help: React.FC<{ availableCommands: string[] }> = ({ availableCommands }) 
 };
 
 export default Help;
-
-// dispatch(hooks.closeHelpPanel()
