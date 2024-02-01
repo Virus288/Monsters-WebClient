@@ -1,7 +1,6 @@
 import type { ReactElement } from 'react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
-import { Container } from '../../../shared/styled';
 import {
   HintBody,
   HintsContainer,
@@ -14,11 +13,9 @@ import {
 } from '../styled/logs';
 import { useMainDispatch, useMainSelector } from '../../../redux/hooks';
 import * as hooks from '../../../redux';
-import LogsController from '../../../logs';
+import type LogsController from '../../../logs';
 import { scrollBottom } from '../handler';
 import * as animation from '../../../style/animation';
-import Messages from '../../messages/components/Messages';
-import Help from '../../help/components/Help';
 
 export const renderLogsBody = (
   logs: { log: string; author: number | string; id: number; animate: boolean }[],
@@ -185,44 +182,5 @@ export const RenderLogsInput: React.FC<{
         </LogButton>
       </LogBottomContainer>
     </>
-  );
-};
-
-export const RenderInitializedUi: React.FC = () => {
-  const [width, setWidth] = useState<number>(200);
-  const [canWrite, setCanWrite] = useState<boolean>(false);
-  const { profile } = useMainSelector(hooks.profileState);
-  const { userName } = useMainSelector(hooks.accountState);
-  const { help } = useMainSelector((states) => states.statics);
-
-  const dispatch = useMainDispatch();
-  const logsController = useMemo(() => {
-    return new LogsController(dispatch, (data: boolean) => setCanWrite(data), {
-      profile,
-      userName: userName as string,
-    });
-  }, [dispatch, profile, userName]);
-
-  useEffect(() => {
-    setWidth(500);
-  }, []);
-
-  return (
-    <Container>
-      {help ? <Help availableCommands={logsController.getAvailableCommandsKeys()} /> : null}
-      <Messages logsController={logsController} setCanWrite={setCanWrite} />
-      <RenderLogs width={width} setCanWrite={setCanWrite} logsController={logsController} />
-      <RenderLogsInput width={width} canWrite={canWrite} logsController={logsController} />
-    </Container>
-  );
-};
-
-export const RenderUninitializedUi: React.FC = () => {
-  return (
-    <Container>
-      <h1>Monsters</h1>
-      <h3>Text based RPG game</h3>
-      <h3>( work in progress )</h3>
-    </Container>
   );
 };
