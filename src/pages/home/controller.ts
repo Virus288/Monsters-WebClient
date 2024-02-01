@@ -35,6 +35,7 @@ export const sendToLogoutPage = (token: string): void => {
 
 export const revokeToken = async (token: string, type: ETokenType): Promise<void> => {
   const server = process.env.REACT_APP_BACKEND!;
+  const home = process.env.REACT_APP_HOME as string;
   const clientSecret = process.env.REACT_APP_CLIENT_SECRET!;
   const clientId = process.env.REACT_APP_CLIENT_ID!;
 
@@ -43,6 +44,7 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<void
     credentials: 'include',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
+      'Access-Control-Allow-Origin': home,
     },
     body: new URLSearchParams({
       token,

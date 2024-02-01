@@ -1,35 +1,32 @@
-# Monsters - Testing client
+# Monsters - Web frontend
 
-Project is simple client made in react
+Project is simple client made in react for monsters game.
 
-## Available Scripts
+## 1. How to start
 
-In the project directory, you can run:
+### Install dependencies
 
-### `yarn start`
+```shell
+npm install / yarn
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3005](http://localhost:3005) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-## Prepare environment
+### Prepare environment
 
 ```shell
 npm run prepareHooks / yarn prepareHooks
 chmod +x .husky/pre-commit
 ```
 
-## Required params in .env and .prod.env files
+## 2. How to build
+
+```shell
+npm run build / yarn build
+```
+
+If you even encounter strange build behavior, tsconfig is set to create build with cache. Set option `incremental` in
+tsConfig to false
+
+## 3. Required params in .env and .prod.env files
 
 ```env
 REACT_APP_BACKEND = Server's http address
