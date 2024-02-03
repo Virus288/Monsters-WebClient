@@ -1,4 +1,4 @@
-import type { EUserRace } from '../enums/commands/races';
+import type { EUserRace } from '../enums/commands';
 
 export interface IPreLoginBody {
   login: string;

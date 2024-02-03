@@ -3,13 +3,13 @@ import type * as types from '../types';
 
 const statics = createSlice({
   name: 'statics',
-  initialState: { settings: false, help: false } as types.IStaticState,
+  initialState: { settings: false, help: false, account: false } as types.IStaticState,
   reducers: {
-    openSettings(state) {
+    openSettingsPanel(state) {
       state.settings = true;
       return state;
     },
-    closeSettings(state) {
+    closeSettingsPanel(state) {
       state.settings = false;
       return state;
     },
@@ -21,8 +21,23 @@ const statics = createSlice({
       state.help = false;
       return state;
     },
+    openAccountPanel(state) {
+      state.account = true;
+      return state;
+    },
+    closeAccountPanel(state) {
+      state.account = false;
+      return state;
+    },
   },
 });
 
-export const { openSettings, closeSettings, closeHelpPanel, openHelpPanel } = statics.actions;
+export const {
+  openSettingsPanel,
+  closeSettingsPanel,
+  closeHelpPanel,
+  openHelpPanel,
+  closeAccountPanel,
+  openAccountPanel,
+} = statics.actions;
 export default statics.reducer;

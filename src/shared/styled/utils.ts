@@ -1,11 +1,18 @@
 import type { MainDispatch } from '../../redux/types';
 import * as hooks from '../../redux';
 
-// eslint-disable-next-line import/prefer-default-export
 export const toggleSettings = (dispatch: MainDispatch, state: boolean): void => {
   if (state) {
-    dispatch(hooks.closeSettings());
+    dispatch(hooks.closeSettingsPanel());
   } else {
-    dispatch(hooks.openSettings());
+    dispatch(hooks.openSettingsPanel());
+  }
+};
+
+export const toggleAccount = (dispatch: MainDispatch, state: boolean): void => {
+  if (state) {
+    dispatch(hooks.closeAccountPanel());
+  } else {
+    dispatch(hooks.openAccountPanel());
   }
 };
