@@ -89,7 +89,7 @@ class CookieGenerator {
         process.env.REACT_APP_HOME!.includes('https')
           ? `domain=.${process.env.REACT_APP_HOME!.split('https://')[1]}`
           : process.env.REACT_APP_HOME!.includes('localhost') || process.env.REACT_APP_HOME!.includes('127.0.0.1')
-            ? undefined
+            ? ''
             : `domain=.${process.env.REACT_APP_HOME!.split('http://')[1]}`
       }`}` +
       `${this.pathValue ? `path=${this.pathValue};` : ''}`;
@@ -109,10 +109,10 @@ export default class Cookies {
   }
 
   addLoginToken(token: string, ttl: number): void {
-    new CookieGenerator(token, 'monsters.uid').secure(false).expires(ttl).sameSite(ESameSiteParams.None).create();
+    new CookieGenerator(token, 'monsters.uid').secure(false).expires(ttl).sameSite(ESameSiteParams.Strict).create();
   }
 
   addRefreshToken(token: string, ttl: number): void {
-    new CookieGenerator(token, 'monsters.ref').secure(false).expires(ttl).sameSite(ESameSiteParams.None).create();
+    new CookieGenerator(token, 'monsters.ref').secure(false).expires(ttl).sameSite(ESameSiteParams.Strict).create();
   }
 }

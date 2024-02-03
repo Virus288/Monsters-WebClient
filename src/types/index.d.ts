@@ -4,3 +4,4 @@ export * from './customs';
 export * from './errors';
 export * from './user';
 export * from './actions';
+export * from './websocket';
