@@ -1,11 +1,17 @@
-import type { MainDispatch } from '../../redux/types';
-import * as hooks from '../../redux';
+import type { MainDispatch } from '../redux/types';
+import * as hooks from '../redux';
+import type { ISocketMessage, ISocketNewMessage } from '../types';
+import { ESocketType } from '../enums';
+import Handler from './handler';
 
 export default class Controller {
   private readonly _dispatch: MainDispatch;
 
+  private readonly _handler: Handler;
+
   constructor(dispatch: MainDispatch) {
     this._dispatch = dispatch;
+    this._handler = new Handler(dispatch);
   }
 
   private _client: WebSocket | undefined;
@@ -16,6 +22,10 @@ export default class Controller {
 
   private set client(value: WebSocket) {
     this._client = value;
+  }
+
+  private get handler(): Handler {
+    return this._handler;
   }
 
   private get dispatch(): MainDispatch {
@@ -59,12 +69,32 @@ export default class Controller {
       console.log(err);
       this.dispatch(hooks.disconnectWebsocket());
     };
-    this.client.onmessage = (msg: MessageEvent<unknown>): void => this.handleMessage(msg);
+    this.client.onmessage = (msg: MessageEvent<unknown>): void => this.handleMessage(msg.data as string);
     this.client.onclose = (e): void => this.close(e.reason);
   }
 
-  private handleMessage(msg: MessageEvent<unknown>): void {
-    console.log('New websocket nessage');
-    console.log(msg.data);
+  private handleMessage(msg: string): void {
+    let parsed: ISocketMessage | Record<string, string> = {};
+
+    try {
+      parsed = JSON.parse(msg) as ISocketMessage;
+    } catch (err) {
+      console.log("Couldn't parse socket message");
+      console.log('err');
+      console.log(err);
+    }
+
+    console.log('New websocket message');
+    console.log(parsed);
+
+    switch (parsed.type as ESocketType) {
+      case ESocketType.Message:
+        this.handler.handleMessage(parsed.payload as ISocketNewMessage);
+        break;
+      default:
+        console.log('Unknown websocket message');
+        console.log(parsed);
+        break;
+    }
   }
 }

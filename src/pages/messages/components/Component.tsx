@@ -42,17 +42,21 @@ const Messages: React.FC<{
   const handleAction = useCallback(() => {
     switch (action?.action) {
       case EMessageComponentActions.RenderAllConversations:
+        // #TODO This is extremely stupid, but 'addLog' without any async action is triggering too fast and is breaking log container. Add some kind of pause, while adding elements to redux
         setTimeout(() => {
-          // #TODO This is extremely stupid, but 'addLog' without any async action is triggering too fast and is breaking log container.
-          dispatch(hooks.addLog({ message: "You've been chatting with these people: ", author: 1 }));
-          chats.forEach((c) => {
-            dispatch(
-              hooks.addLog({
-                message: c.receiver === profile.user ? c.sender : c.receiver,
-                author: 1,
-              }),
-            );
-          });
+          if (!chats || chats.length === 0) {
+            dispatch(hooks.addLog({ message: "You didn't send any messages yet", author: 1 }));
+          } else {
+            dispatch(hooks.addLog({ message: "You've been chatting with these people: ", author: 1 }));
+            chats.forEach((c) => {
+              dispatch(
+                hooks.addLog({
+                  message: c.receiver === profile.user ? c.sender : c.receiver,
+                  author: 1,
+                }),
+              );
+            });
+          }
         }, 1000);
         break;
       case EMessageComponentActions.GetMessage:

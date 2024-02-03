@@ -4,3 +4,4 @@ export * from './cookies';
 export * from './messages';
 export * from './componentActions';
 export * from './characterStates';
+export * from './websocket';
