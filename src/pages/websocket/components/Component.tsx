@@ -1,7 +1,7 @@
 import type React from 'react';
 import { useEffect, useMemo } from 'react';
 import { useMainDispatch } from '../../../redux/hooks';
-import Controller from '../controller';
+import Controller from '../../../websocket';
 
 const Websocket: React.FC = () => {
   const dispatch = useMainDispatch();

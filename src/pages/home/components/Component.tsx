@@ -5,9 +5,9 @@ import * as hooks from '../../../redux';
 import * as animation from '../../../style/animation';
 import { RenderLogs, RenderLogsInput } from './Renderer';
 import LogsController from '../../../logs';
-import Help from '../../help/components/Help';
-import Websocket from '../../websocket/components/FourOhFour';
-import Messages from '../../messages/components/Messages';
+import Help from '../../help/components/Component';
+import Websocket from '../../websocket/components/Component';
+import Messages from '../../messages/components/Component';
 
 const RenderInitializedUi: React.FC = () => {
   const [width, setWidth] = useState<number>(200);
