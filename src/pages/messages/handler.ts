@@ -155,13 +155,19 @@ export default class Handler {
   private renderMessagesDetails(details: IDetailedMessage[]): void {
     this.dispatch(hooks.addLog({ message: 'Loading last 10 messages', author: 1 }));
 
-    details.forEach((d) => {
-      this.dispatch(
-        hooks.addLog({
-          message: `${d.sender}: ${d.message}`,
-          author: 1,
-        }),
-      );
-    });
+    details
+      .sort((a, b) => {
+        if (new Date(a.date).getTime() > new Date(b.date).getTime()) return 1;
+        if (new Date(a.date).getTime() < new Date(b.date).getTime()) return -1;
+        return 0;
+      })
+      .forEach((d) => {
+        this.dispatch(
+          hooks.addLog({
+            message: `${d.sender}: ${d.message}`,
+            author: 1,
+          }),
+        );
+      });
   }
 }

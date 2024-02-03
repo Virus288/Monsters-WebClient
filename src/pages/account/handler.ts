@@ -20,7 +20,7 @@ export const register = (
   }
 
   controllers
-    .register(username.value, password.value, email.value)
+    .register(username.value.trim(), password.value, email.value.trim())
     .then((): void => {
       return setSuccess(true);
     })

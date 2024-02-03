@@ -10,5 +10,6 @@ export interface IDetailedMessage {
   receiver: string;
   read: boolean;
   chatId: string;
+  date: string;
   message: string;
 }

@@ -3,22 +3,25 @@ import type { DefaultTheme } from 'styled-components';
 import { AnimatePresence } from 'framer-motion';
 import Router from './Router';
 import { App } from './shared/styled';
-import Settings from './pages/settings/components/Component';
+import * as components from './pages';
 import { preLogin } from './pages/account/handler';
 import Loading from './shared/components/Loading';
 import { useMainDispatch, useMainSelector } from './redux/hooks';
 import Navbar from './shared/components/Navbar';
-import { toggleSettings } from './shared/styled/utils';
+import { toggleAccount, toggleSettings } from './shared/styled/utils';
 
 const StaticHandlers: React.FC<{
   setTheme: React.Dispatch<React.SetStateAction<DefaultTheme>>;
 }> = ({ setTheme }) => {
   const dispatch = useMainDispatch();
-  const { settings } = useMainSelector((states) => states.statics);
+  const { settings, account } = useMainSelector((states) => states.statics);
 
   return (
     <AnimatePresence mode="wait">
-      {settings ? <Settings setTheme={setTheme} disablePanel={(): void => toggleSettings(dispatch, settings)} /> : null}
+      {settings ? (
+        <components.Settings setTheme={setTheme} disablePanel={(): void => toggleSettings(dispatch, settings)} />
+      ) : null}
+      {account ? <components.Account disablePanel={(): void => toggleAccount(dispatch, account)} /> : null}
     </AnimatePresence>
   );
 };
