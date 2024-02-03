@@ -47,7 +47,8 @@ export const LogsContainer = styled(motion.div)<ILogProps>`
 
 export const LogAnimationContainer = styled(motion.div)<IDefaultComponentProps>`
   width: 100%;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
 `;
 
@@ -74,7 +75,20 @@ export const LogBottomContainer = styled(motion.div)<ILogProps>`
 export const HintsContainer = styled(motion.div)<ILogProps>`
   height: fit-content;
   max-height: 130px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 50px;
+    background: ${(props): string => props.theme.background.opposite};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${(props): string => props.theme.background.default};
+    border: 1px solid black;
+    border-radius: 50px;
+  }
 
   @media (min-width: 768px) {
     width: ${(props): number => props.$width}px;
