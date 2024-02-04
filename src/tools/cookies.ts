@@ -80,18 +80,28 @@ class CookieGenerator {
   }
 
   create(): void {
+    let domain: string = process.env.REACT_APP_HOME!;
+    const isIp =
+      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (domain.includes('https://')) {
+      domain = `${domain.split('https://')[1]}`;
+    } else if (domain.includes('http://')) {
+      domain = `${domain.split('http://')[1]}`;
+    }
+
+    if (domain.includes(':')) {
+      domain = domain.split(':')[0] as string;
+    }
+
+    if (!isIp.test(domain)) {
+      domain = `.${domain}`;
+    }
     document.cookie =
       `${this.name}=${this.value};` +
       `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +
       `${this.secureValue ? 'Secure;' : ''}` +
       `${this.sameSiteValue ? `SameSite=${this.sameSiteValue};` : ''}` +
-      `${`${
-        process.env.REACT_APP_HOME!.includes('https')
-          ? `domain=.${process.env.REACT_APP_HOME!.split('https://')[1]}`
-          : process.env.REACT_APP_HOME!.includes('localhost') || process.env.REACT_APP_HOME!.includes('127.0.0.1')
-            ? ''
-            : `domain=.${process.env.REACT_APP_HOME!.split('http://')[1]}`
-      }`}` +
+      `${`domain=${domain}`}` +
       `${this.pathValue ? `path=${this.pathValue};` : ''}`;
   }
 }
