@@ -7,6 +7,9 @@ export class FullError extends Error implements IFullError {
   status!: number;
 }
 
+/**
+ * Throw this error if root element got removed
+ */
 export class NoRoot extends FullError {
   constructor() {
     super('NoRoot');

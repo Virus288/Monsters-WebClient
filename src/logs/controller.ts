@@ -3,6 +3,9 @@ import type { IFullError } from '../types';
 import type { IGetMessages } from '../types/messages';
 
 export default class Controller {
+  /**
+   * Send request to create user profile
+   */
   async createProfile(race: EUserRace): Promise<void> {
     const home = process.env.REACT_APP_HOME as string;
     const server = process.env.REACT_APP_BACKEND!;
@@ -24,6 +27,9 @@ export default class Controller {
     throw err;
   }
 
+  /**
+   * Send request to send new message
+   */
   async sendMessage(body: string, receiver: string): Promise<void> {
     const server = process.env.REACT_APP_BACKEND!;
     const home = process.env.REACT_APP_HOME!;
@@ -46,6 +52,9 @@ export default class Controller {
     throw err;
   }
 
+  /**
+   * Send request to get user messages
+   */
   async getMessages(): Promise<Record<string, IGetMessages>> {
     const server = process.env.REACT_APP_BACKEND!;
     const home = process.env.REACT_APP_HOME!;

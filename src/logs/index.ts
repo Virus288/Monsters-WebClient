@@ -8,6 +8,9 @@ import * as commands from '../enums/commands';
 import type { IFullError, IUserProfile } from '../types';
 import type { IGetMessages } from '../types/messages';
 
+/**
+ * Logs controller, used by components, which runs all 'game' actions
+ */
 export default class LogsController {
   private readonly _handler: Handler;
 
@@ -18,6 +21,9 @@ export default class LogsController {
     userName: string;
   };
 
+  /**
+   * Void, which can block user's input. When used, 'Logs' component manages other end of this action
+   */
   private readonly _setCanWrite: (canWrite: boolean) => void;
 
   constructor(
@@ -36,6 +42,9 @@ export default class LogsController {
     });
   }
 
+  /**
+   * Void, which communications with 'messages' component to use redux data in order to run actions
+   */
   private _messagesComponentAction:
     | ((
         params:
@@ -107,10 +116,17 @@ export default class LogsController {
     return this._dispatch;
   }
 
+  /**
+   * Throw this error if root element got removed
+   */
   changeCharacterState(state: enums.ECharacterState): void {
     this.characterState = state;
   }
 
+  /**
+   * Return all commands, that user can run in current character state.
+   * Empty array as callback means 'anything' and will not be validated
+   */
   getAvailableCommands(): string[] {
     switch (this.characterState) {
       case enums.ECharacterState.Registration:
@@ -124,6 +140,9 @@ export default class LogsController {
     }
   }
 
+  /**
+   * Return keys of available user commands
+   */
   getAvailableCommandsKeys(): string[] {
     switch (this.characterState) {
       case enums.ECharacterState.Registration:
@@ -137,6 +156,9 @@ export default class LogsController {
     }
   }
 
+  /**
+   * Get user input on "enter" key
+   */
   sendLogOnEnter(
     e: React.KeyboardEvent<HTMLInputElement>,
     canWrite: boolean,
@@ -146,6 +168,9 @@ export default class LogsController {
     this.sendLog((e.target as HTMLInputElement).value, canWrite, setMessage);
   }
 
+  /**
+   * Get user input and validate it
+   */
   sendLog(input: string, canWrite: boolean, setMessage: React.Dispatch<React.SetStateAction<string>>): void {
     if (!canWrite || input.length === 0) return;
 
@@ -180,6 +205,9 @@ export default class LogsController {
       });
   }
 
+  /**
+   * Load data on initialization
+   */
   initLoadData(): void {
     const actions = [enums.ECharacterState.GetMessages];
 
@@ -197,6 +225,9 @@ export default class LogsController {
       });
   }
 
+  /**
+   * Init class
+   */
   async init(logs: { log: string; author: string | number }[]): Promise<void> {
     console.log(`All logs: ${logs.length}`);
     return new Promise((resolve) => {
@@ -214,12 +245,18 @@ export default class LogsController {
     });
   }
 
+  /**
+   * Initialize function, to handle messages actions
+   */
   setMessagesComponentAction(
     action: (params: { action: enums.EMessageComponentActions; params: string | number } | undefined) => void,
   ): void {
     this.messagesComponentAction = action;
   }
 
+  /**
+   * Handle user input
+   */
   private async handleLog(input: string): Promise<void> {
     // Handle generic actions
     if (Object.values(commands.EGenericActions).includes(input.toLowerCase() as commands.EGenericActions)) {
@@ -265,18 +302,11 @@ export default class LogsController {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  private async fetchLogs(): Promise<void> {
-    // This function will fetch last x logs from server, alongside player's status, which defines what actions he can do
-    // It should use this.dispatch to send logs
-    return new Promise((resolve) => {
-      resolve();
-    });
-  }
-
+  /**
+   * Run user specified action
+   */
   private async handleAction(input: string): Promise<void> {
-    const callback = await this.handler.handleAsyncCommand(input, this.characterState);
+    const callback = await this.handler.handleCommand(input, this.characterState);
     console.log('callback');
     console.log(callback);
 
@@ -293,8 +323,11 @@ export default class LogsController {
     }
   }
 
+  /**
+   * Run action to load data
+   */
   private async handleDataLoad(characterState: enums.ECharacterState): Promise<void> {
-    const callback = await this.handler.handleAsyncCommand('', characterState);
+    const callback = await this.handler.handleCommand('', characterState);
 
     switch (characterState) {
       case enums.ECharacterState.GetMessages:
