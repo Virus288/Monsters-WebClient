@@ -1,6 +1,7 @@
 import { generateRandomName } from '../../tools';
 import type { ETokenType } from '../../enums';
 import type { IFullError } from '../../types';
+import Cookies from '../../tools/cookies';
 
 export const sendToLoginPage = (): void => {
   // #TODO This should generate nonce, which should be validated back by response. Nonce should be saved in cookies for max of 10 min. If user won't manage to log in after that time, login should not be validated
@@ -38,11 +39,13 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<void
   const home = process.env.REACT_APP_HOME as string;
   const clientSecret = process.env.REACT_APP_CLIENT_SECRET!;
   const clientId = process.env.REACT_APP_CLIENT_ID!;
+  const accessToken = new Cookies().getToken('monsters.uid');
 
   const res = await fetch(`${server}/token/revocation`, {
     method: 'POST',
     credentials: 'include',
     headers: {
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/x-www-form-urlencoded',
       'Access-Control-Allow-Origin': home,
     },
