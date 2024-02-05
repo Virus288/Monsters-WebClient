@@ -51,11 +51,13 @@ export const getUserLogin = async (): Promise<IPreLoginBody | undefined> => {
 export const getProfile = async (id: string): Promise<IUserProfile> => {
   const server = process.env.REACT_APP_BACKEND!;
   const home = process.env.REACT_APP_HOME!;
+  const accessToken = new Cookies().getToken('monsters.uid');
 
   const res = await fetch(`${server}/profile?id=${id}`, {
     method: 'GET',
     credentials: 'include',
     headers: {
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': home,
     },
@@ -70,12 +72,15 @@ export const getProfile = async (id: string): Promise<IUserProfile> => {
 export const register = async (login: string, password: string, email: string): Promise<void> => {
   const home = process.env.REACT_APP_HOME as string;
   const server = process.env.REACT_APP_BACKEND!;
+  const accessToken = new Cookies().getToken('monsters.uid');
 
   const res = await fetch(`${server}/users/register`, {
     method: 'POST',
     body: JSON.stringify({ login, password, email }),
     credentials: 'include',
     headers: {
+      Authorization: `Bearer ${accessToken}`,
+
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': home,
     },
