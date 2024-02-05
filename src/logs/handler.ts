@@ -3,7 +3,6 @@ import * as hooks from '../redux';
 import Controller from './controller';
 import type * as commands from '../enums/commands';
 import * as enums from '../enums';
-import type { IGetMessages } from '../types/messages';
 import type { IActionParams } from '../types';
 
 export default class Handler {
@@ -21,6 +20,9 @@ export default class Handler {
 
   private _actionParams: IActionParams = { sendMessageTo: undefined };
 
+  /**
+   * Store for  user params on multistep commands
+   */
   private get actionParams(): IActionParams {
     return this._actionParams;
   }
@@ -47,14 +49,23 @@ export default class Handler {
     return this._controller;
   }
 
+  /**
+   * Save user's previous state, for action, which does not influence character's actions, like sending messages
+   */
   savePreviousCharacterState(characterState: enums.ECharacterState): void {
     this.previousCharacterState = characterState;
   }
 
+  /**
+   * Restore previously saved user state
+   */
   restorePreviousCharacterState(): void {
     this.changeCharacterState(this.previousCharacterState as enums.ECharacterState);
   }
 
+  /**
+   * Save user's params from multistep commands
+   */
   addActionParam(characterState: enums.ECharacterState, input: string): void {
     switch (characterState) {
       case enums.ECharacterState.SendMessageTo:
@@ -65,6 +76,9 @@ export default class Handler {
     }
   }
 
+  /**
+   * Remove user's params from multistep commands
+   */
   removeActionParam(characterState: enums.ECharacterState): void {
     switch (characterState) {
       case enums.ECharacterState.SendMessageTo:
@@ -75,7 +89,10 @@ export default class Handler {
     }
   }
 
-  async handleAsyncCommand(input: string, characterState: enums.ECharacterState): Promise<unknown> {
+  /**
+   * Handle command triggered by user
+   */
+  async handleCommand(input: string, characterState: enums.ECharacterState): Promise<unknown> {
     switch (characterState) {
       case enums.ECharacterState.Registration:
         return this.controller.createProfile(input.toLowerCase() as commands.EUserRace);
@@ -89,12 +106,8 @@ export default class Handler {
   }
 
   /**
-   * Because handleAsyncCommand does not allow on multiple requests in current state, I wrote this add "addon" for getMessage request
+   * Render 'register profile' logs
    */
-  async fetchMessages(): Promise<Record<string, IGetMessages>> {
-    return this.controller.getMessages();
-  }
-
   getRegisterLogs(): void {
     const data = [
       'Hi. My name is Jessica. Welcome to our adventure guild. In order to register as an adventurer, I need you to provide me with some information. Please fill out this form.',
@@ -105,6 +118,9 @@ export default class Handler {
     data.forEach((message) => this.dispatch(hooks.addLog({ message, author: 1 })));
   }
 
+  /**
+   * Render 'finished registration' logs
+   */
   finishRegistration(): void {
     const data = [
       "It seems I got everything I need. Here's your adventurer plate.",
