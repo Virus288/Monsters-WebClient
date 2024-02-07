@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "cross-env PORT=3005 react-scripts start -FAST_REFRESH=true",
+    "start": "cross-env NODE_ENV=development cross-env PORT=3005 react-scripts start -FAST_REFRESH=true",
     "build": "react-scripts build",
     "test": "echo 'No tests yes'",
     "lint": "cross-env NODE_ENV=development eslint . --ext .ts,.tsx --fix",
