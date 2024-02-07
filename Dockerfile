@@ -8,6 +8,7 @@ ADD . /usr/src/app
 COPY .prod.env .env
 ARG REACT_APP_BACKEND
 ENV REACT_APP_BACKEND=$REACT_APP_BACKEND
+ENV NODE_ENV=prod
 
 RUN npm run build
 
