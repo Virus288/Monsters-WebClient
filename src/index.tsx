@@ -7,7 +7,7 @@ import './style/fontello/css/fontello.css';
 
 const target = document.getElementById('root');
 if (!target) throw new NoRoot();
-
+//
 const root = ReactDOM.createRoot(target);
 
 const Root: React.FC = () => {
