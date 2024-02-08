@@ -1,26 +1,42 @@
-import React, { useState } from 'react';
-import type { DefaultTheme } from 'styled-components';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import * as themes from './style/theme/themes';
-import ViewsController from './ViewsController';
-import store from './redux/store';
-import { GlobalStyle } from './shared/styled';
-import Theme from './style/theme';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+ } from "react-router-dom";
+import './App.css'
+import RootLayout from "./_root/RootLayout";
+import Home from "./_root/pages/Home";
+import AuthLayout from "./_auth/AuthLayout";
 
-const App: React.FC = () => {
-  const [theme, setTheme] = useState<DefaultTheme>(themes.lightTheme);
+
+function App() {
+ 
+  const router = createBrowserRouter([
+    {
+      path:"/:id",
+      element:<RootLayout/>,
+      children:[
+        {
+          path:"/:id",
+          element:<Home/>
+        }
+      ],
+
+    },
+    {
+      path:"/",
+      element:<AuthLayout/>
+
+    }
+  
+  ])
 
   return (
-    <Theme theme={theme}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <GlobalStyle />
-          <ViewsController setTheme={setTheme} />
-        </BrowserRouter>
-      </Provider>
-    </Theme>
-  );
-};
+<div className="bg-slate-900">
+  <RouterProvider router={router}/>
+</div>
+  )
+}
 
-export default App;
+export default App
