@@ -1,8 +1,12 @@
+import { Terminal } from "../../components/Terminal"
 
 
-const Home = () => {
+const Home = ({history,ref,promptLabel,commands}) => {
   return (
-    <div className="bg-orange-600 h-[100%] w-full">Homeasd</div>
+    <div className="bg-orange-600 h-full w-full flex justify-center">
+
+      <Terminal history={history} ref={ref} promptLabel={promptLabel} commands={commands} />
+    </div>
   )
 }
 
