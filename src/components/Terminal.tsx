@@ -9,7 +9,7 @@ export const Terminal = forwardRef(
     const {
       history = [],
       promptLabel = '>',
-
+ 
       commands = {},
     } = props;
 
@@ -28,7 +28,7 @@ export const Terminal = forwardRef(
     const focusInput = useCallback(() => {
       inputRef.current?.focus();
     }, []);
-
+    console.log(commands)
 
     /**
      * When user types something, update input value
@@ -41,13 +41,6 @@ export const Terminal = forwardRef(
     );
 
 
-
-    const handleCommand = () => {
-        const keys = Object.keys(commands);
-        const isValid = keys.includes(input.toLowerCase());
-        console.log(isValid);
-    }
-    
 
 
 

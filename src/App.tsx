@@ -15,9 +15,12 @@ import LandingPage from "./_auth/pages/LandingPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useTerminal } from "./hooks/useTerminal";
 import { useEffect, useMemo } from "react";
+import useCommands from "./hooks/useCommands";
 
 function App() {
   const user = "Adam";
+
+  const methods = useCommands();
 
   const {
     history,
@@ -61,26 +64,11 @@ function App() {
     );
   };
 
-  const help = async () => {
-    await pushToHistory(
-      <div className="flex flex-col">
-        <p className="font-semibold">Here are all the commands you can use:</p>
-        <span>- game init</span>
-        <span>- alert</span>
-        <span>- races</span>
-        <span>- profile</span>
-        <span>- messages</span>
-        <span>- messages</span>
-        <span>- sendMsg</span>
-        <span>- clear</span>
-        <span>- exit</span>
-      </div>
-    );
-  };
 
-  const alert = async () => {
+
+  const alert = () => {
     alert("Hello!");
-    await pushToHistory(
+    pushToHistory(
       <>
         <div>
           <strong>Alert</strong>
@@ -92,15 +80,11 @@ function App() {
     );
   };
 
-  const commands = useMemo(
-    () => ({
-      help: help,
-      clear: resetTerminal,
-      start: start,
-      alert: alert,
-    }),
-    [pushToHistory]
-  );
+  const commands = useMemo(() => {
+    return {
+      help,
+    };
+  }, [pushToHistory]);
 
   const queryClient = new QueryClient();
 
