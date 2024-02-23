@@ -80,7 +80,7 @@ class CookieGenerator {
   }
 
   create(): void {
-    let domain: string = process.env.REACT_APP_HOME!;
+    let domain: string = import.meta.env.VITE_API_HOME
     const isIp =
       /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (domain.includes('https://')) {
@@ -96,6 +96,12 @@ class CookieGenerator {
     if (!isIp.test(domain)) {
       domain = `.${domain}`;
     }
+    console.log(    `${this.name}=${this.value};` +
+    `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +
+    `${this.secureValue ? 'Secure;' : ''}` +
+    `${this.sameSiteValue ? `SameSite=${this.sameSiteValue};` : ''}` +
+    `${`domain=${domain}`}` +
+    `${this.pathValue ? `path=${this.pathValue};` : ''}`)
     document.cookie =
       `${this.name}=${this.value};` +
       `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +

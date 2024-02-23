@@ -34,7 +34,7 @@ export const loadStatus = (
 export const help = (
   pushToHistory: (item: TerminalHistoryItem) => void
 ): void => {
-    console.log("HELP test")
+
   pushToHistory(
     <div className="flex flex-col">
       <p className="font-semibold">Here are all the commands you can use:</p>

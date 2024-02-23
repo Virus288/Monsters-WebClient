@@ -12,79 +12,33 @@ import AuthLayout from "./_auth/AuthLayout";
 import Register from "./_auth/pages/register/Register";
 import Login from "./_auth/pages/Login";
 import LandingPage from "./_auth/pages/LandingPage";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { useTerminal } from "./hooks/useTerminal";
-import { useEffect, useMemo } from "react";
-import useCommands from "./hooks/useCommands";
+import { QueryClient, QueryClientProvider, useMutation } from "react-query";
+import { useEffect } from "react";
+import { getUserLogin, getUserProfile, userLogin } from "./clientApi/clientApi";
+import Cookies from "./tools/cookies";
+import { useAccountStore, useProfileStore } from "./zustand/store";
 
 function App() {
-  const user = "Adam";
-
-  const methods = useCommands();
-
-  const {
-    history,
-    pushToHistory,
-    setTerminalRef,
-    resetTerminal,
-    invalidCommand,
-  } = useTerminal();
+  const setUser = useAccountStore((state) => state.setAccount);
+  const setProfile = useProfileStore((state)=>state.setProfile)
+  const loginUser = async (cookie: string) => {
+    new Cookies().addLoginToken(cookie, Date.now() + 1000 * 60 * 24 * 30);
+    const data = await getUserLogin();
+    const profile = await getUserProfile(data.login)
+ 
+    setUser({ id: data.sub, login: data.login });
+    setProfile(profile)
+    // await getUserProfile(data.id)
+  };
 
   useEffect(() => {
-    resetTerminal();
+    const accessToken = new Cookies().getToken("monsters.uid");
 
-    start();
-    loadStatus();
+    if (accessToken) {
+      loginUser(accessToken).catch((e) => console.log(e));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const loadStatus = async () => {
-    await pushToHistory(
-      <>
-        <div className="text-normal">
-          Welcome
-          <span className="text-orange-400 ml-1 mr-1">
-            <strong>{user}</strong>
-          </span>
-          Nice to see You !
-        </div>
-        <br />
-        <div>You can write: 'help' , to check list of avalible commands.</div>
-      </>
-    );
-  };
-
-  const start = async () => {
-    await pushToHistory(
-      <>
-        <div>
-          <strong>Starting</strong> the server...{" "}
-          <span style={{ color: "green" }}>Done</span>
-        </div>
-      </>
-    );
-  };
-
-
-
-  const alert = () => {
-    alert("Hello!");
-    pushToHistory(
-      <>
-        <div>
-          <strong>Alert</strong>
-          <span style={{ color: "orange", marginLeft: 10 }}>
-            <strong>Shown in the browser</strong>
-          </span>
-        </div>
-      </>
-    );
-  };
-
-  const commands = useMemo(() => {
-    return {
-      help,
-    };
-  }, [pushToHistory]);
 
   const queryClient = new QueryClient();
 
@@ -96,14 +50,7 @@ function App() {
       children: [
         {
           path: "/:id",
-          element: (
-            <Home
-              commands={commands}
-              history={history}
-              ref={setTerminalRef}
-              promptLabel={<div className="text-green-400">You{" >>"}</div>}
-            />
-          ),
+          element: <Home />,
         },
       ],
     },

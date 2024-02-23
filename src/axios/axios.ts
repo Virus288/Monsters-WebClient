@@ -14,6 +14,7 @@ const clientApi = axios.create({
     Authorization: `Bearer ${accessToken}`,
     "Content-Type": "application/x-www-form-urlencoded",
     "Access-Control-Allow-Origin": HOME_URL,
+    
   },
 });
 

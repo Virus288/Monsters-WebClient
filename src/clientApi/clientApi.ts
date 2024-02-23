@@ -4,6 +4,13 @@ import { generateRandomName } from "../tools";
 import Cookies from "../tools/cookies";
 import { IRegisterFormValues } from "../types";
 import { AxiosResponse } from "axios";
+import { IUserProfile } from "../zustand/store";
+
+
+export const userLogin =async(formData)=>{
+  const response = await clientApi.post("/debug/interaction",formData)
+  return response.data
+}
 
 export const sendToLoginPage = (): void => {
   const REDIRECT_URL = import.meta.env.VITE_API_REDIRECT_LOGIN_URL;
@@ -19,13 +26,17 @@ export const sendToLoginPage = (): void => {
   window.location.href = `/auth?${queryParams}`;
 };
 
-export const getUserLogin = async (): Promise<AxiosResponse> => {
-  const response = await clientApi.get("/me");
+export const getUserLogin = async (): Promise<{login:string,sub:string}> => {
+  const accessToken = new Cookies().getToken('monsters.uid');
+  const response = await clientApi.get("/me",{
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+  }})
   return response.data
 };
 
-export const getUserProfile = async (id: string): Promise<AxiosResponse> => {
-  const response = await clientApi.get(`/profile?id=${id}`);
+export const getUserProfile = async (name: string): Promise<IUserProfile> => {
+  const response = await clientApi.get(`/profile?name=${name}`);
   return response.data;
 };
 
