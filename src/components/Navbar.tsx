@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
-import { IoLogOutOutline } from "react-icons/io5";
-import { Button } from "./ui/button";
+import { Link } from 'react-router-dom';
+import { IoLogOutOutline } from 'react-icons/io5';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   const user = false;
@@ -8,21 +8,19 @@ const Navbar = () => {
   return (
     <nav className=" flex flex-col items-center h-[55px]">
       <div className="w-[95%] flex justify-between h-full items-center">
-        <span className="text-slate-300 font-bold text-base lg:text-xl">
-          Monsters
-        </span>
+        <span className="text-slate-300 font-bold text-base lg:text-xl">Monsters</span>
         {user && (
           <div className="flex items-center gap-6 ">
             <Link to="/login">
               <span className="text-slate-300 ">
-                <Button className="text-base" variant={"ghost"}>
+                <Button className="text-base" variant="ghost">
                   Login
                 </Button>
               </span>
             </Link>
             <Link to="/register">
               <span className="text-slate-300 ">
-                <Button className="text-base" variant={"ghost"}>
+                <Button className="text-base" variant="ghost">
                   Join
                 </Button>
               </span>
@@ -34,8 +32,8 @@ const Navbar = () => {
           <div>
             <Link to="/register">
               <span className="text-slate-300 ">
-                <Button className="text-base" variant={"ghost"}>
-                  <IoLogOutOutline className="mr-1" size={22}/>
+                <Button className="text-base" variant="ghost">
+                  <IoLogOutOutline className="mr-1" size={22} />
                   Logout
                 </Button>
               </span>

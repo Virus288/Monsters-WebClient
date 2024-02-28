@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { ESameSiteParams } from "../enums/cookies"
+import { ESameSiteParams } from '../enums/cookies';
 
 class CookieGenerator {
   private readonly _value: string;
@@ -80,7 +80,7 @@ class CookieGenerator {
   }
 
   create(): void {
-    let domain: string = import.meta.env.VITE_API_HOME
+    let domain: string = import.meta.env.VITE_API_HOME;
     const isIp =
       /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (domain.includes('https://')) {
@@ -90,18 +90,13 @@ class CookieGenerator {
     }
 
     if (domain.includes(':')) {
-      domain = domain.split(':')[0] as string;
+      domain = domain.split(':')[0];
     }
 
     if (!isIp.test(domain)) {
       domain = `.${domain}`;
     }
-    console.log(    `${this.name}=${this.value};` +
-    `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +
-    `${this.secureValue ? 'Secure;' : ''}` +
-    `${this.sameSiteValue ? `SameSite=${this.sameSiteValue};` : ''}` +
-    `${`domain=${domain}`}` +
-    `${this.pathValue ? `path=${this.pathValue};` : ''}`)
+
     document.cookie =
       `${this.name}=${this.value};` +
       `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +

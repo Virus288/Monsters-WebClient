@@ -1,111 +1,46 @@
-import {create} from "zustand";
+import { create } from 'zustand';
+import { isError, useQuery } from 'react-query';
+import zukeeper from 'zukeeper';
+import type * as types from './types';
+import Cookies from '../tools/cookies';
+import { loginUser } from '../controllers';
 
+const accessToken = new Cookies().getToken('monsters.uid');
 
+export const useAccountStore = create<types.IAccountStore>((set) => ({
 
-type CounterStore= {
-count:number;
-increment:()=>void;
-decrement:()=>void;
-incrementAsync:()=>Promise<void>;
-}
+  isLoggedIn: false,
+  account: undefined,
+  setAccount: (user): void => set({ account: user }),
 
-type IUser ={
-   login:string ;
-   id:string ;
-}
+  setIsLoggedIn: (bol): void => set({ isLoggedIn: bol }),
+}));
 
-type IAccountStore= {
-   account:object| undefined;
-   setAccount:(data:IUser)=>void;
+export const useLogsStore = create((set) => ({
+  logs: [],
+  setLogs: (logs) => {
+    set({ logs });
+  },
+}));
+export const useProfileStore = create<types.ProfileStore>((set) => ({
+  profile: undefined,
+  setProfile: (profile) => {
+    set({ profile });
+  },
+}));
 
-   }
+export const useStaticsStore = create(() => ({
+  statics: [],
+}));
 
-   export enum EUserRace {
-      Human = 'human',
-      Elf = 'elf',
-      Goblin = 'goblin',
-      Dwarf = 'dwarf',
-      Orc = 'orc',
-      Fairy = 'fairy',
-      DragonBord = 'dragonBorn',
-    }
-    
+export const useMessagesStore = create(() => ({
+  messages: [],
+}));
 
-    type ProfileStore= {
-      profile:IUserProfile |undefined;
-      setProfile:(profile:IUserProfile)=>void;
+export const useWebsocketStore = create(() => ({
+  websocket: null,
+}));
 
-      }
-
-   export interface IUserProfile {
-      _id: string;
-      user: string;
-      race: EUserRace;
-      friends: string[];
-      lvl: number;
-      exp: number[];
-      initialized: boolean;
-      inventory: string;
-      party: string;
-    }
-    
-
-
-
-
-
-
-
-export const useCounterStore = create<CounterStore>((set)=>({
-count:0,
-increment:()=>{
-    set((state)=>({count:state.count+1}))
-},
-incrementAsync: async()=>{
-await new Promise((resolve)=>setTimeout(resolve,1000))
-set((state)=>({count:state.count+1}))
-},
-    
-decrement:()=>{
-    set((state)=>({count:state.count-1}))
-},
-}))
-
-
-export const useAccountStore = create<IAccountStore>((set)=>({
-account:undefined,
-setAccount:(user)=>{
-   set({account:user})
-}
-
-    }))
-    
-    export const useLogsStore= create((set)=>({
-        logs:[],
-        setLogs:(logs)=>{
-         set({logs:logs})
-        }
-
-     }))
-     export const useProfileStore = create<ProfileStore>((set)=>({
-        profile:undefined,
-        setProfile:(profile)=>{
-         set({profile})
-        }
-            }))
-
- export const useStaticsStore= create(()=>({
-    statics:[]
- }))
-
- export const useMessagesStore= create(()=>({
-    messages:[]
- }))
-
- export const useWebsocketStore= create(()=>({
-    websocket:null
- }))
-
- export const useHistoryStore= create(()=>({
-    history:['start']
- }))
+export const useHistoryStore = create(() => ({
+  history: ['start'],
+}));

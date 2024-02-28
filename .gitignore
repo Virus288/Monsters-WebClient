@@ -23,3 +23,23 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+coverage
+.eslintcache
+
+# OSX
+.DS_Store
+
+release/app/dist
+release/build
+/build
+.erb/dll
+
+
+# Ignore local cache files
+**/**/yarn.lock
+**/**/yarn-error.json
+**/**/package-lock.json
+yarn.lock
+package-lock.json
+yarn-error.json
