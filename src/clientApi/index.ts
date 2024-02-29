@@ -1,25 +1,25 @@
 import type { AxiosResponse } from 'axios';
 import clientApi from '../tools/axios';
-import type { ETokenType } from '../enums/tokens';
+import type { ETokenType } from '../enums';
 import { generateRandomName } from '../tools';
 import Cookies from '../tools/cookies';
-import type { IRegisterFormValues } from '../types';
 
-import type * as types from '../types/index';
+import type * as types from '../types';
 
-export const userLogin = async (formData: { login: string; password: string }) => {
+export const userLogin = async (formData: { login: string; password: string }): Promise<unknown> => {
   const response = await clientApi.post('/debug/interaction', formData);
-  return response.data;
+  return response.data as unknown;
 };
 
 export const sendToLoginPage = (): void => {
-  const REDIRECT_URL = import.meta.env.VITE_API_REDIRECT_LOGIN_URL;
-  const CLIENT_ID = import.meta.env.VITE_API_CLIENT_ID;
+  const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
+  const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
+  // eslint-disable-next-line compat/compat
   const queryParams = new URLSearchParams({
-    client_id: CLIENT_ID,
+    client_id: clientId,
     response_type: 'code',
-    redirect_uri: REDIRECT_URL,
+    redirect_uri: redirectUrl,
     nonce: generateRandomName(),
     scope: 'openid',
   }).toString();
@@ -33,7 +33,7 @@ export const getUserLogin = async (): Promise<{ login: string; sub: string }> =>
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  return response.data;
+  return response.data as { login: string; sub: string };
 };
 
 export const getUserProfile = async (name: string): Promise<types.IUserProfile> => {
@@ -43,59 +43,57 @@ export const getUserProfile = async (name: string): Promise<types.IUserProfile> 
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  return response.data;
+  return response.data as types.IUserProfile;
 };
 
-export const createAccount = async (formData: IRegisterFormValues) => {
+export const createAccount = async (formData: types.IRegisterFormValues): Promise<unknown> => {
   const response = await clientApi.post('/users/register', formData);
-  return response.data;
+  return response.data as unknown;
 };
 
 export const login = async (code: string): Promise<AxiosResponse> => {
-  const REDIRECT_URL = import.meta.env.VITE_API_REDIRECT_LOGIN_URL;
-  const CLIENT_SECRET = import.meta.env.VITE_API_CLIENT_SECRET;
-  const CLIENT_ID = import.meta.env.VITE_API_CLIENT_ID;
+  const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
+  const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
+  const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
+  // eslint-disable-next-line compat/compat
   const body = new URLSearchParams({
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
+    client_id: clientId,
+    client_secret: clientSecret,
     code,
     grant_type: 'authorization_code',
-    redirect_uri: REDIRECT_URL,
+    redirect_uri: redirectUrl,
   });
 
-  const response = await clientApi.post('/token', body);
-
-  return response;
+  return clientApi.post('/token', body);
 };
 
 export const refreshAccessToken = async (token: string): Promise<AxiosResponse> => {
-  const CLIENT_SECRET = import.meta.env.VITE_API_CLIENT_SECRET;
-  const CLIENT_ID = import.meta.env.VITE_API_CLIENT_ID;
+  const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
+  const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
+  // eslint-disable-next-line compat/compat
   const body = new URLSearchParams({
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
+    client_id: clientId,
+    client_secret: clientSecret,
     refresh_token: token,
     grant_type: 'refresh_token',
   });
 
-  const response = await clientApi.post('/token', body);
-
-  return response;
+  return clientApi.post('/token', body);
 };
 
 export const revokeToken = async (token: string, type: ETokenType): Promise<AxiosResponse> => {
-  const CLIENT_SECRET = import.meta.env.VITE_API_CLIENT_SECRET;
-  const CLIENT_ID = import.meta.env.VITE_API_CLIENT_ID;
+  const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
+  const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
+  // eslint-disable-next-line compat/compat
   const body = new URLSearchParams({
     token,
     token_type_hint: type,
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
+    client_id: clientId,
+    client_secret: clientSecret,
   });
 
-  const response = await clientApi.post('/token/revocation', body);
-  return response;
+  return clientApi.post('/token/revocation', body);
 };

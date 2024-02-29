@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/prefer-default-export
 export const generateRandomName = (max = 20): string => {
   const vocabulary = 'ABCDEFGHIJKLMNOUPRSTUWZabcdefghijklmnouprstuwz';
   let name = '';

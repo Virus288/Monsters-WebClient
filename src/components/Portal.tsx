@@ -1,4 +1,4 @@
-import type { ReactHTMLElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import React from 'react';
 import {
   AlertDialog,
@@ -8,13 +8,13 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog';
 
-type IPortalProps= {
-  children:ReactNode;
-  button:ReactNode;
-  triggerFn:()=>void;
-}
+type IPortalProps = {
+  children: ReactNode;
+  button: ReactNode;
+  triggerFn: () => void;
+};
 
-const Portal:React.FC<IPortalProps>= ({ children, button, triggerFn }) => {
+const Portal: React.FC<IPortalProps> = ({ children, button, triggerFn }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>{button}</AlertDialogTrigger>
