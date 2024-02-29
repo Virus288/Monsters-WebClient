@@ -1,17 +1,15 @@
 import type { HTMLInputTypeAttribute } from 'react';
 import React from 'react';
 
-type IInputProps ={
-  label:string;
-  type:HTMLInputTypeAttribute ;
-  placeholder:string;
-  onHandleChange:(e:React.ChangeEvent<HTMLInputElement>,name:string)=>void;
-  required:boolean;
-  name:string;
+type IInputProps = {
+  label: string;
+  type: HTMLInputTypeAttribute;
+  placeholder: string;
+  onHandleChange: (e: React.ChangeEvent<HTMLInputElement>, name: string) => void;
+  name: string;
+};
 
-}
-
-const FormInput:React.FC<IInputProps> = ({ label, type, name, placeholder, onHandleChange}) => {
+const FormInput: React.FC<IInputProps> = ({ label, type, name, placeholder, onHandleChange }) => {
   return (
     <label htmlFor="" className="flex flex-col gap-3  w-[300px]">
       <span className="text-slate-500 text-sm">{label}</span>

@@ -1,25 +1,21 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { Terminal } from '../../components/Terminal';
-import { useTerminal } from '../../hooks/useTerminal';
+import React, { useEffect } from 'react';
+import Terminal from '../../components/Terminal';
+import useTerminal from '../../hooks/useTerminal';
 
-
-const Home:React.FC = () => {
-
-
+const Home: React.FC = () => {
   const { history, pushToHistory, setTerminalRef, resetTerminal } = useTerminal();
 
   const user = 'Adam';
 
+  const start = (): void => {
+    pushToHistory(
+      <div>
+        <strong>Starting</strong> the server... <span style={{ color: 'green' }}>Done</span>
+      </div>,
+    );
+  };
 
-
-  useEffect(() => {
-    resetTerminal();
-
-    start();
-    loadStatus();
-  }, []);
-
-  const loadStatus = () => {
+  const loadStatus = (): void => {
     pushToHistory(
       <>
         <div className="text-normal">
@@ -30,20 +26,19 @@ const Home:React.FC = () => {
           Nice to see You !
         </div>
         <br />
-        <div>You can write: 'help' , to check list of avalible commands.</div>
+        <div>You can write: &apos;help&apos; , to check list of available commands.</div>
       </>,
     );
   };
 
-  const start = () => {
-    pushToHistory(
-      <div>
-        <strong>Starting</strong> the server... <span style={{ color: 'green' }}>Done</span>
-      </div>,
-    );
-  };
+  useEffect(() => {
+    resetTerminal();
 
-  const help = () => {
+    start();
+    loadStatus();
+  }, []);
+
+  const help = (): void => {
     pushToHistory(
       <div className="flex flex-col">
         <p className="font-semibold">Here are all the commands you can use:</p>
@@ -60,7 +55,7 @@ const Home:React.FC = () => {
     );
   };
 
-  const alert = () => {
+  const alert = (): void => {
     pushToHistory(
       <div>
         <strong>Alert</strong>
@@ -71,7 +66,7 @@ const Home:React.FC = () => {
     );
   };
 
-  const helps = () => [
+  const helps = (): string[] => [
     'Here are all the commands you can use:',
     '- game init',
     '- alert',

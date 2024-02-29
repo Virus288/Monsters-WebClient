@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { TerminalHistoryItem } from '../types';
 
-export const useTerminal = () => {
+const useTerminal = () => {
   const [terminalRef, setDomNode] = useState<HTMLDivElement>();
   const setTerminalRef = useCallback((node: HTMLDivElement) => setDomNode(node), []);
 
@@ -66,3 +66,5 @@ export const useTerminal = () => {
     setHistory,
   };
 };
+
+export default useTerminal;

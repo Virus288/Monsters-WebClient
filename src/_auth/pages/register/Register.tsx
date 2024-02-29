@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { AxiosError } from 'axios';
-import axios from 'axios';
 import { useMutation } from 'react-query';
-import { handleRegisterConfig } from './registerFormConfig';
+import handleRegisterConfig from './registerFormConfig';
 import FormInput from '../../../components/FormInput';
 
 import type { IRegisterFormValues } from '../../../types';
 import { createAccount } from '../../../clientApi';
 
-const Register:React.FC = () => {
+const Register: React.FC = () => {
   const [values, setValues] = useState<IRegisterFormValues>({
     login: '',
     password: '',
@@ -17,13 +16,13 @@ const Register:React.FC = () => {
     email: '',
   });
   const inputs = handleRegisterConfig(values);
-  const LOGIN_URL = import.meta.env.VITE_API_REDIRECT_LOGIN_URL;
+  const loginUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
   const mutation = useMutation(createAccount, {
     onSuccess: (data) => console.log(data),
     onError: (error: AxiosError | Error) => console.log(error.message),
   });
 
-  const onHandleChange = (e, name) => {
+  const onHandleChange = (e, name: string) => {
     setValues((prev) => ({
       ...prev,
       [name]: e.target.value,
@@ -43,15 +42,15 @@ const Register:React.FC = () => {
         </h2>
       </Link>
       <h3 className="text-slate-200 text-3xl font-bold">Create a new account</h3>
-      <p className="text-slate-400 text-sm text-center mt-2">please eneter your details</p>
+      <p className="text-slate-400 text-sm text-center mt-2">please enter your details</p>
 
       <form action="" className="flex flex-col gap-6 mt-6">
         {inputs.map((input) => {
-          return <FormInput {...input} key={input.id} onHandleChange={onHandleChange} />;
+          return <FormInput {...input} key={input.id as string} onHandleChange={onHandleChange} />;
         })}
         <div className="flex justify-center">
           <span className="text-slate-400">Already have an account?</span>
-          <Link to={LOGIN_URL}>
+          <Link to={loginUrl}>
             <p className="text-violet-200 ml-1">Login</p>
           </Link>
         </div>

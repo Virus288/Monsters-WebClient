@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { IoLogOutOutline } from 'react-icons/io5';
+import React from 'react';
 import { Button } from './ui/button';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const user = false;
 
   return (
