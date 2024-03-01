@@ -2,29 +2,20 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { Button } from '../../components/ui/button';
-import { getUserLogin, getUserProfile, sendToLoginPage, userLogin } from '../../clientApi/index';
+import { userLogin } from '../../clientApi';
 import Portal from '../../components/Portal';
-import Cookies from '../../tools/cookies';
-import { useAccountStore, useProfileStore } from '../../zustand/store';
 import { loginUser } from '../../controllers';
 
-const LandingPage:React.FC = () => {
+const LandingPage: React.FC = () => {
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [cookie, setCookie] = useState<string | undefined>(undefined);
-
-
-  const { setAccount } = useAccountStore.getState();
-const { setProfile } = useProfileStore.getState();
-const { setIsLoggedIn } = useAccountStore.getState();
-
 
   const mutation = useMutation(userLogin, {
-    onSuccess: (data) => loginUser(data.token),
+    onSuccess: (data: Record<string, string>) => loginUser(data.token),
     onError: (e) => alert(e),
   });
 
-  const handleLogin = (data) => {
+  const handleLogin = (data): void => {
     mutation.mutate(data);
   };
 

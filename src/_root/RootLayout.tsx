@@ -1,4 +1,4 @@
-import { Outlet,Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { useAccountStore } from '../zustand/store';
 
@@ -11,15 +11,14 @@ const isLoggedIn = useAccountStore((state)=>state.isLoggedIn);
 
   return (
     <div className=" h-screen w-full ">
-
       <Navbar />
-
-
-
-   { isLoggedIn? (<section>
-        <Outlet />
-      </section>):<Navigate to="/"/>}
-
+      {isLoggedIn ? (
+        <section>
+          <Outlet />
+        </section>
+      ) : (
+        <Navigate to="/" />
+      )}
     </div>
   );
 };

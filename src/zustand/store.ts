@@ -1,14 +1,7 @@
 import { create } from 'zustand';
-import { isError, useQuery } from 'react-query';
-import zukeeper from 'zukeeper';
 import type * as types from './types';
-import Cookies from '../tools/cookies';
-import { loginUser } from '../controllers';
-
-const accessToken = new Cookies().getToken('monsters.uid');
 
 export const useAccountStore = create<types.IAccountStore>((set) => ({
-
   isLoggedIn: false,
   account: undefined,
   setAccount: (user): void => set({ account: user }),
@@ -18,13 +11,13 @@ export const useAccountStore = create<types.IAccountStore>((set) => ({
 
 export const useLogsStore = create((set) => ({
   logs: [],
-  setLogs: (logs) => {
+  setLogs: (logs: string[]): void => {
     set({ logs });
   },
 }));
 export const useProfileStore = create<types.ProfileStore>((set) => ({
   profile: undefined,
-  setProfile: (profile) => {
+  setProfile: (profile): void => {
     set({ profile });
   },
 }));

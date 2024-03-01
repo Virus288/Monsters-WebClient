@@ -1,5 +1,5 @@
-export const handleRegisterConfig = (values) => {
-  const inputs = [
+const handleRegisterConfig = (values: Record<string, string>): Record<string, string | number | boolean>[] => {
+  return [
     {
       id: 1,
       name: 'login',
@@ -46,6 +46,6 @@ export const handleRegisterConfig = (values) => {
       className: 'signupPage-form',
     },
   ];
-
-  return inputs;
 };
+
+export default handleRegisterConfig;

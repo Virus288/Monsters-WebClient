@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import type { AxiosError } from 'axios';
-import axios from 'axios';
 import { useMutation } from 'react-query';
-import { handleRegisterConfig } from './registerFormConfig';
-import FormInput from '../../../components/FormInput';
-
 import type { IRegisterFormValues } from '../../../types';
 import { createAccount } from '../../../clientApi';
 
@@ -47,7 +43,7 @@ const Register:React.FC = () => {
         </h2>
       </Link>
       <h3 className="text-slate-200 text-3xl font-bold">Create a new account</h3>
-      <p className="text-slate-400 text-sm text-center mt-2">please eneter your details</p>
+      <p className="text-slate-400 text-sm text-center mt-2">please enter your details</p>
 
     <form className="flex flex-col  gap-5" onSubmit={onSubmit}>
       <h2 className="text-3xl font-bold">Create an Account</h2>

@@ -1,10 +1,4 @@
-import type { EUserRace } from '../enums/races';
-
-export interface IAccountState {
-  userName: string | undefined;
-  id: string | undefined;
-  registered: boolean;
-}
+import type { EUserRace } from '../enums';
 
 export interface IUserProfile {
   _id: string;

@@ -1,11 +1,11 @@
 import './terminal.css';
-import type { ForwardedRef } from 'react';
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import type { ForwardedRef} from 'react';
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import type { TerminalProps } from '../types';
-import { useTerminal } from '../hooks/useTerminal';
+import useTerminal from '../hooks/useTerminal';
 import * as Commands from '../hooks/useCommands';
 
-export const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElement>) => {
+const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElement>) => {
   const { promptLabel = '>' } = props;
 
   const inputRef = useRef<HTMLInputElement>();
@@ -34,15 +34,16 @@ export const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTML
     setInputValue(e.target.value);
   }, []);
 
-  const handleInputKeyDown = (e) => {
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-      const avalibleCommandList = Object.keys(Commands);
+      const availableCommandList = Object.keys(Commands);
 
-      const isCommandValid = avalibleCommandList.includes(input.toLocaleLowerCase());
+      const isCommandValid = availableCommandList.includes(input.toLocaleLowerCase());
 
       if (!isCommandValid) {
         setInputValue('');
-        return pushToHistory('InvalidCommand');
+        pushToHistory('InvalidCommand');
+        return;
       }
       pushToHistory(input);
       setInputValue('');
@@ -52,11 +53,11 @@ export const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTML
   return (
     <div className="terminal" ref={ref} onClick={focusInput}>
       {history.map((line, index) => {
-        const prompt = Commands[line];
+        const Prompt = Commands[line as keyof typeof Commands];
 
         return (
           <div className="terminal__line" key={`terminal-line-${index}-${line}`}>
-            {prompt()}
+            <Prompt />
           </div>
         );
       })}
@@ -68,6 +69,7 @@ export const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTML
             value={input}
             onKeyDown={(e) => handleInputKeyDown(e)}
             onChange={handleInputChange}
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             ref={inputRef}
           />
@@ -76,3 +78,5 @@ export const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTML
     </div>
   );
 });
+
+export default Terminal;
