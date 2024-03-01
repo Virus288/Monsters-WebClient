@@ -50,14 +50,18 @@ const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElem
     }
   };
 
+
   return (
     <div className="terminal" ref={ref} onClick={focusInput}>
       {history.map((line, index) => {
         const Prompt = Commands[line as keyof typeof Commands];
 
+  console.log(line);
+  console.log('line');
         return (
           <div className="terminal__line" key={`terminal-line-${index}-${line}`}>
-            <Prompt />
+
+    {      Prompt()}
           </div>
         );
       })}

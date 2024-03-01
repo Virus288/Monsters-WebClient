@@ -36,7 +36,7 @@ const Register:React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen flex-1">
+    <div className="flex flex-col justify-center items-center h-full border-2  bg-[#010B00] flex-1">
       <Link to="/">
         <h2 className="text-7xl text-slate-400 md:text-8xl font-bold mb-10 ">
           <span className="text-violet-600">M</span>onsters
@@ -45,8 +45,8 @@ const Register:React.FC = () => {
       <h3 className="text-slate-200 text-3xl font-bold">Create a new account</h3>
       <p className="text-slate-400 text-sm text-center mt-2">please enter your details</p>
 
-    <form className="flex flex-col  gap-5" onSubmit={onSubmit}>
-      <h2 className="text-3xl font-bold">Create an Account</h2>
+    <form className="flex   flex-col h-full  gap-5" onSubmit={onSubmit}>
+
       <div className="flex flex-col md:flex-row gap-5 px-4 ">
             <label className="text-gray-700 text-sm font-bold flex-1 flex flex-col gap-1 w-[300px]">
           User Name

@@ -14,7 +14,7 @@ export const userLogin = async (formData: { login: string; password: string }): 
 export const sendToLoginPage = (): void => {
   const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
   const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
-
+  const server = import.meta.env.VITE_API_BACKEND as string;
   // eslint-disable-next-line compat/compat
   const queryParams = new URLSearchParams({
     client_id: clientId,
@@ -23,8 +23,11 @@ export const sendToLoginPage = (): void => {
     nonce: generateRandomName(),
     scope: 'openid',
   }).toString();
-  window.location.href = `/auth?${queryParams}`;
+  window.location.href = `${server}/auth?${queryParams}`;
 };
+
+
+
 
 export const getUserLogin = async (): Promise<{ login: string; sub: string }> => {
   const accessToken = new Cookies().getToken('monsters.uid');
@@ -64,8 +67,9 @@ export const login = async (code: string): Promise<AxiosResponse> => {
     grant_type: 'authorization_code',
     redirect_uri: redirectUrl,
   });
-
-  return clientApi.post('/token', body);
+  const data = await clientApi.post('/token', body);
+  console.log(data.data);
+  return data.data;
 };
 
 export const refreshAccessToken = async (token: string): Promise<AxiosResponse> => {

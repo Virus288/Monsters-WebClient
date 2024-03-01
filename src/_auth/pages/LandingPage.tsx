@@ -1,23 +1,34 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useMutation } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
+import { log } from 'console';
 import { Button } from '../../components/ui/button';
-import { userLogin } from '../../clientApi';
+import { sendToLoginPage, userLogin,login } from '../../clientApi';
 import Portal from '../../components/Portal';
 import { loginUser } from '../../controllers';
+
 
 const LandingPage: React.FC = () => {
   const [login, setLogin] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
+const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    console.log(code);
 
-  const mutation = useMutation(userLogin, {
-    onSuccess: (data: Record<string, string>) => loginUser(data.token),
-    onError: (e) => alert(e),
-  });
+  // const navigateFn =(url:string):void=>{
+  //   navigate(url);
+  // };
 
-  const handleLogin = (data): void => {
-    mutation.mutate(data);
-  };
+
+
+
+  // const mutation = useMutation(sendToLoginPage, {
+  //   onSuccess: (data: Record<string, string>) => loginUser(data.token,navigateFn),
+  //   onError: (e:Error) => console.log(e),
+  // });
+
+
 
   return (
     <div className=" flex flex-col justify-center gap-6 items-center  h-screen flex-1">
@@ -28,38 +39,13 @@ const LandingPage: React.FC = () => {
         Text based <span className="text-slate-400">terminal</span> Role Play game.
       </p>
       <div className=" w-full  flex flex-col items-center lg:flex-row  justify-center gap-10  h-1/4">
-        <Portal
-          button={
-            <Button className="text-slate-200 text-lg" variant="ghost">
-              Login
-            </Button>
-          }
-          triggerFn={() => handleLogin({ login, password })}
-        >
-          <div className="flex flex-col justify-evenly  ">
-            <label className=" text-slate-400 font-semibold mb-6" htmlFor="login">
-              Login
-            </label>
-            <input
-              placeholder="login"
-              onChange={(e) => setLogin(e.target.value)}
-              id="cookie"
-              type="text"
-              className="w-[80%]  rounded-[5px] mx-auto py-3 bg-dark-4 outline-none px-2 text-slate-400"
-            />
-            <label className=" text-slate-400 font-semibold mb-6" htmlFor="cookie">
-              Password
-            </label>
-            <input
-              placeholder="password"
-              onChange={(e) => setPassword(e.target.value)}
-              id="cookie"
-              type="password"
-              className="w-[80%]  rounded-[5px] mx-auto py-3 bg-dark-4 outline-none px-2 text-slate-400"
-            />
-          </div>
-        </Portal>
 
+    <Button className="text-slate-200 font-semibold text-lg bg-violet-900 px-6 " variant="ghost" onClick={(e)=>{
+      e.preventDefault();
+      sendToLoginPage();
+    }}>
+            Login
+          </Button>
         <Link to="/register">
           <Button className="text-slate-200 font-semibold text-lg bg-violet-900 px-6 " variant="ghost">
             Join

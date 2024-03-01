@@ -4,16 +4,23 @@ import Cookies from './cookies';
 const apiUrl = import.meta.env.VITE_API_BACKEND as string;
 
 const homeUrl = import.meta.env.VITE_API_HOME as string;
+console.log(homeUrl);
 const accessToken = new Cookies().getToken('monsters.uid');
+
+const headers = {
+
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Access-Control-Allow-Origin': homeUrl,
+};
+
+// if (accessToken) {
+//   headers["Authorization"] = `Bearer ${accessToken}`
+// }
 
 const clientApi = axios.create({
   baseURL: apiUrl,
   withCredentials: true,
-  headers: {
-    Authorization: `Bearer ${accessToken}`,
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Access-Control-Allow-Origin': homeUrl,
-  },
+  headers
 });
 
 export default clientApi;

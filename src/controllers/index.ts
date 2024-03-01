@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { getUserLogin, getUserProfile } from '../clientApi';
 import Cookies from '../tools/cookies';
 import { useAccountStore, useProfileStore } from '../zustand/store';
@@ -5,6 +6,7 @@ import { useAccountStore, useProfileStore } from '../zustand/store';
 const { setAccount } = useAccountStore.getState();
 const { setProfile } = useProfileStore.getState();
 const { setIsLoggedIn } = useAccountStore.getState();
+
 
 export const addCookie = (cookie: string): void => {
   console.log('Adding cookie. Please refresh the page after adding');
@@ -14,11 +16,14 @@ export const addCookie = (cookie: string): void => {
 export const loginUser = async (cookie: string): Promise<void> => {
   new Cookies().addLoginToken(cookie, Date.now() + 1000 * 60 * 24 * 30);
 
+
+
   const data = await getUserLogin();
   const profile = await getUserProfile(data.login);
 
   setAccount({ id: data.sub, login: data.login });
   setProfile(profile);
   setIsLoggedIn(true);
+
 
 };

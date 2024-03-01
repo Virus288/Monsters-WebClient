@@ -10,6 +10,7 @@ import Cookies from './tools/cookies';
 import { loginUser } from './controllers';
 import RootLoader from './components/RootLoader';
 import AuthLoader from './components/AuthLoader';
+import Login from './_auth/pages/Login';
 
 const  App:React.FC = () => {
 
@@ -17,13 +18,6 @@ const [isRootRdy,setIsRootRdy]=useState(false);
 const [isAuthRdy,setIsAuthRdy]=useState(false);
 
 
-const acc = useAccountStore((state)=>state.account);
-
-
-
-const { setAccount } = useAccountStore.getState();
-const { setProfile } = useProfileStore.getState();
-const { setIsLoggedIn } = useAccountStore.getState();
 
 
 
@@ -43,16 +37,18 @@ const { setIsLoggedIn } = useAccountStore.getState();
   }, []);
 
   return (
-    <main className="bg-[#010B00]">
+    <main className="bg-[#010B00] h-screen">
       <Router>
         <Routes>
           <Route element={isAuthRdy ? <AuthLayout /> : <AuthLoader />}>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Register /> } />
+            <Route path="/login" element={<Login /> } />
+
           </Route>
 
           <Route element={isRootRdy ? <RootLayout /> : <RootLoader />}>
-            <Route path="/terminal" element={<Home />} />
+            <Route path="/*" element={<Home />} />
           </Route>
         </Routes>
       </Router>
