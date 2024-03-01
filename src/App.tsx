@@ -19,14 +19,14 @@ import { useAccountStore,useProfileStore } from './zustand/store';
 import RootLoader from './components/RootLoader';
 import AuthLoader from './components/AuthLoader';
 
-const  App=():React.FC=> {
+const  App:React.FC = () => {
 
 const [isRootRdy,setIsRootRdy]=useState(false);
 const [isAuthRdy,setIsAuthRdy]=useState(false);
 
 
 const acc = useAccountStore((state)=>state.account);
-const isLoggedIn = useAccountStore((state)=>state.isLoggedIn);
+
 
 
 const { setAccount } = useAccountStore.getState();
@@ -57,14 +57,6 @@ setTimeout(() => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
-  // if(!rdy){
-  //   return(
-  //     <Loader />
-  //   );
-  // }
-
 
   return (
 <main className='bg-[#010B00]'>

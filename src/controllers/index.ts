@@ -18,7 +18,7 @@ export const addCookie = (cookie: string): void => {
 export const loginUser = async (cookie: string) => {
   new Cookies().addLoginToken(cookie, Date.now() + 1000 * 60 * 24 * 30);
   const data = await getUserLogin();
-  console.log(data);
+
   const profile = await getUserProfile(data.login);
 
 
