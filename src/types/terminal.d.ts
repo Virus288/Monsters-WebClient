@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { EUserCommands } from '../enums';
 
 export type TerminalHistoryItem = ReactNode | string;
 export type TerminalHistory = TerminalHistoryItem[];
@@ -12,3 +13,19 @@ export type TerminalProps = {
   promptLabel?: TerminalHistoryItem;
   commands: TerminalCommands;
 };
+
+export type IMiddleware = {
+  state: EUserCommands;
+  data: unknown;
+  oldState?: EUserCommands;
+
+
+}
+
+
+export type IFightResponse = {
+  character: string;
+  action: string;
+  target: string;
+  value: number;
+}

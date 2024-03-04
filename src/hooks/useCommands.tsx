@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAccountStore, useProfileStore } from '../zustand/store';
+import { useMutation, useQuery } from 'react-query';
+import { initProfile } from '../gameApi/gameApi';
 
 
 
@@ -29,6 +31,7 @@ export const start = () => {
 };
 
 export const mycharacter = ()=>{
+
 
   const {data} = useProfileStore.getState().profile
  
@@ -69,3 +72,50 @@ export const InvalidCommand: React.FC = () => {
 };
 
 
+export const initFight = ():Promise<void>=>{
+
+} 
+
+export const attack = ():Promise<void>=>{
+  
+} 
+export const leaveFight = ():Promise<void>=>{
+  
+} 
+
+export const races = ()=>{
+return(
+  <div className='flex flex-col'>
+ 
+<span>Human</span>
+<span>Elf</span>
+<span>Goblin</span>
+<span>Dwarf</span>
+<span>Orc</span>
+<span>Fairy</span>
+<span>DragonBorn</span>
+  </div>
+)
+
+}
+
+
+export const confirmationWindow = () =>{
+
+return (
+<div className='flex'>
+Human ....
+</div>
+)
+
+}
+
+export const confirmationSuccesWindow = () =>{
+
+return (
+<div className='flex'>
+Race has been picked sucessfully.
+</div>
+)
+
+}
