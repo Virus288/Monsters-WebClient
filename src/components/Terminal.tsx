@@ -4,18 +4,30 @@ import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'rea
 import type { TerminalProps } from '../types';
 import useTerminal from '../hooks/useTerminal';
 import * as Commands from '../hooks/useCommands';
+import { useHistoryStore, useProfileStore } from '../zustand/store';
 
 const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElement>) => {
   const { promptLabel = '>' } = props;
 
+const isInitialized = useProfileStore((state)=>state.profile.data.initialized);
+
+const history = useHistoryStore((state)=> state.history);
+
+
+
+const add = useHistoryStore(state => state.addToHistory);
+
+
+
+useEffect(()=>{
+  if(!isInitialized)
+  add('unnitializedProfile');
+},[]);
+
   const inputRef = useRef<HTMLInputElement>();
   const [input, setInputValue] = useState<string>('');
 
-  const {
-    pushToHistory,
 
-    history,
-  } = useTerminal();
   /**
    * Focus on input when render  terminal or click in the terminal
    */
@@ -42,17 +54,17 @@ const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElem
 
       if (!isCommandValid) {
         setInputValue('');
-        pushToHistory('InvalidCommand');
+        add('InvalidCommand');
         return;
       }
-      pushToHistory(input);
+      add(input);
       setInputValue('');
     }
   };
 
-
+console.log(history);
   return (
-    <div className="terminal" ref={ref} onClick={focusInput}>
+    <div className="terminal " ref={ref} onClick={focusInput}>
       {history.map((line, index) => {
         const Prompt = Commands[line as keyof typeof Commands];
 

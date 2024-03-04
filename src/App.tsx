@@ -18,12 +18,6 @@ const [isRootRdy,setIsRootRdy]=useState(false);
 const [isAuthRdy,setIsAuthRdy]=useState(false);
 
 
-
-
-
-
-
-
   useEffect(() => {
     const accessToken = new Cookies().getToken('monsters.uid');
 

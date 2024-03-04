@@ -4,6 +4,7 @@ import type { ETokenType } from '../enums';
 import { generateRandomName } from '../tools';
 import Cookies from '../tools/cookies';
 
+
 import type * as types from '../types';
 
 export const userLogin = async (formData: { login: string; password: string }): Promise<unknown> => {
@@ -25,8 +26,6 @@ export const sendToLoginPage = (): void => {
   }).toString();
   window.location.href = `${server}/auth?${queryParams}`;
 };
-
-
 
 
 export const getUserLogin = async (): Promise<{ login: string; sub: string }> => {
@@ -54,7 +53,7 @@ export const createAccount = async (formData: types.IRegisterFormValues): Promis
   return response.data as unknown;
 };
 
-export const login = async (code: string): Promise<AxiosResponse> => {
+export const login = async (code: string): Promise<ILoginBody> => {
   const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
   const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
   const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
@@ -101,3 +100,15 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<Axio
 
   return clientApi.post('/token/revocation', body);
 };
+
+
+type IFightFormData = {
+  team: string[];
+}
+
+export const initFight = async (fightFormdata: IFightFormData): Promise<void> => {
+  const response = await clientApi.post('debug/fights/create', fightFormdata);
+  return response.data;
+}
+
+
