@@ -17,6 +17,8 @@
 .terminal__line {
     line-height: 2;
     white-space: pre-wrap;
+   
+    max-width: 40%;
 }
 
 .terminal__prompt {

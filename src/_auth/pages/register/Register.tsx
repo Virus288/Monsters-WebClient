@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import type { AxiosError } from 'axios';
@@ -9,16 +9,12 @@ import { createAccount } from '../../../clientApi';
 const Register:React.FC = () => {
 
 
-
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
   } = useForm<IRegisterFormValues>();
-
-
-
 
 
 

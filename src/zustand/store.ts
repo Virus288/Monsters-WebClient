@@ -34,6 +34,15 @@ export const useWebsocketStore = create(() => ({
   websocket: null,
 }));
 
-export const useHistoryStore = create(() => ({
-  history: ['start'],
+export const useHistoryStore = create((set) => ({
+  history: ["start"],
+  addToHistory: (output) =>
+    set(state => ({
+      history: [
+        ...state.history,
+        output
+      ]
+    }))
+
 }));
+

@@ -14,7 +14,7 @@ const headers = {
 };
 
 // if (accessToken) {
-//   headers["Authorization"] = `Bearer ${accessToken}`
+// 
 // }
 
 const clientApi = axios.create({

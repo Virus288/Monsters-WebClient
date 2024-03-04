@@ -5,7 +5,7 @@ const useTerminal = () => {
   const [terminalRef, setDomNode] = useState<HTMLDivElement>();
   const setTerminalRef = useCallback((node: HTMLDivElement) => setDomNode(node), []);
 
-  const [history, setHistory] = useState(['start']);
+  const [history, setHistory] = useState(['start','help']);
 
   useEffect(() => {
     const windowResizeEvent = () => {
