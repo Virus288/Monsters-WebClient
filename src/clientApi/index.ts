@@ -106,6 +106,9 @@ type IFightFormData = {
   team: string[];
 }
 
+
+
+
 export const initFight = async (fightFormdata: IFightFormData): Promise<void> => {
   const response = await clientApi.post('debug/fights/create', fightFormdata);
   return response.data;

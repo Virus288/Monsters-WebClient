@@ -34,7 +34,13 @@ export const useWebsocketStore = create(() => ({
   websocket: null,
 }));
 
-export const useHistoryStore = create((set) => ({
+
+type IUseHistoryStore = {
+  history: string[];
+  addToHistory: (output: string) => void;
+}
+
+export const useHistoryStore = create<IUseHistoryStore>((set) => ({
   history: ["start"],
   addToHistory: (output) =>
     set(state => ({
