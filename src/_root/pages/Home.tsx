@@ -38,46 +38,6 @@ const Home: React.FC = () => {
     loadStatus();
   }, []);
 
-  const help = (): void => {
-    pushToHistory(
-      <div className="flex flex-col">
-        <p className="font-semibold">Here are all the commands you can use:</p>
-        <span>- game init</span>
-        <span>- alert</span>
-        <span>- races</span>
-        <span>- profile</span>
-        <span>- messages</span>
-        <span>- messages</span>
-        <span>- sendMsg</span>
-        <span>- clear</span>
-        <span>- exit</span>
-      </div>,
-    );
-  };
-
-  const alert = (): void => {
-    pushToHistory(
-      <div>
-        <strong>Alert</strong>
-        <span style={{ color: 'orange', marginLeft: 10 }}>
-          <strong>Shown in the browser</strong>
-        </span>
-      </div>,
-    );
-  };
-
-  const helps = (): string[] => [
-    'Here are all the commands you can use:',
-    '- game init',
-    '- alert',
-    '- races',
-    '- profile',
-    '- messages',
-    '- sendMsg',
-    '- clear',
-    '- exit',
-  ];
-
   const commands = {
     help: 'help',
     start: 'start',

@@ -1,16 +1,8 @@
 import type { AxiosResponse } from 'axios';
-import clientApi from '../tools/axios';
+import { basicClient, loggedClient } from '../tools/axios';
 import type { ETokenType } from '../enums';
 import { generateRandomName } from '../tools';
-import Cookies from '../tools/cookies';
-
-
 import type * as types from '../types';
-
-export const userLogin = async (formData: { login: string; password: string }): Promise<unknown> => {
-  const response = await clientApi.post('/debug/interaction', formData);
-  return response.data as unknown;
-};
 
 export const sendToLoginPage = (): void => {
   const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
@@ -27,33 +19,21 @@ export const sendToLoginPage = (): void => {
   window.location.href = `${server}/auth?${queryParams}`;
 };
 
-
-export const getUserLogin = async (): Promise<{ login: string; sub: string }> => {
-  const accessToken = new Cookies().getToken('monsters.uid');
-  const response = await clientApi.get('/me', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return response.data as { login: string; sub: string };
+export const getUserLogin = async (): Promise<AxiosResponse<types.IGetLogin>> => {
+  return loggedClient.get('/me');
 };
 
-export const getUserProfile = async (name: string): Promise<types.IUserProfile> => {
-  const accessToken = new Cookies().getToken('monsters.uid');
-  const response = await clientApi.get(`/profile?name=${name}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return response.data as types.IUserProfile;
+export const getUserProfile = async (name: string): Promise<AxiosResponse<types.IGetProfile>> => {
+  return loggedClient.get(`/profile?name=${name}`);
 };
 
-export const createAccount = async (formData: types.IRegisterFormValues): Promise<unknown> => {
-  const response = await clientApi.post('/users/register', formData);
-  return response.data as unknown;
+export const createAccount = async (
+  formData: types.IRegisterFormValues,
+): Promise<AxiosResponse<types.IDefaultResponse>> => {
+  return basicClient.post('/users/register', formData);
 };
 
-export const login = async (code: string): Promise<ILoginBody> => {
+export const login = async (code: string): Promise<AxiosResponse<types.IGetToken>> => {
   const redirectUrl = import.meta.env.VITE_API_REDIRECT_LOGIN_URL as string;
   const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
   const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
@@ -66,12 +46,10 @@ export const login = async (code: string): Promise<ILoginBody> => {
     grant_type: 'authorization_code',
     redirect_uri: redirectUrl,
   });
-  const data = await clientApi.post('/token', body);
-  console.log(data.data);
-  return data.data;
+  return basicClient.post('/token', body);
 };
 
-export const refreshAccessToken = async (token: string): Promise<AxiosResponse> => {
+export const refreshAccessToken = async (token: string): Promise<AxiosResponse<types.IDefaultResponse>> => {
   const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
   const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
@@ -83,10 +61,10 @@ export const refreshAccessToken = async (token: string): Promise<AxiosResponse> 
     grant_type: 'refresh_token',
   });
 
-  return clientApi.post('/token', body);
+  return basicClient.post('/token', body);
 };
 
-export const revokeToken = async (token: string, type: ETokenType): Promise<AxiosResponse> => {
+export const revokeToken = async (token: string, type: ETokenType): Promise<AxiosResponse<types.IDefaultResponse>> => {
   const clientSecret = import.meta.env.VITE_API_CLIENT_SECRET as string;
   const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
 
@@ -98,20 +76,11 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<Axio
     client_secret: clientSecret,
   });
 
-  return clientApi.post('/token/revocation', body);
+  return basicClient.post('/token/revocation', body);
 };
 
-
-type IFightFormData = {
-  team: string[];
-}
-
-
-
-
-export const initFight = async (fightFormdata: IFightFormData): Promise<void> => {
-  const response = await clientApi.post('debug/fights/create', fightFormdata);
-  return response.data;
-}
-
-
+export const initFight = async (
+  fightFormdata: types.IFightFormData,
+): Promise<AxiosResponse<types.IDefaultResponse>> => {
+  return basicClient.post('debug/fights/create', fightFormdata);
+};

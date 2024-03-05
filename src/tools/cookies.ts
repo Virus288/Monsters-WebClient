@@ -103,7 +103,7 @@ class CookieGenerator {
       `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +
       `${this.secureValue ? 'Secure;' : ''}` +
       `${this.sameSiteValue ? `SameSite=${this.sameSiteValue};` : ''}` +
-      `${`domain=${domain}`}` +
+      `domain=${domain}` +
       `${this.pathValue ? `path=${this.pathValue};` : ''}`;
   }
 }

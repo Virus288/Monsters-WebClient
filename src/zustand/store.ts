@@ -9,12 +9,13 @@ export const useAccountStore = create<types.IAccountStore>((set) => ({
   setIsLoggedIn: (bol): void => set({ isLoggedIn: bol }),
 }));
 
-export const useLogsStore = create((set) => ({
+export const useLogsStore = create<types.ILogsStore>((set) => ({
   logs: [],
   setLogs: (logs: string[]): void => {
     set({ logs });
   },
 }));
+
 export const useProfileStore = create<types.ProfileStore>((set) => ({
   profile: undefined,
   setProfile: (profile): void => {
@@ -22,33 +23,10 @@ export const useProfileStore = create<types.ProfileStore>((set) => ({
   },
 }));
 
-export const useStaticsStore = create(() => ({
-  statics: [],
+export const useHistoryStore = create<types.IHistoryStore>((set) => ({
+  history: ['start'],
+  addToHistory: (output): void =>
+    set((state) => ({
+      history: [...state.history, output],
+    })),
 }));
-
-export const useMessagesStore = create(() => ({
-  messages: [],
-}));
-
-export const useWebsocketStore = create(() => ({
-  websocket: null,
-}));
-
-
-type IUseHistoryStore = {
-  history: string[];
-  addToHistory: (output: string) => void;
-}
-
-export const useHistoryStore = create<IUseHistoryStore>((set) => ({
-  history: ["start"],
-  addToHistory: (output) =>
-    set(state => ({
-      history: [
-        ...state.history,
-        output
-      ]
-    }))
-
-}));
-

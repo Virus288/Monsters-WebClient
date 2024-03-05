@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { EUserCommands } from '../enums';
+import type { EUserCommands } from '../enums';
 
 export type TerminalHistoryItem = ReactNode | string;
 export type TerminalHistory = TerminalHistoryItem[];

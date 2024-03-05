@@ -1,42 +1,29 @@
-import './terminal.css';
-import type { ForwardedRef} from 'react';
+import '../style/terminal.css';
+import type { ForwardedRef } from 'react';
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
-import { useMutation } from 'react-query';
 import type { IMiddleware, TerminalProps } from '../types';
-import useTerminal from '../hooks/useTerminal';
 import * as Commands from '../hooks/useCommands';
-import  newUserCommand from '../hooks/controller';
+import newUserCommand from '../controllers/api';
 import { useHistoryStore, useProfileStore } from '../zustand/store';
 import { EUserCommands } from '../enums';
 
 const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElement>) => {
-  const { promptLabel = '>' } = props;
-
-const isInitialized = useProfileStore((state)=>state.profile.data.initialized);
-
-const history = useHistoryStore((state)=> state.history);
-
-
-const add = useHistoryStore(state => state.addToHistory);
-
-
-
-
-
-useEffect(()=>{
-  if(!isInitialized){
-      add('unnitializedProfile');
-
-setMiddleware({state:EUserCommands.UNNITALIZED});
-  }
-
-},[]);
-
   const inputRef = useRef<HTMLInputElement>();
   const [input, setInputValue] = useState<string>('');
-  const [middleware, setMiddleware] = useState<IMiddleware>({data:undefined,state:EUserCommands.MAP});
+  const [middleware, setMiddleware] = useState<IMiddleware>({ data: undefined, state: EUserCommands.MAP });
 
+  const { promptLabel = '>' } = props;
+  const isInitialized = useProfileStore((state) => state.profile?.initialized);
+  const history = useHistoryStore((state) => state.history);
+  const add = useHistoryStore((state) => state.addToHistory);
 
+  useEffect(() => {
+    if (!isInitialized) {
+      add('unnitializedProfile');
+
+      setMiddleware({ ...middleware, state: EUserCommands.UNNITALIZED });
+    }
+  }, []);
 
   /**
    * Focus on input when render  terminal or click in the terminal
@@ -58,28 +45,19 @@ setMiddleware({state:EUserCommands.UNNITALIZED});
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
-
-      // add(input);
       setInputValue('');
-      console.log('START');
-
-
-      newUserCommand(input,middleware,setMiddleware,add).catch(e=>console.log(e));
+      newUserCommand(input, middleware, setMiddleware, add).catch((e) => console.log(e));
     }
   };
 
-console.log(history);
   return (
     <div className="terminal " ref={ref} onClick={focusInput}>
       {history.map((line, index) => {
-        const Prompt = Commands[line as keyof typeof Commands];
+        const action = Commands[line as keyof typeof Commands];
 
-  console.log(line);
-  console.log('line');
         return (
           <div className="terminal__line" key={`terminal-line-${index}-${line}`}>
-
-    {      Prompt()}
+            {action()}
           </div>
         );
       })}

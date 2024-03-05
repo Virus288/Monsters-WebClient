@@ -22,3 +22,7 @@ export interface ILoginBody {
   refresh_token: string;
   expires_in: number;
 }
+
+type IFightFormData = {
+  team: string[];
+};
