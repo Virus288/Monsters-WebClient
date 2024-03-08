@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAccountStore, useProfileStore } from '../zustand/store';
 
-export const unnitializedProfile: React.FC = () => {
+export const uninitializedProfile: React.FC = () => {
   const userLogin = useAccountStore.getState().account?.login;
 
   return (
@@ -33,6 +33,22 @@ export const mycharacter: React.FC = () => {
       <span>Race:{data.race}</span>
       <span>Lvl:{data.lvl}</span>
       <span />
+    </div>
+  );
+};
+
+export const err: React.FC = () => {
+  return (
+    <div className="flex flex-col">
+      <span>Got error</span>
+    </div>
+  );
+};
+
+export const actionSuccess: React.FC<{ message: string }> = ({ message }) => {
+  return (
+    <div className="flex flex-col">
+      <span>{message}</span>
     </div>
   );
 };

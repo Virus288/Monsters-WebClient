@@ -2,7 +2,6 @@ import '../style/terminal.css';
 import type { ForwardedRef } from 'react';
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import type { IMiddleware, TerminalProps } from '../types';
-import * as Commands from '../hooks/useCommands';
 import newUserCommand from '../controllers/api';
 import { useHistoryStore, useProfileStore } from '../zustand/store';
 import { EUserCommands } from '../enums';
@@ -19,7 +18,7 @@ const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElem
 
   useEffect(() => {
     if (!isInitialized) {
-      add('unnitializedProfile');
+      add('uninitializedProfile');
 
       setMiddleware({ ...middleware, state: EUserCommands.UNNITALIZED });
     }
@@ -46,18 +45,18 @@ const Terminal = forwardRef((props: TerminalProps, ref: ForwardedRef<HTMLDivElem
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       setInputValue('');
-      newUserCommand(input, middleware, setMiddleware, add).catch((e) => console.log(e));
+      newUserCommand(input, add).catch((e) => console.log(e));
     }
   };
 
   return (
     <div className="terminal " ref={ref} onClick={focusInput}>
       {history.map((line, index) => {
-        const action = Commands[line as keyof typeof Commands];
+        // const action = Commands[target as keyof typeof Commands];
 
         return (
-          <div className="terminal__line" key={`terminal-line-${index}-${line}`}>
-            {action()}
+          <div className="terminal__line" key={`terminal-line-${index}-${line as string}`}>
+            {line}
           </div>
         );
       })}

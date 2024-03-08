@@ -1,80 +1,90 @@
-import { EConfirmationCommands, EUserCommands, EUserRace } from '../enums';
-import { initProfile } from '../gameApi/gameApi';
-import type { IMiddleware } from '../types';
-import * as Commands from '../hooks/useCommands';
+import nlp from 'compromise';
+import { EUserActions, EUserRace } from '../enums';
+import { attack, initProfile, sendMessage } from '../gameApi/gameApi';
 
-const getAvailableCommands = (middleware: IMiddleware): string[] => {
-  let data: string[] = ['help'];
+const handleAttackEnemy = async (target: string, add: (output: string) => void): Promise<void> => {
+  const { data } = await attack(target);
 
-  switch (middleware.state) {
-    case EUserCommands.UNNITALIZED:
-      data = [...data, ...(Object.values(EUserRace) as string[])];
-      break;
-    case EUserCommands.CONFIRMATION:
-      data = [...data, ...(Object.values(EConfirmationCommands) as string[])];
-      break;
-    default:
-      data = [...data, ...Object.keys(Commands)];
-      break;
-  }
-
-  return data;
+  data.data.forEach((r) => {
+    add(`${r.character} attacked enemy ${r.target} for ${r.value}`);
+  });
 };
 
-const newUserCommand = async (
-  input: string,
-  middleware: IMiddleware,
-  setMiddleware: React.Dispatch<React.SetStateAction<IMiddleware>>,
-  add: (output: string) => void,
-): Promise<void> => {
-  const availableCommands = getAvailableCommands(middleware).map((command) => command.toLocaleLowerCase());
+const validCommands = [
+  { action: EUserActions.Attack, target: ['enemy', 'foe', 'opponent'] },
+  { action: EUserActions.SendMessage.toLocaleLowerCase(), target: ['to'] },
+  { action: EUserActions.ChooseRacer.toLocaleLowerCase(), target: Object.values(EUserRace) },
+];
 
-  if (!availableCommands.includes(input.toLocaleLowerCase().trim())) {
-    add('InvalidCommand');
-    return;
-  }
+const newUserCommand = async (command: string, add: (output: string) => void): Promise<void> => {
+  let userAction: EUserActions | undefined;
+  let userTarget: string = '';
+  let userMessage: string = '';
+  let messageTarget: string = '';
 
-  if (input === 'help') {
-    add(input);
-    return;
-  }
+  try {
+    // To co wprowadził user, splitowane
+    let tokens = nlp(command.toLowerCase())
+      .terms()
+      .map((term) => term.text()) as string[];
 
-  if (middleware.state === EUserCommands.UNNITALIZED) {
-    add('confirmationWindow');
-    setMiddleware({
-      ...middleware,
-      data: input,
-      state: EUserCommands.CONFIRMATION,
-      oldState: EUserCommands.UNNITALIZED,
-    });
-    return;
-  }
+    validCommands.forEach((c) => {
+      const { action, target } = c;
 
-  console.log('middleware');
-  console.log(middleware);
+      // Dozwolone akcje z powyższej listy
+      const actions = nlp(action)
+        .terms()
+        .map((term) => term.text()) as unknown[];
 
-  if (middleware.state === EUserCommands.CONFIRMATION) {
-    if (input === (EConfirmationCommands.YES as string)) {
-      if (middleware?.oldState === EUserCommands.UNNITALIZED) {
-        const data = await initProfile(middleware.data as EUserRace);
+      // Sprawdź czy 1 wyraz podany przez user azgadza się z dostępnymi komendami
+      if (actions.includes(tokens[0] as never)) {
+        userAction = action as EUserActions;
 
-        if (data.status !== 200) {
-          console.log('Got error while registering user profile', data.data?.error);
-          add('InvalidCommand');
-          return;
+        // Czy nie jest to komenda składająca się z 1 wyrazu?
+        if (target.length > 0 && tokens.length > 1) {
+          // Mały 'hack' by obsługiwało poprawnie wysyłkę wiadomości
+          if (userAction === EUserActions.SendMessage || userAction === EUserActions.ChooseRacer) {
+            tokens = [userAction, ...tokens.slice(2)];
+          }
+
+          // Sprawdź czy drugi wyraz w komendzie jest poprawnym "targetem" z ww. listy
+          if (target.includes(tokens[1])) {
+            [, userTarget] = tokens;
+
+            // Trzeci parametr. Używany przykładowo przy "send message to jacek banana"
+            if (tokens.length > 2) {
+              // eslint-disable-next-line prefer-destructuring
+              messageTarget = tokens[2];
+              userMessage = tokens.slice(3).join(' ');
+            }
+          }
+        } else if (tokens.length > 1) {
+          userMessage = tokens.slice(1).join(' ');
         }
-
-        add('confirmationSuccesWindow');
-        setMiddleware({ ...middleware, data: undefined, state: EUserCommands.MAP });
       }
+    });
+
+    console.log('{ userAction, userTarget, userMessage, messageTarget }');
+    console.log({ userAction, userTarget, userMessage, messageTarget });
+
+    if (userAction === EUserActions.SendMessage) {
+      await sendMessage(messageTarget, userMessage);
+      return add('Message send');
     }
 
-    if (input === (EConfirmationCommands.NO as string)) {
-      setMiddleware({ ...middleware, data: undefined, state: middleware?.oldState ?? EUserCommands.MAP });
+    if (userAction === EUserActions.Attack) {
+      return await handleAttackEnemy(messageTarget, add);
     }
-    return;
+
+    if (userAction === EUserActions.ChooseRacer) {
+      if (userTarget.length === 0) return add('Incorrect race');
+
+      await initProfile(userTarget as EUserRace);
+      return add('User choose a race');
+    }
+  } catch (err) {
+    add(`We got an error ${(err as Error).message}`);
   }
-  add(input);
 };
 
 export default newUserCommand;
