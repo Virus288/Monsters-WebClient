@@ -15,3 +15,9 @@ export enum EConfirmationCommands {
   YES = 'yes',
   NO = 'no',
 }
+
+export enum EUserActions {
+  SendMessage = 'send message',
+  Attack = 'attack',
+  ChooseRacer = 'choose race',
+}

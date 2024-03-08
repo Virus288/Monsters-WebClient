@@ -9,23 +9,18 @@ export type TerminalCommands = {
 };
 
 export type TerminalProps = {
-  history: TerminalHistory;
   promptLabel?: TerminalHistoryItem;
-  commands: TerminalCommands;
 };
 
 export type IMiddleware = {
   state: EUserCommands;
   data: unknown;
   oldState?: EUserCommands;
-
-
-}
-
+};
 
 export type IFightResponse = {
   character: string;
   action: string;
   target: string;
   value: number;
-}
+};

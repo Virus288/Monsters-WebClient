@@ -1,4 +1,5 @@
 import type * as types from '../types';
+import type { ILog, IPreparedMessagesBody } from '../types';
 
 export type ProfileStore = {
   profile: types.IUserProfile | undefined;
@@ -18,6 +19,11 @@ export type IHistoryStore = {
 };
 
 export type ILogsStore = {
-  logs: string[];
-  setLogs: (logs: string[]) => void;
+  logs: ILog[];
+  setLogs: (logs: ILog[]) => void;
+};
+
+export type IMessagesStore = {
+  messages: Record<string, IPreparedMessagesBody>;
+  addMessages: (messages: Record<string, IPreparedMessagesBody>) => void;
 };

@@ -11,8 +11,10 @@ export const useAccountStore = create<types.IAccountStore>((set) => ({
 
 export const useLogsStore = create<types.ILogsStore>((set) => ({
   logs: [],
-  setLogs: (logs: string[]): void => {
-    set({ logs });
+  setLogs: (logs): void => {
+    set((state) => ({
+      logs: [...state.logs, ...logs],
+    }));
   },
 }));
 
@@ -28,5 +30,13 @@ export const useHistoryStore = create<types.IHistoryStore>((set) => ({
   addToHistory: (output): void =>
     set((state) => ({
       history: [...state.history, output],
+    })),
+}));
+
+export const useMessagesStore = create<types.IMessagesStore>((set) => ({
+  messages: {},
+  addMessages: (output): void =>
+    set((state) => ({
+      messages: { ...state.messages, ...output },
     })),
 }));

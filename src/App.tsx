@@ -12,11 +12,9 @@ import RootLoader from './components/RootLoader';
 import AuthLoader from './components/AuthLoader';
 import Login from './_auth/pages/Login';
 
-const  App:React.FC = () => {
-
-const [isRootRdy,setIsRootRdy]=useState(false);
-const [isAuthRdy,setIsAuthRdy]=useState(false);
-
+const App: React.FC = () => {
+  const [isRootRdy, setIsRootRdy] = useState(false);
+  const [isAuthRdy, setIsAuthRdy] = useState(false);
 
   useEffect(() => {
     const accessToken = new Cookies().getToken('monsters.uid');
@@ -24,6 +22,7 @@ const [isAuthRdy,setIsAuthRdy]=useState(false);
     if (accessToken) {
       loginUser(accessToken).catch((err) => console.log('Got err with prelogin', err));
     }
+
     setTimeout(() => {
       setIsRootRdy(true);
       setIsAuthRdy(true);
@@ -36,9 +35,8 @@ const [isAuthRdy,setIsAuthRdy]=useState(false);
         <Routes>
           <Route element={isAuthRdy ? <AuthLayout /> : <AuthLoader />}>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/register" element={<Register /> } />
-            <Route path="/login" element={<Login /> } />
-
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
           </Route>
 
           <Route element={isRootRdy ? <RootLayout /> : <RootLoader />}>
