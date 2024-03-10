@@ -19,5 +19,18 @@ export enum EConfirmationCommands {
 export enum EUserActions {
   SendMessage = 'send message',
   Attack = 'attack',
-  ChooseRacer = 'choose race',
+  ChooseRace = 'choose race',
+  Help = 'help',
+  Repo = 'repo',
+  Show = 'show',
+  Clear = 'clear',
+  Exit = 'exit',
+}
+
+
+
+export enum EShowOptions {
+  Races = 'races',
+  Players = 'players',
+  Profile = 'profile'
 }

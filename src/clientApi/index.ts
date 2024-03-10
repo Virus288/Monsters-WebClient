@@ -19,6 +19,22 @@ export const sendToLoginPage = (): void => {
   window.location.href = `${server}/auth?${queryParams}`;
 };
 
+
+export const sendToLogoutPage = (token: string): void => {
+  const redirectUrl = import.meta.env.VITE_API_HOME as string;
+  const clientId = import.meta.env.VITE_API_CLIENT_ID as string;
+  const server = import.meta.env.VITE_API_BACKEND as string;
+
+
+  const params = new URLSearchParams({
+    id_token_hint: token,
+    post_logout_redirect_uri: redirectUrl,
+    client_id: clientId,
+  }).toString();
+  console.log(params)
+  window.location.href = `${server}/session/end?${params}`;
+};
+
 export const getUserLogin = async (): Promise<AxiosResponse<types.IGetLogin>> => {
   return loggedClient.get('/me');
 };
@@ -84,3 +100,10 @@ export const initFight = async (
 ): Promise<AxiosResponse<types.IDefaultResponse>> => {
   return basicClient.post('debug/fights/create', fightFormdata);
 };
+
+
+export const handleBugReport = async (): Promise => {
+
+  return console.log('BUG REPORT HAS BEEN SEND');
+
+}

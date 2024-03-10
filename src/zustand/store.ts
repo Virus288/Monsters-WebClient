@@ -26,11 +26,16 @@ export const useProfileStore = create<types.ProfileStore>((set) => ({
 }));
 
 export const useHistoryStore = create<types.IHistoryStore>((set) => ({
-  history: ['start'],
+  history: [],
   addToHistory: (output): void =>
     set((state) => ({
       history: [...state.history, output],
     })),
+  clearHistory: (): void => {
+    set(() => ({
+      history: []
+    }));
+  }
 }));
 
 export const useMessagesStore = create<types.IMessagesStore>((set) => ({

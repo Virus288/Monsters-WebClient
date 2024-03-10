@@ -1,6 +1,10 @@
 import nlp from 'compromise';
-import { EUserActions, EUserRace } from '../enums';
+import { EShowOptions, EUserActions, EUserRace } from '../enums';
 import { attack, initProfile, sendMessage } from '../gameApi/gameApi';
+import { races, repo } from '../constants/clientCommands';
+import { show as showFn } from "../constants/clientCommands";
+import { IUserProfile } from '../types';
+import { logout } from './logout';
 
 const handleAttackEnemy = async (target: string, add: (output: string) => void): Promise<void> => {
   const { data } = await attack(target);
@@ -13,14 +17,23 @@ const handleAttackEnemy = async (target: string, add: (output: string) => void):
 const validCommands = [
   { action: EUserActions.Attack, target: ['enemy', 'foe', 'opponent'] },
   { action: EUserActions.SendMessage.toLocaleLowerCase(), target: ['to'] },
-  { action: EUserActions.ChooseRacer.toLocaleLowerCase(), target: Object.values(EUserRace) },
+  { action: EUserActions.ChooseRace.toLocaleLowerCase(), target: Object.values(EUserRace) },
+  { action: EUserActions.Help.toLocaleLowerCase(), target: ['op'] },
+  { action: EUserActions.Repo.toLocaleLowerCase(), target: ['op'] },
+  { action: EUserActions.Show.toLocaleLowerCase(), target: Object.values(EShowOptions) },
+  { action: EUserActions.Clear.toLocaleLowerCase(), target: ['op'] },
+  { action: EUserActions.Exit.toLocaleLowerCase(), target: ['op'] }
+
 ];
 
-const newUserCommand = async (command: string, add: (output: string) => void): Promise<void> => {
+const newUserCommand = async (command: string, add: (output: string) => void, profile: IUserProfile, clearTerminal: () => void): Promise<void> => {
+  add(command);
   let userAction: EUserActions | undefined;
   let userTarget: string = '';
   let userMessage: string = '';
   let messageTarget: string = '';
+  let help: string = '';
+  let show: EShowOptions | undefined
 
   try {
     // To co wprowadził user, splitowane
@@ -76,12 +89,41 @@ const newUserCommand = async (command: string, add: (output: string) => void): P
       return await handleAttackEnemy(messageTarget, add);
     }
 
-    if (userAction === EUserActions.ChooseRacer) {
+    if (userAction === EUserActions.ChooseRace) {
       if (userTarget.length === 0) return add('Incorrect race');
 
       await initProfile(userTarget as EUserRace);
       return add('User choose a race');
     }
+
+    if (userAction === EUserActions.Help) {
+      return console.log('HELP');
+    }
+
+    if (userAction === EUserActions.Repo) {
+      const response = await repo();
+
+      add(response);
+      return response;
+    }
+
+    if (userAction === EUserActions.Show) {
+      console.log('a')
+      const validRaces = await showFn(userTarget, profile);
+      add(validRaces);
+      return validRaces;
+    }
+
+    if (userAction === EUserActions.Clear) {
+      return clearTerminal();
+      // #TODO Fix terminal clear
+
+    }
+
+    if (userAction === EUserActions.Exit) {
+      return logout();
+    }
+
   } catch (err) {
     add(`We got an error ${(err as Error).message}`);
   }

@@ -16,6 +16,7 @@ export type IAccountStore = {
 export type IHistoryStore = {
   history: string[];
   addToHistory: (output: string) => void;
+  clearHistory: () => void;
 };
 
 export type ILogsStore = {

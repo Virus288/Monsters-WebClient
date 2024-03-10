@@ -7,7 +7,7 @@ export type IGetLogin = {
   sub: string;
 } & IDefaultResponse;
 
-export type IGetProfile = IUserProfile & IDefaultResponse;
+export type IGetProfile = { data: IUserProfile } & IDefaultResponse;
 
 export type IGetToken = ILoginBody & IDefaultResponse;
 
