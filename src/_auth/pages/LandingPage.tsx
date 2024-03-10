@@ -5,7 +5,7 @@ import { sendToLoginPage } from '../../clientApi';
 
 const LandingPage: React.FC = () => {
   return (
-    <div className=" flex flex-col justify-center gap-6 items-center  h-screen flex-1">
+    <div className=" flex flex-col justify-center gap-6 items-center min-h-[100%]   h-screen flex-1">
       <h2 className="text-slate-400 text-6xl md:text-7xl lg:text-8xl font-bold">
         <span className="text-violet-600">M</span>onsters
       </h2>
