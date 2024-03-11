@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import { stat } from 'fs';
 import RootLayout from './_root/RootLayout';
 import Home from './_root/pages/Home';
 import AuthLayout from './_auth/AuthLayout';
@@ -11,10 +12,16 @@ import { loginUser } from './controllers';
 import RootLoader from './components/RootLoader';
 import AuthLoader from './components/AuthLoader';
 import Login from './_auth/pages/Login';
+import { useAccountStore, useProfileStore } from './zustand/store';
 
 const App: React.FC = () => {
   const [isRootRdy, setIsRootRdy] = useState(false);
   const [isAuthRdy, setIsAuthRdy] = useState(false);
+    const profile = useProfileStore((state) => state.profile);
+    const account = useAccountStore((state) => state.account);
+
+
+
 
   useEffect(() => {
     const accessToken = new Cookies().getToken('monsters.uid');
@@ -26,11 +33,11 @@ const App: React.FC = () => {
     setTimeout(() => {
       setIsRootRdy(true);
       setIsAuthRdy(true);
-    }, 500);
+    }, 800);
   }, []);
 
   return (
-    <main className="bg-[#010B00] h-screen">
+    <main className="bg-[#010B00] h-screen dark:bg-white ">
       <Router>
         <Routes>
           <Route element={isAuthRdy ? <AuthLayout /> : <AuthLoader />}>
@@ -40,7 +47,7 @@ const App: React.FC = () => {
           </Route>
 
           <Route element={isRootRdy ? <RootLayout /> : <RootLoader />}>
-            <Route path="/*" element={<Home />} />
+            <Route path="/*" element={<Home account={account} profile={profile} />} />
           </Route>
         </Routes>
       </Router>

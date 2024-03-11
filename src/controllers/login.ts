@@ -12,6 +12,7 @@ export const handleLogin = async (code: string): Promise<void> => {
   return loginUser(data.access_token);
 };
 
+
 export const initApp = async (
   addMessages: (messages: Record<string, IPreparedMessagesBody>) => void,
   addLogs: (logs: ILog[]) => void,

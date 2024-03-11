@@ -3,7 +3,8 @@ import Terminal from '../../components/Terminal';
 import { initApp } from '../../controllers/login';
 import { useLogsStore, useMessagesStore } from '../../zustand/store';
 
-const Home: React.FC = () => {
+const Home: React.FC = ({account,profile}) => {
+
   const addMessages = useMessagesStore((state) => state.addMessages);
   const addLogs = useLogsStore((state) => state.setLogs);
 
@@ -14,8 +15,8 @@ const Home: React.FC = () => {
   });
 
   return (
-    <div className="h-full w-full flex justify-center">
-      <Terminal promptLabel={<div className="text-green-400">You{' >>'}</div>} />
+    <div className="h-full w-full flex justify-center ">
+      <Terminal profile={profile} account={account} promptLabel={<div className="text-green-400">You{' >>'}</div>} />
     </div>
   );
 };

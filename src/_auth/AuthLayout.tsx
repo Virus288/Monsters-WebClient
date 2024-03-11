@@ -6,21 +6,16 @@ const AuthLayout: React.FC = () => {
   const { isLoggedIn } = useAccountStore.getState();
 
   return (
-    <div className=" h-screen w-full flex ">
+    <div className=" h-full w-full flex overflow-hidden ">
       {!isLoggedIn ? (
-        <section className="flex-1">
+        <section className="flex-1 h-full overflow-y-scroll custom-scrollbar">
           <Outlet />
         </section>
       ) : (
         <Navigate to="/terminal" />
       )}
-      <div className="hidden xl:flex h-screen max-w-[50%] ">
-        <img
-          src="/public/images/monsters-bg_3.jpg"
-          alt="logo-img"
-          className=" object-contain bg-no-repeat object-center"
-        />
-      </div>
+       <img   src="/public/images/monsters-bg_3.jpg" alt="logo"
+          className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat" />
     </div>
   );
 };
