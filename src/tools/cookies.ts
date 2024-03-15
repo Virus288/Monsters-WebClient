@@ -1,5 +1,6 @@
 // eslint-disable-next-line max-classes-per-file
-import { ESameSiteParams } from '../enums/cookies';
+import type { ETokenNames } from '../enums';
+import { ESameSiteParams } from '../enums';
 
 class CookieGenerator {
   private readonly _value: string;
@@ -109,7 +110,7 @@ class CookieGenerator {
 }
 
 export default class Cookies {
-  getToken(target: string): string | undefined {
+  getToken(target: ETokenNames): string | undefined {
     return document.cookie
       .split('; ')
       .find((c) => c.startsWith(`${target}=`))

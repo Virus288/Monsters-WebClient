@@ -1,10 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import type { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import type { IRegisterFormValues } from '../../../types';
-import { createAccount } from '../../../clientApi';
+import { createAccount } from '../../../communication';
 
 const Register: React.FC = () => {
   const {
@@ -15,8 +14,8 @@ const Register: React.FC = () => {
   } = useForm<IRegisterFormValues>();
 
   const mutation = useMutation(createAccount, {
-    onSuccess: (data) => console.log(data.data),
-    onError: (error: AxiosError | Error) => console.log(error.message),
+    // onSuccess: (data) => console.log(data.data),
+    // onError: (error: AxiosError | Error) => console.log(error.message),
   });
 
   const onSubmit = handleSubmit((data) => {

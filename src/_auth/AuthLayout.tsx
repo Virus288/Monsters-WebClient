@@ -14,8 +14,11 @@ const AuthLayout: React.FC = () => {
       ) : (
         <Navigate to="/terminal" />
       )}
-       <img   src="/public/images/monsters-bg_3.jpg" alt="logo"
-          className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat" />
+      <img
+        src="/public/images/monsters-bg_3.jpg"
+        alt="logo"
+        className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat"
+      />
     </div>
   );
 };

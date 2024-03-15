@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import Terminal from '../../components/Terminal';
-import { initApp } from '../../controllers/login';
+import { initApp } from '../../controllers';
 import { useLogsStore, useMessagesStore } from '../../zustand/store';
+import type { IUser, IUserProfile } from '../../types';
 
-const Home: React.FC = ({account,profile}) => {
-
+const Home: React.FC<{ account: IUser; profile: IUserProfile }> = ({ account, profile }) => {
   const addMessages = useMessagesStore((state) => state.addMessages);
   const addLogs = useLogsStore((state) => state.setLogs);
 

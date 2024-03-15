@@ -21,16 +21,13 @@ export enum EUserActions {
   Attack = 'attack',
   ChooseRace = 'choose race',
   Help = 'help',
-  Repo = 'repo',
   Show = 'show',
   Clear = 'clear',
   Exit = 'exit',
 }
 
-
-
 export enum EShowOptions {
   Races = 'races',
   Players = 'players',
-  Profile = 'profile'
+  Profile = 'profile',
 }
