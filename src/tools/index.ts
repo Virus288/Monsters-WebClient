@@ -1,5 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
-export const generateRandomName = (max = 20): string => {
+import Cookies from './cookies';
+import getHttpClient from './axios';
+
+const generateRandomName = (max = 20): string => {
   const vocabulary = 'ABCDEFGHIJKLMNOUPRSTUWZabcdefghijklmnouprstuwz';
   let name = '';
   for (let x = 0; x < max; x++) {
@@ -7,3 +9,5 @@ export const generateRandomName = (max = 20): string => {
   }
   return name;
 };
+
+export { getHttpClient, Cookies, generateRandomName };

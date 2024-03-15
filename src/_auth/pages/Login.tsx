@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthLoader from '../../components/AuthLoader';
-import { handleLogin } from '../../controllers/login';
+import { handleLogin } from '../../controllers';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -14,8 +14,7 @@ const Login: React.FC = () => {
 
     handleLogin(code as string)
       .then(() => navigate('/terminal'))
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         navigate('/');
       });
   }, []);

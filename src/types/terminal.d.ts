@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { EUserCommands } from '../enums';
+import type { IUser, IUserProfile } from './account';
 
 export type TerminalHistoryItem = ReactNode | string;
 export type TerminalHistory = TerminalHistoryItem[];
@@ -10,6 +11,8 @@ export type TerminalCommands = {
 
 export type TerminalProps = {
   promptLabel?: TerminalHistoryItem;
+  account: IUser;
+  profile: IUserProfile;
 };
 
 export type IMiddleware = {

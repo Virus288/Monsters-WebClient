@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
-import { sendToLoginPage } from '../../clientApi';
+import { sendToLoginPage } from '../../communication';
 
 const LandingPage: React.FC = () => {
   return (

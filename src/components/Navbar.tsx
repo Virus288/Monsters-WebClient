@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import { IoLogOutOutline } from 'react-icons/io5';
 import React from 'react';
+import { IoLogOutOutline } from 'react-icons/io5';
 import { Button } from './ui/button';
-import Portal from './Portal';
-import { logout } from '../controllers/logout';
-
+import { logout } from '../controllers';
 
 const Navbar: React.FC = () => {
   const user = false;
@@ -31,7 +29,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
         )}
-
         {!user && (
           <div>
             <Link to="/register">
@@ -40,7 +37,6 @@ const Navbar: React.FC = () => {
                   <IoLogOutOutline className="mr-1" size={22} />
                   Logout
                 </Button>
-
               </span>
             </Link>
           </div>
