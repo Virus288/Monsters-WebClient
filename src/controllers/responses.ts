@@ -43,7 +43,6 @@ DragonBorn - (Assuming characteristics based on typical fantasy lore) Noble and 
       break;
     default:
       add(`Missing param. Please provide a parameter for the show command.
-        
         Available options:
         - Races: Display available races.
         - Players: Display players online.

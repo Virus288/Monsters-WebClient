@@ -1,4 +1,4 @@
-import type { EUserRace } from '../enums';
+import type { ECharacterState, EUserRace } from '../enums';
 
 export interface IUserProfile {
   _id: string;
@@ -10,6 +10,7 @@ export interface IUserProfile {
   initialized: boolean;
   inventory: string;
   party: string;
+  state: ECharacterState;
 }
 
 export type IUser = {

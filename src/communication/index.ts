@@ -4,12 +4,9 @@ import type { ETokenType, EUserRace } from '../enums';
 import type * as types from '../types';
 import { generateRandomName } from '../tools';
 
-export const sendMessage = async (
-  message: string,
-  receiver: string,
-): Promise<AxiosResponse<types.IDefaultResponse>> => {
+export const sendMessage = async (receiver: string, body: string): Promise<AxiosResponse<types.IDefaultResponse>> => {
   try {
-    return await getHttpClient().post('/message/send', { message, receiver });
+    return await getHttpClient().post('/message/send', { body, receiver });
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }

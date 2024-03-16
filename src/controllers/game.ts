@@ -1,70 +1,100 @@
 import nlp from 'compromise';
-import { EShowOptions, EUserActions, EUserRace } from '../enums';
+import { ECharacterState, EShowOptions, EUserActions, EUserRace } from '../enums';
 import { handleAttackEnemy, show as showFn } from './responses';
-import type { IUserProfile } from '../types';
+import type { IAvailableCommands, IUserProfile } from '../types';
 import { initProfile, sendMessage } from '../communication';
 
-const validCommands = [
+const baseCommands: IAvailableCommands[] = [
   { action: EUserActions.Attack, target: ['enemy'] },
-  { action: EUserActions.SendMessage.toLocaleLowerCase(), target: ['to'] },
-  { action: EUserActions.ChooseRace.toLocaleLowerCase(), target: Object.values(EUserRace) },
-  { action: EUserActions.Help.toLocaleLowerCase(), target: ['op'] },
+  {
+    action: EUserActions.Send.toLocaleLowerCase(),
+    target: ['message'],
+    secondTarget: ['username'],
+    thirdTarget: ['message'],
+  },
+  { action: EUserActions.Choose.toLocaleLowerCase(), target: ['race'], secondTarget: Object.values(EUserRace) },
+  { action: EUserActions.Help.toLocaleLowerCase() },
   { action: EUserActions.Show.toLocaleLowerCase(), target: Object.values(EShowOptions) },
-  { action: EUserActions.Clear.toLocaleLowerCase(), target: ['op'] },
-  { action: EUserActions.Exit.toLocaleLowerCase(), target: ['op'] },
+  { action: EUserActions.Clear.toLocaleLowerCase() },
+  { action: EUserActions.Exit.toLocaleLowerCase() },
 ];
 
-const chooseRace = async (race: string, add: (output: string) => void): Promise<void> => {
-  if (!Object.values(EUserRace).includes(race.toLowerCase() as EUserRace)) {
-    return add('Incorrect race');
+const getAvailableCommands = (profile: IUserProfile): IAvailableCommands[] => {
+  if (!profile.initialized) {
+    return baseCommands.filter(
+      (c) => (c.action as EUserActions) === EUserActions.Choose || (c.action as EUserActions) === EUserActions.Help,
+    );
   }
+
+  // Add filtering commands based on state. Documentation about it will be added later
+  switch (profile.state) {
+    case ECharacterState.Map:
+      return baseCommands.filter((c) => (c.action as EUserActions) !== EUserActions.Attack);
+    case ECharacterState.Fight:
+    default:
+      return baseCommands;
+  }
+};
+
+const chooseRace = async (race: string, add: (output: string) => void): Promise<void> => {
   await initProfile(race as EUserRace);
   return add(`Jessica [NPC]: Great. Looks like I've got everything I need.
               You are not officially registered adventurer. If you want to take any quests, you can find on your left on job board. 
               Please be careful. We lost too many people last year`);
 };
 
-const renderHelp = (add: (output: string) => void): void => {
-  Object.values(EUserActions).forEach((c) => {
+const renderHelp = (add: (output: string) => void, profile: IUserProfile): void => {
+  const commands = getAvailableCommands(profile);
+  add('Available commands:');
+
+  commands.forEach((c) => {
     setTimeout(() => {
-      add(c);
+      add(
+        `- ${c.action} ${c.target ? `[${c.target.join(' / ')}]` : ''} ${c.secondTarget ? `[${c.secondTarget.join(' / ')}]` : ''}`,
+      );
     }, 100);
   });
 };
 
-const isMultiWordTarget = (action: EUserActions): boolean => {
-  const multiWordTarget: string[] = [EUserActions.SendMessage, EUserActions.ChooseRace];
-  return multiWordTarget.includes(action);
+const renderAvailableRaces = (add: (output: string) => void): void => {
+  add('Available races:');
+  Object.values(EUserRace).forEach((c) => {
+    setTimeout(() => {
+      add(`- ${c}`);
+    }, 100);
+  });
 };
 
-const formatInput = (input: string): [EUserActions, ...string[]] => {
+const formatInput = (input: string, profile: IUserProfile): [EUserActions, ...string[]] => {
   const preparedInput: [EUserActions?, ...string[]] = [];
 
-  let tokens = nlp(input.toLowerCase())
+  const tokens = nlp(input)
     .terms()
     .map((term) => term.text()) as string[];
 
-  validCommands.forEach((c) => {
+  getAvailableCommands(profile).forEach((c) => {
     const { action, target } = c;
 
     const actions = nlp(action)
       .terms()
-      .map((term) => term.text()) as unknown[];
+      .map((term) => term.text()) as string[];
 
-    if (actions.includes(tokens[0] as never)) {
-      preparedInput.push(action.toLocaleLowerCase());
+    if (actions.includes(tokens[0]?.toLowerCase())) {
+      preparedInput.push(action.toLocaleLowerCase().toLowerCase());
 
-      if (target.length > 0 && tokens.length > 1) {
-        if (isMultiWordTarget(preparedInput[0] as EUserActions)) {
-          tokens = [preparedInput[0] as EUserActions, ...tokens.slice(2)];
-        }
-
-        if (target.includes(tokens[1])) {
+      if ((target?.length ?? 0) > 0 && tokens.length > 0) {
+        if ((target as string[]).includes(tokens[1]?.toLowerCase())) {
           preparedInput.push(tokens[1]);
 
           if (tokens.length > 2) {
-            preparedInput.push(tokens[2]);
-            preparedInput.push(tokens.slice(3).join(' '));
+            // Ignore 'to' from 'send message to target'
+            if (tokens[2]?.toLowerCase() === 'to') {
+              preparedInput.push(tokens[3]);
+              preparedInput.push(tokens.slice(4).join(' '));
+            } else {
+              preparedInput.push(tokens[2]);
+              preparedInput.push(tokens.slice(3).join(' '));
+            }
           }
         }
       } else if (tokens.length > 1) {
@@ -83,7 +113,7 @@ export const newUserCommand = async (
   profile: IUserProfile,
   clearTerminal: () => void,
 ): Promise<void> => {
-  const prepared = formatInput(command);
+  const prepared = formatInput(command, profile);
   const action = prepared[0];
 
   if (!action) {
@@ -91,34 +121,45 @@ export const newUserCommand = async (
     return;
   }
 
-  try {
-    switch (action) {
-      case EUserActions.Help:
-        renderHelp(add);
-        break;
-      case EUserActions.SendMessage:
-        await sendMessage(prepared[1], prepared[2]);
-        add('Message sent');
-        break;
-      case EUserActions.Attack:
-        await handleAttackEnemy(prepared[1], add);
-        break;
-      case EUserActions.ChooseRace:
-        await chooseRace(prepared[1], add);
-        break;
-      case EUserActions.Show:
-        showFn(prepared[1] as EShowOptions, profile, add);
-        break;
-      case EUserActions.Clear:
-        clearTerminal();
-        break;
-      default:
-        add("Incorrect command. Type 'help' to see all available commands");
-        break;
-    }
-  } catch (err) {
-    console.log('err');
-    console.log(err);
-    add(`We got an error ${(err as Error).message}`);
+  switch (action) {
+    case EUserActions.Help:
+      renderHelp(add, profile);
+      break;
+    case EUserActions.Send:
+      if (prepared[1].toLowerCase() === 'message') {
+        if (!prepared[2]) {
+          add('No receiver provided');
+        } else if (!prepared[3]) {
+          add('No message provided');
+        } else {
+          await sendMessage(prepared[2], prepared[3]);
+          add('Message sent');
+        }
+      } else {
+        add('Sending other elements than messages is not supported');
+      }
+      break;
+    case EUserActions.Attack:
+      await handleAttackEnemy(prepared[1], add);
+      break;
+    case EUserActions.Choose:
+      if (!prepared[1] || prepared[1].toLowerCase() !== 'race') {
+        add('Incorrect command');
+      } else if (!Object.values(EUserRace).includes(prepared[2].toLowerCase() as EUserRace)) {
+        add('incorrect race.');
+        renderAvailableRaces(add);
+      } else {
+        await chooseRace(prepared[2], add);
+      }
+      break;
+    case EUserActions.Show:
+      showFn(prepared[1].toLowerCase() as EShowOptions, profile, add);
+      break;
+    case EUserActions.Clear:
+      clearTerminal();
+      break;
+    default:
+      add("Incorrect command. Type 'help' to see all available commands");
+      break;
   }
 };

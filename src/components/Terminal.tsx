@@ -29,7 +29,7 @@ const Terminal = forwardRef((props: TerminalProps) => {
     const msg = initMessage();
     add(msg);
 
-    if (profile.initialized && profile && account.login) {
+    if (!profile.initialized && profile && account.login) {
       uninitializedProfile(account.login, add);
     }
   }, [account.login, add, profile]);
@@ -63,7 +63,11 @@ const Terminal = forwardRef((props: TerminalProps) => {
     if (e.key === 'Enter') {
       setInputValue('');
       add(input);
-      newUserCommand(input, add, profile, clearTerminal);
+      newUserCommand(input, add, profile, clearTerminal).catch((err) => {
+        console.log('err');
+        console.log(err);
+        add(`${(err as Error).message}`);
+      });
       terminalRef?.scrollTo({
         top: terminalRef?.scrollHeight ?? 99999,
         behavior: 'smooth',
