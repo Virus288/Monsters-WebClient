@@ -18,8 +18,9 @@ import type { IUser, IUserProfile } from './types';
 const App: React.FC = () => {
   const [isRootRdy, setIsRootRdy] = useState(false);
   const [isAuthRdy, setIsAuthRdy] = useState(false);
-  const profile = useProfileStore((state) => state.profile);
   const account = useAccountStore((state) => state.account);
+  const profile = useProfileStore((state) => state.profile);
+  const addProfile = useProfileStore((state) => state.setProfile);
 
   useEffect(() => {
     const accessToken = new Cookies().getToken(ETokenNames.Access);
@@ -45,7 +46,10 @@ const App: React.FC = () => {
           </Route>
 
           <Route element={isRootRdy ? <RootLayout /> : <RootLoader />}>
-            <Route path="/*" element={<Home account={account as IUser} profile={profile as IUserProfile} />} />
+            <Route
+              path="/*"
+              element={<Home account={account as IUser} profile={profile as IUserProfile} addProfile={addProfile} />}
+            />
           </Route>
         </Routes>
       </Router>

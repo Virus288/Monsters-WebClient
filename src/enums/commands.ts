@@ -1,27 +1,11 @@
-export enum ECommands {
-  HELP = 'help',
-  START = 'start',
-  CLEAR = 'clear',
-  ALERT = 'alert',
-}
-
-export enum EUserCommands {
-  UNNITALIZED = 'unnitialized',
-  CONFIRMATION = 'confirmation',
-  MAP = 'map',
-}
-
-export enum EConfirmationCommands {
-  YES = 'yes',
-  NO = 'no',
-}
-
 export enum EUserActions {
   Send = 'send',
   Attack = 'attack',
   Choose = 'choose',
   Help = 'help',
   Show = 'show',
+  Leave = 'leave',
+  Create = 'create',
   Clear = 'clear',
   Exit = 'exit',
 }
@@ -30,4 +14,14 @@ export enum EShowOptions {
   Races = 'races',
   Players = 'players',
   Profile = 'profile',
+}
+
+export enum EFightAction {
+  Attack = 'attack',
+}
+
+export enum EFightStatus {
+  Win = 'win',
+  Lose = 'lose',
+  Ongoing = 'ongoing',
 }

@@ -1,5 +1,5 @@
 import type { IUserProfile } from '../types';
-import { EShowOptions } from '../enums';
+import { EFightAction, EFightStatus, EShowOptions } from '../enums';
 import { attack } from '../communication';
 
 export const uninitializedProfile = (userLogin: string, add: (output: string) => void): void => {
@@ -51,10 +51,49 @@ DragonBorn - (Assuming characteristics based on typical fantasy lore) Noble and 
   }
 };
 
-export const handleAttackEnemy = async (target: string, add: (output: string) => void): Promise<void> => {
+/**
+ * Make actions more natural sounding
+ *
+ * @returns {string} Stringed value
+ */
+const prepareFightActionResponse = (action: EFightAction): string => {
+  switch (action) {
+    case EFightAction.Attack:
+      return 'attacked';
+    default:
+      return 'Unknown move';
+  }
+};
+
+export const handleAttackEnemy = async (
+  target: string,
+  add: (output: string) => Promise<void>,
+  profile: IUserProfile,
+  addProfile: (profile: IUserProfile) => void,
+  removeCurrentFight: () => void,
+): Promise<void> => {
   const { data } = await attack(target);
 
-  data.data.forEach((r) => {
-    add(`${r.character} attacked enemy ${r.target} for ${r.value}`);
+  if (data.state) {
+    addProfile({ ...profile, ...data.state });
+    removeCurrentFight();
+  }
+
+  switch (data.data.status) {
+    case EFightStatus.Win:
+      add('Fight won');
+      break;
+    case EFightStatus.Lose:
+      add('Fight lost');
+      break;
+    case EFightStatus.Ongoing:
+    default:
+      break;
+  }
+
+  data.data.logs.forEach((l) => {
+    setTimeout(() => {
+      add(`${l.character} ${prepareFightActionResponse(l.action)} ${l.target} for ${l.value}`);
+    }, 100);
   });
 };

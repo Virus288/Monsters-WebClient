@@ -36,9 +36,22 @@ export const initProfile = async (race: EUserRace): Promise<AxiosResponse<types.
   }
 };
 
-export const attack = async (target: string): Promise<AxiosResponse<types.IGetAttack>> => {
+export const attack = async (target: string): Promise<AxiosResponse<types.IAttack>> => {
   try {
     return await getHttpClient().post('/fights/attack', { target });
+  } catch (err) {
+    throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
+  }
+};
+
+export const getActiveFight = async (): Promise<AxiosResponse<types.IGetActiveFight>> => {
+  try {
+    // eslint-disable-next-line compat/compat
+    const queryParams = new URLSearchParams({
+      active: 'true',
+    }).toString();
+
+    return await getHttpClient().get(`/fights?${queryParams}`);
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
@@ -84,6 +97,15 @@ export const getUserLogin = async (): Promise<AxiosResponse<types.IGetLogin>> =>
 export const getUserProfile = async (name: string): Promise<AxiosResponse<types.IGetProfile>> => {
   try {
     return await getHttpClient().get(`/profile?name=${name}`);
+  } catch (err) {
+    throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
+  }
+};
+
+// #TODO Save logs with their ids in local storage and fetch logs based on latest _id
+export const saveLog = async (message: string): Promise<AxiosResponse<types.IAddLogs>> => {
+  try {
+    return await getHttpClient().post('/logs', { message });
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
@@ -158,11 +180,17 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<Axio
   }
 };
 
-export const initFight = async (
-  fightFormData: types.IFightFormData,
-): Promise<AxiosResponse<types.IDefaultResponse>> => {
+export const createFight = async (enemy: string): Promise<AxiosResponse<types.ICreateFightResponse>> => {
   try {
-    return await getHttpClient().post('debug/fights/create', fightFormData);
+    return await getHttpClient().post('debug/fights/create', { team: [enemy] });
+  } catch (err) {
+    throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
+  }
+};
+
+export const leaveFight = async (): Promise<AxiosResponse<types.IDefaultResponse>> => {
+  try {
+    return await getHttpClient().get('fights/leave', {});
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }

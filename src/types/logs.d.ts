@@ -7,3 +7,5 @@ export interface ILog {
 }
 
 export type IGetLogs = { data: ILog[] } & IDefaultResponse;
+
+export type IAddLogs = { data: { _id: string } } & IDefaultResponse;

@@ -13,6 +13,7 @@ export type TerminalProps = {
   promptLabel?: TerminalHistoryItem;
   account: IUser;
   profile: IUserProfile;
+  addProfile: (profile: IUserProfile) => void;
 };
 
 export type IMiddleware = {

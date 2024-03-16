@@ -2,7 +2,7 @@ import '../style/terminal.css';
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import type { TerminalProps } from '../types';
 import { newUserCommand } from '../controllers';
-import { useHistoryStore } from '../zustand/store';
+import { useAccountStore, useFightsStore, useHistoryStore } from '../zustand/store';
 import Portal from './Portal';
 import { Button } from './ui/button';
 import ReportBugForm from './forms/ReportBugForm';
@@ -15,11 +15,15 @@ const Terminal = forwardRef((props: TerminalProps) => {
   const [terminalRef, setDomNode] = useState<HTMLDivElement>();
   const setTerminalRef = useCallback((node: HTMLDivElement) => setDomNode(node), []);
 
-  const { promptLabel = '>', account, profile } = props;
+  const { promptLabel = '>', account, profile, addProfile } = props;
 
   const history = useHistoryStore((state) => state.history);
   const add = useHistoryStore((state) => state.addToHistory);
   const clearTerminal = useHistoryStore((state) => state.clearHistory);
+  const addFight = useFightsStore((state) => state.addCurrentFight);
+  const currentFight = useFightsStore((state) => state.activeFight);
+  const removeCurrentFight = useFightsStore((state) => state.removeCurrentFight);
+  const username = useAccountStore((state) => state.account?.login);
 
   const focusInput = useCallback(() => {
     inputRef.current?.focus();
@@ -29,7 +33,7 @@ const Terminal = forwardRef((props: TerminalProps) => {
     const msg = initMessage();
     add(msg);
 
-    if (!profile.initialized && profile && account.login) {
+    if (!profile?.initialized && profile && account.login) {
       uninitializedProfile(account.login, add);
     }
   }, [account.login, add, profile]);
@@ -63,7 +67,17 @@ const Terminal = forwardRef((props: TerminalProps) => {
     if (e.key === 'Enter') {
       setInputValue('');
       add(input);
-      newUserCommand(input, add, profile, clearTerminal).catch((err) => {
+      newUserCommand(
+        input,
+        username as string,
+        add,
+        clearTerminal,
+        profile,
+        addProfile,
+        currentFight,
+        addFight,
+        removeCurrentFight,
+      ).catch((err) => {
         console.log('err');
         console.log(err);
         add(`${(err as Error).message}`);

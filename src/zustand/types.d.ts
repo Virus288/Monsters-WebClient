@@ -1,5 +1,4 @@
 import type * as types from '../types';
-import type { ILog, IPreparedMessagesBody } from '../types';
 
 export type ProfileStore = {
   profile: types.IUserProfile | undefined;
@@ -16,15 +15,24 @@ export type IAccountStore = {
 export type IHistoryStore = {
   history: string[];
   addToHistory: (output: string) => void;
+  initHistory: (commands: string[]) => void;
   clearHistory: () => void;
 };
 
+export type IFightStore = {
+  activeFight: types.IFightEntity | undefined;
+  fights: types.IFightEntity[];
+  addCurrentFight: (data: types.IFightEntity) => void;
+  removeCurrentFight: () => void;
+  addFights: (data: types.IFightEntity[]) => void;
+};
+
 export type ILogsStore = {
-  logs: ILog[];
-  setLogs: (logs: ILog[]) => void;
+  logs: types.ILog[];
+  setLogs: (logs: types.ILog[]) => void;
 };
 
 export type IMessagesStore = {
-  messages: Record<string, IPreparedMessagesBody>;
-  addMessages: (messages: Record<string, IPreparedMessagesBody>) => void;
+  messages: Record<string, types.IPreparedMessagesBody>;
+  addMessages: (messages: Record<string, types.IPreparedMessagesBody>) => void;
 };

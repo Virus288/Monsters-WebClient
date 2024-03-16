@@ -1,7 +1,8 @@
 import Cookies from '../tools/cookies';
-import type { ILog, IPreparedMessagesBody, IUserProfile } from '../types';
+import type { IFightEntity, ILog, IPreparedMessagesBody, IUserProfile } from '../types';
 import { useAccountStore, useProfileStore } from '../zustand/store';
-import { getLogs, getMessages, getUserLogin, getUserProfile, login } from '../communication';
+import { getActiveFight, getLogs, getMessages, getUserLogin, getUserProfile, login } from '../communication';
+import { ECharacterState } from '../enums';
 
 export const loginUser = async (): Promise<void> => {
   const { setAccount } = useAccountStore.getState();
@@ -12,7 +13,7 @@ export const loginUser = async (): Promise<void> => {
   const profile = await getUserProfile(data.data.login);
 
   setAccount({ id: data.data.sub, login: data.data.login });
-  setProfile(profile.data?.data as IUserProfile);
+  setProfile(profile.data?.data);
   setIsLoggedIn(true);
 };
 
@@ -27,10 +28,18 @@ export const handleLogin = async (code: string): Promise<void> => {
 export const initApp = async (
   addMessages: (messages: Record<string, IPreparedMessagesBody>) => void,
   addLogs: (logs: ILog[]) => void,
-): Promise<void> => {
+  profile: IUserProfile,
+  addFight: (data: IFightEntity) => void,
+): Promise<ILog[]> => {
   const messages = await getMessages();
   const logs = await getLogs();
 
+  if (profile.state === ECharacterState.Fight) {
+    const fight = await getActiveFight();
+    addFight(fight.data.data[0]);
+  }
+
   addMessages(messages.data.data);
   addLogs(logs.data.data);
+  return logs.data.data;
 };

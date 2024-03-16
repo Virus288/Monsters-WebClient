@@ -27,15 +27,39 @@ export const useProfileStore = create<types.ProfileStore>((set) => ({
 
 export const useHistoryStore = create<types.IHistoryStore>((set) => ({
   history: [],
+  initHistory: (commands): void =>
+    set((state) => ({
+      history: [...state.history, ...commands],
+    })),
   addToHistory: (output): void =>
     set((state) => ({
       history: [...state.history, output],
     })),
   clearHistory: (): void => {
     set(() => ({
-      history: []
+      history: [],
     }));
-  }
+  },
+}));
+
+export const useFightsStore = create<types.IFightStore>((set) => ({
+  activeFight: undefined,
+  fights: [],
+  addCurrentFight: (data): void => {
+    set(() => ({
+      activeFight: data,
+    }));
+  },
+  addFights: (data): void => {
+    set(() => ({
+      fights: data,
+    }));
+  },
+  removeCurrentFight: (): void => {
+    set(() => ({
+      activeFight: undefined,
+    }));
+  },
 }));
 
 export const useMessagesStore = create<types.IMessagesStore>((set) => ({
