@@ -1,5 +1,3 @@
-import type { ESocketType } from '../enums';
-
 export interface ISocketMessage {
   type: ESocketType;
   payload: unknown;

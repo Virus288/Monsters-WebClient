@@ -1,15 +1,9 @@
-export interface IGetMessages {
+import type { IDefaultResponse } from './generic';
+
+export interface IPreparedMessagesBody {
   sender: string;
   receiver: string;
-  chatId: string;
+  messages: number;
 }
 
-export interface IDetailedMessage {
-  _id: string;
-  sender: string;
-  receiver: string;
-  read: boolean;
-  chatId: string;
-  date: string;
-  message: string;
-}
+export type IGetMessages = { data: Record<string, IPreparedMessagesBody> } & IDefaultResponse;

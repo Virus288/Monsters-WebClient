@@ -1,25 +1,59 @@
-import React, { useState } from 'react';
-import type { DefaultTheme } from 'styled-components';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import * as themes from './style/theme/themes';
-import ViewsController from './ViewsController';
-import store from './redux/store';
-import { GlobalStyle } from './shared/styled';
-import Theme from './style/theme';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './App.css';
+import React, { useEffect, useState } from 'react';
+import RootLayout from './_root/RootLayout';
+import Home from './_root/pages/Home';
+import AuthLayout from './_auth/AuthLayout';
+import Register from './_auth/pages/register/Register';
+import LandingPage from './_auth/pages/LandingPage';
+import Cookies from './tools/cookies';
+import { loginUser } from './controllers';
+import RootLoader from './components/RootLoader';
+import AuthLoader from './components/AuthLoader';
+import Login from './_auth/pages/Login';
+import { useAccountStore, useProfileStore } from './zustand/store';
+import { ETokenNames } from './enums';
+import type { IUser, IUserProfile } from './types';
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState<DefaultTheme>(themes.lightTheme);
+  const [isRootRdy, setIsRootRdy] = useState(false);
+  const [isAuthRdy, setIsAuthRdy] = useState(false);
+  const account = useAccountStore((state) => state.account);
+  const profile = useProfileStore((state) => state.profile);
+  const addProfile = useProfileStore((state) => state.setProfile);
+
+  useEffect(() => {
+    const accessToken = new Cookies().getToken(ETokenNames.Access);
+
+    if (accessToken) {
+      loginUser().catch((err) => console.log('Got err with preLogin', err));
+    }
+
+    setTimeout(() => {
+      setIsRootRdy(true);
+      setIsAuthRdy(true);
+    }, 800);
+  }, []);
 
   return (
-    <Theme theme={theme}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <GlobalStyle />
-          <ViewsController setTheme={setTheme} />
-        </BrowserRouter>
-      </Provider>
-    </Theme>
+    <main className="bg-[#010B00] h-screen dark:bg-white ">
+      <Router>
+        <Routes>
+          <Route element={isAuthRdy ? <AuthLayout /> : <AuthLoader />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+
+          <Route element={isRootRdy ? <RootLayout /> : <RootLoader />}>
+            <Route
+              path="/*"
+              element={<Home account={account as IUser} profile={profile as IUserProfile} addProfile={addProfile} />}
+            />
+          </Route>
+        </Routes>
+      </Router>
+    </main>
   );
 };
 

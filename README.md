@@ -1,41 +1,30 @@
-# Monsters - Web frontend
+# React + TypeScript + Vite
 
-Project is simple client made in react for monsters game.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## 1. How to start
+Currently, two official plugins are available:
 
-### Install dependencies
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-```shell
-npm install / yarn
+## Expanding the ESLint configuration
+
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+
+- Configure the top-level `parserOptions` property like this:
+
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
 ```
 
-### Prepare environment
-
-```shell
-npm run prepareHooks / yarn prepareHooks
-chmod +x .husky/pre-commit
-```
-
-## 2. How to build
-
-```shell
-npm run build / yarn build
-```
-
-If you even encounter strange build behavior, tsconfig is set to create build with cache. Set option `incremental` in
-tsConfig to false
-
-## 3. Required params in .env and .prod.env files
-
-```env
-REACT_APP_BACKEND = Server's http address
-REACT_APP_WS_BACKEND = Server's websocket address
-REACT_APP_REDIRECT_URL = Redirect url for oidc login. Currently, server has hardcodded url `http://localhost:3005/login`, which is where I host my react app for development. This WILL change in the future
-REACT_APP_CLIENT_SECRET = Oidc client's secret
-REACT_APP_CLIENT_ID = Oidc client's id
-```
-
-You can edit example.env, since it includes all required params
-
-## This project is using fontello icons. They can be found in /src/style/fontello. All credits go to their original authors
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list

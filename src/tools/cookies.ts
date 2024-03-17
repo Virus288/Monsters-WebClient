@@ -1,4 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
+import type { ETokenNames } from '../enums';
 import { ESameSiteParams } from '../enums';
 
 class CookieGenerator {
@@ -80,7 +81,8 @@ class CookieGenerator {
   }
 
   create(): void {
-    let domain: string = process.env.REACT_APP_HOME!;
+    let domain = import.meta.env.VITE_API_HOME as string;
+
     const isIp =
       /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     if (domain.includes('https://')) {
@@ -90,24 +92,25 @@ class CookieGenerator {
     }
 
     if (domain.includes(':')) {
-      domain = domain.split(':')[0] as string;
+      [domain] = domain.split(':');
     }
 
     if (!isIp.test(domain)) {
       domain = `.${domain}`;
     }
+
     document.cookie =
       `${this.name}=${this.value};` +
       `${this.expiresValue ? `expires=${new Date(Date.now() + this.expiresValue * 1000).toString()};` : ''}` +
       `${this.secureValue ? 'Secure;' : ''}` +
       `${this.sameSiteValue ? `SameSite=${this.sameSiteValue};` : ''}` +
-      `${`domain=${domain}`}` +
+      `domain=${domain}` +
       `${this.pathValue ? `path=${this.pathValue};` : ''}`;
   }
 }
 
 export default class Cookies {
-  getToken(target: string): string | undefined {
+  getToken(target: ETokenNames): string | undefined {
     return document.cookie
       .split('; ')
       .find((c) => c.startsWith(`${target}=`))
