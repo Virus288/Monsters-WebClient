@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -6,6 +6,8 @@ import type { IRegisterFormValues } from '../../../types';
 import { createAccount } from '../../../communication';
 
 const Register: React.FC = () => {
+  const [err, setErr] = useState<string | undefined>(undefined);
+
   const {
     register,
     watch,
@@ -15,7 +17,7 @@ const Register: React.FC = () => {
 
   const mutation = useMutation(createAccount, {
     // onSuccess: (data) => console.log(data.data),
-    // onError: (error: AxiosError | Error) => console.log(error.message),
+    onError: (error: Error) => setErr(error.message),
   });
 
   const onSubmit = handleSubmit((data) => {
@@ -23,7 +25,7 @@ const Register: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-[100%]   flex-1">
+    <div className="flex flex-col justify-center items-center min-h-[100%] flex-1" onClick={() => setErr(undefined)}>
       <Link to="/">
         <h2 className="text-7xl text-slate-400 md:text-8xl font-bold mb-10 ">
           <span className="text-violet-600">M</span>onsters
@@ -41,7 +43,7 @@ const Register: React.FC = () => {
               className=" border rounded w-full py-2 px-2 font-normal bg-dark-4 outline-none border-none focus:ring focus:ring-violet-800"
               {...register('login', { required: 'this field is required' })}
             />
-            {errors.login && <span className="text-rose-800 text-xs mt-1">{errors.login.message}</span>}
+            {err && <span className="text-rose-800 text-xs mt-1">{err}</span>}
           </label>
         </div>
         <div className="flex flex-col  gap-5 px-4 ">
