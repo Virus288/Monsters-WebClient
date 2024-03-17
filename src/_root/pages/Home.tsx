@@ -3,6 +3,7 @@ import Terminal from '../../components/Terminal';
 import { initApp } from '../../controllers';
 import { useFightsStore, useHistoryStore, useLogsStore, useMessagesStore } from '../../zustand/store';
 import type { IUser, IUserProfile } from '../../types';
+import WebSocket from '../../components/Websocket';
 
 const Home: React.FC<{
   account: IUser;
@@ -15,10 +16,14 @@ const Home: React.FC<{
   const addFight = useFightsStore((state) => state.addCurrentFight);
 
   useEffect(() => {
-    console.log('App init ?');
     initApp(addMessages, addLogs, profile, addFight)
       .then((logs) => {
-        const preparedLogs = logs.length > 0 ? logs.map((l) => l.message) : [];
+        const preparedLogs =
+          logs.length > 0
+            ? logs.map((l) => {
+                return { message: l.message, target: l.target };
+              })
+            : [];
         return initHistory(preparedLogs);
       })
       .catch((err) => {
@@ -28,6 +33,7 @@ const Home: React.FC<{
 
   return (
     <div className="h-full w-full flex justify-center ">
+      <WebSocket />
       <Terminal
         profile={profile}
         account={account}

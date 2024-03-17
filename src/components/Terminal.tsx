@@ -32,7 +32,7 @@ const Terminal = forwardRef((props: TerminalProps) => {
 
   useEffect(() => {
     const msg = initMessage();
-    add(msg);
+    add(msg.target, msg.message);
 
     if (!profile?.initialized && profile && account.login) {
       uninitializedProfile(account.login, add);
@@ -67,7 +67,8 @@ const Terminal = forwardRef((props: TerminalProps) => {
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === 'Enter') {
       setInputValue('');
-      add(input);
+      add(username as string, input);
+
       newUserCommand(
         input,
         username as string,
@@ -81,7 +82,7 @@ const Terminal = forwardRef((props: TerminalProps) => {
       ).catch((err) => {
         console.log('err');
         console.log(err);
-        add(`${(err as Error).message}`);
+        add('System', `${(err as Error).message}`);
       });
       terminalRef?.scrollTo({
         top: terminalRef?.scrollHeight ?? 99999,
@@ -94,12 +95,12 @@ const Terminal = forwardRef((props: TerminalProps) => {
 
   return (
     <div className="terminal  " ref={setTerminalRef} onClick={focusInput}>
-      {history.map((line, index) => {
+      {history.map((c, index) => {
         // const action = Commands[target as keyof typeof Commands];
 
         return (
-          <div className="terminal__line" key={`terminal-line-${index}-${line}`}>
-            {line}
+          <div className="terminal__line" key={`terminal-line-${index}-${c.message}`}>
+            {c.target !== undefined && c.target !== '' ? `${c.target}: ${c.message}` : c.message}
           </div>
         );
       })}
@@ -123,8 +124,8 @@ const Terminal = forwardRef((props: TerminalProps) => {
           button={<Button className="bg-rose-900 hover:bg-rose-800 font-semibold">Report Bug</Button>}
           triggerFn={() => {
             reportBug(bugReport)
-              .then(() => add('Bug reported'))
-              .catch(() => add("Couldn't send bug report"));
+              .then(() => add('System', 'Bug reported'))
+              .catch(() => add('System', "Couldn't send bug report"));
           }}
         >
           <ReportBugForm setBugReport={setBugReport} />

@@ -3,6 +3,7 @@ import type { IDefaultResponse } from './generic';
 export interface ILog {
   _id: string;
   message: string;
+  target: string;
   date: string;
 }
 

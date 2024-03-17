@@ -26,9 +26,13 @@ const baseCommands: IAvailableCommands[] = [
   { action: EUserActions.Exit.toLocaleLowerCase() },
 ];
 
-const prepareAdd = async (add: (command: string) => void, input: string): Promise<void> => {
-  add(input);
-  await saveLog(input);
+const prepareAdd = async (
+  add: (target: string, command: string) => void,
+  target: string,
+  input: string,
+): Promise<void> => {
+  add(target, input);
+  await saveLog(target, input);
 };
 
 const getAvailableCommands = (
@@ -72,36 +76,40 @@ const getAvailableCommands = (
   }
 };
 
-const chooseRace = async (race: string, add: (output: string) => Promise<void>): Promise<void> => {
+const chooseRace = async (race: string, add: (target: string, output: string) => void): Promise<void> => {
   await initProfile(race as EUserRace);
-  return add(`Jessica [NPC]: Great. Looks like I've got everything I need.
+  return add(
+    'Jessica [NPC]',
+    `Great. Looks like I've got everything I need.
               You are not officially registered adventurer. If you want to take any quests, you can find on your left on job board. 
-              Please be careful. We lost too many people last year`);
+              Please be careful. We lost too many people last year`,
+  );
 };
 
 const renderHelp = (
-  add: (output: string) => void,
+  add: (target: string, output: string) => void,
   profile: IUserProfile,
   username: string,
   fight: IFightEntity | undefined,
 ): void => {
   const commands = getAvailableCommands(profile, username, fight);
-  add('Available commands:');
+  add('System', 'Available commands:');
 
   commands.forEach((c) => {
     setTimeout(() => {
       add(
+        '',
         `- ${c.action} ${c.target ? `[${c.target.join(' / ')}]` : ''} ${c.secondTarget ? `[${c.secondTarget.join(' / ')}]` : ''} ${c.thirdTarget ? `[${c.thirdTarget.join(' / ')}]` : ''}`,
       );
     }, 100);
   });
 };
 
-const renderAvailableRaces = (add: (output: string) => void): void => {
-  add('Available races:');
+const renderAvailableRaces = (add: (target: string, output: string) => void): void => {
+  add('System', 'Available races:');
   Object.values(EUserRace).forEach((c) => {
     setTimeout(() => {
-      add(`- ${c}`);
+      add('System', `- ${c}`);
     }, 100);
   });
 };
@@ -156,7 +164,7 @@ const formatInput = (
 export const newUserCommand = async (
   command: string,
   username: string,
-  add: (output: string) => void,
+  add: (target: string, output: string) => void,
   clearTerminal: () => void,
   profile: IUserProfile,
   addProfile: (profile: IUserProfile) => void,
@@ -168,10 +176,10 @@ export const newUserCommand = async (
   const action = prepared[0];
 
   if (!action) {
-    add("Incorrect or not allowed command. Type 'help' to see all available commands");
+    add('System', "Incorrect or not allowed command. Type 'help' to see all available commands");
     return;
   }
-  await saveLog(command);
+  await saveLog('', command);
 
   switch (action) {
     case EUserActions.Help:
@@ -182,48 +190,48 @@ export const newUserCommand = async (
         const data = await leaveFight();
         addProfile({ ...profile, ...data.data.state });
         removeCurrentFight();
-        await prepareAdd(add, 'Fight left');
+        await prepareAdd(add, '', 'Fight left');
       } else {
-        await prepareAdd(add, "Incorrect 'leave' target");
+        await prepareAdd(add, '', "Incorrect 'leave' target");
       }
       break;
     case EUserActions.Send:
       if (prepared[1].toLowerCase() === 'message') {
         if (!prepared[2]) {
-          await prepareAdd(add, 'No receiver provided');
+          await prepareAdd(add, '', 'No receiver provided');
         } else if (!prepared[3]) {
-          await prepareAdd(add, 'No message provided');
+          await prepareAdd(add, '', 'No message provided');
         } else {
           await sendMessage(prepared[2], prepared[3]);
-          await prepareAdd(add, 'Message sent');
+          await prepareAdd(add, 'System', 'Message sent');
         }
       } else {
-        await prepareAdd(add, 'Sending other elements than messages is not supported');
+        await prepareAdd(add, '', 'Sending other elements than messages is not supported');
       }
       break;
     case EUserActions.Create:
       if (prepared[1].toLowerCase() === 'fight') {
         if (prepared[2] !== 'against') {
-          await prepareAdd(add, "Incorrect command. Type 'help' to see all available commands");
+          await prepareAdd(add, '', "Incorrect command. Type 'help' to see all available commands");
           return;
         }
         const data = await createFight(prepared[3]);
         addProfile({ ...profile, ...data.data.state });
         const activeFight = await getActiveFight();
         addFight(activeFight.data.data[0]);
-        await prepareAdd(add, 'Fight created');
+        await prepareAdd(add, '', 'Fight created');
       } else {
-        await prepareAdd(add, 'Sending other elements than messages is not supported');
+        await prepareAdd(add, '', 'Sending other elements than messages is not supported');
       }
       break;
     case EUserActions.Attack:
       if (!prepared[1]) {
-        await prepareAdd(add, 'No enemy chosen');
+        await prepareAdd(add, '', 'No enemy chosen');
         return;
       }
       await handleAttackEnemy(
         prepared[1],
-        async (command: string) => prepareAdd(add, command),
+        async (target: string, command: string) => prepareAdd(add, target, command),
         profile,
         addProfile,
         removeCurrentFight,
@@ -231,12 +239,12 @@ export const newUserCommand = async (
       break;
     case EUserActions.Choose:
       if (!prepared[1] || prepared[1].toLowerCase() !== 'race') {
-        await prepareAdd(add, 'Incorrect command');
+        await prepareAdd(add, '', 'Incorrect command');
       } else if (!Object.values(EUserRace).includes(prepared[2].toLowerCase() as EUserRace)) {
-        await prepareAdd(add, 'Incorrect race');
+        await prepareAdd(add, '', 'Incorrect race');
         renderAvailableRaces(add);
       } else {
-        await chooseRace(prepared[2], async (command: string) => prepareAdd(add, command));
+        await chooseRace(prepared[2], add);
       }
       break;
     case EUserActions.Show:
@@ -246,7 +254,7 @@ export const newUserCommand = async (
       clearTerminal();
       break;
     default:
-      await prepareAdd(add, "Incorrect command. Type 'help' to see all available commands");
+      await prepareAdd(add, '', "Incorrect command. Type 'help' to see all available commands");
       break;
   }
 };

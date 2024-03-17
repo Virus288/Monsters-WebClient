@@ -31,9 +31,9 @@ export const useHistoryStore = create<types.IHistoryStore>((set) => ({
     set((state) => ({
       history: [...state.history, ...commands],
     })),
-  addToHistory: (output): void =>
+  addToHistory: (target, message): void =>
     set((state) => ({
-      history: [...state.history, output],
+      history: [...state.history, { target, message }],
     })),
   clearHistory: (): void => {
     set(() => ({

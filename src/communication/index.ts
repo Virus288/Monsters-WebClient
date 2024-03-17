@@ -103,9 +103,9 @@ export const getUserProfile = async (name: string): Promise<AxiosResponse<types.
 };
 
 // #TODO Save logs with their ids in local storage and fetch logs based on latest _id
-export const saveLog = async (message: string): Promise<AxiosResponse<types.IAddLogs>> => {
+export const saveLog = async (target: string, message: string): Promise<AxiosResponse<types.IAddLogs>> => {
   try {
-    return await getHttpClient().post('/logs', { message, target: 'banana' });
+    return await getHttpClient().post('/logs', { message, target });
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
