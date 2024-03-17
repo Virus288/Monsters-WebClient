@@ -105,7 +105,7 @@ export const getUserProfile = async (name: string): Promise<AxiosResponse<types.
 // #TODO Save logs with their ids in local storage and fetch logs based on latest _id
 export const saveLog = async (message: string): Promise<AxiosResponse<types.IAddLogs>> => {
   try {
-    return await getHttpClient().post('/logs', { message });
+    return await getHttpClient().post('/logs', { message, target: 'banana' });
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
@@ -182,7 +182,7 @@ export const revokeToken = async (token: string, type: ETokenType): Promise<Axio
 
 export const createFight = async (enemy: string): Promise<AxiosResponse<types.ICreateFightResponse>> => {
   try {
-    return await getHttpClient().post('debug/fights/create', { team: [enemy] });
+    return await getHttpClient().post('/debug/fights/create', { team: [enemy] });
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
@@ -190,16 +190,16 @@ export const createFight = async (enemy: string): Promise<AxiosResponse<types.IC
 
 export const leaveFight = async (): Promise<AxiosResponse<types.IDefaultResponse>> => {
   try {
-    return await getHttpClient().get('fights/leave', {});
+    return await getHttpClient().get('/fights/leave', {});
   } catch (err) {
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
 };
 
-export const handleBugReport = async (): Promise<void> => {
-  // eslint-disable-next-line compat/compat
-  return new Promise((resolve) => {
-    console.log('BUG REPORT HAS BEEN SEND');
-    resolve(undefined);
-  });
+export const reportBug = async (message: string): Promise<AxiosResponse<types.IDefaultResponse>> => {
+  try {
+    return await getHttpClient().post('/bug', { message });
+  } catch (err) {
+    throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
+  }
 };

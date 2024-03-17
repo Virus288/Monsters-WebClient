@@ -7,6 +7,7 @@ import Portal from './Portal';
 import { Button } from './ui/button';
 import ReportBugForm from './forms/ReportBugForm';
 import { initMessage, uninitializedProfile } from '../controllers/responses';
+import { reportBug } from '../communication';
 
 const Terminal = forwardRef((props: TerminalProps) => {
   const inputRef = useRef<HTMLInputElement>();
@@ -89,6 +90,8 @@ const Terminal = forwardRef((props: TerminalProps) => {
     }
   };
 
+  const [bugReport, setBugReport] = useState<string>('');
+
   return (
     <div className="terminal  " ref={setTerminalRef} onClick={focusInput}>
       {history.map((line, index) => {
@@ -118,9 +121,13 @@ const Terminal = forwardRef((props: TerminalProps) => {
       <div className="fixed top-2 right-[170px]">
         <Portal
           button={<Button className="bg-rose-900 hover:bg-rose-800 font-semibold">Report Bug</Button>}
-          triggerFn={(): void => console.log('Function not implemented')}
+          triggerFn={() => {
+            reportBug(bugReport)
+              .then(() => add('Bug reported'))
+              .catch(() => add("Couldn't send bug report"));
+          }}
         >
-          <ReportBugForm />
+          <ReportBugForm setBugReport={setBugReport} />
         </Portal>
       </div>
     </div>

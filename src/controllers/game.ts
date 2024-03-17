@@ -38,7 +38,10 @@ const getAvailableCommands = (
 ): IAvailableCommands[] => {
   if (!profile.initialized) {
     return baseCommands.filter(
-      (c) => (c.action as EUserActions) === EUserActions.Choose || (c.action as EUserActions) === EUserActions.Help,
+      (c) =>
+        (c.action as EUserActions) === EUserActions.Choose ||
+        (c.action as EUserActions) === EUserActions.Help ||
+        (c.action as EUserActions) === EUserActions.Clear,
     );
   }
 
