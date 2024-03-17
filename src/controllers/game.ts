@@ -20,7 +20,7 @@ const baseCommands: IAvailableCommands[] = [
     action: EUserActions.Create.toLocaleLowerCase(),
     target: ['fight'],
     secondTarget: ['against'],
-    thirdTarget: ['username'],
+    thirdTarget: ['username', ('test enemy is bandit')],
   },
   { action: EUserActions.Clear.toLocaleLowerCase() },
   { action: EUserActions.Exit.toLocaleLowerCase() },
@@ -59,19 +59,19 @@ const getAvailableCommands = (
     default:
       return fight
         ? baseCommands
-            .filter((c) => (c.action as EUserActions) !== EUserActions.Choose)
-            .map((a) => {
-              if ((a.action as EUserActions) !== EUserActions.Attack) return a;
-              let enemyTeam: IFightTeam[] | undefined;
+          .filter((c) => (c.action as EUserActions) !== EUserActions.Choose)
+          .map((a) => {
+            if ((a.action as EUserActions) !== EUserActions.Attack) return a;
+            let enemyTeam: IFightTeam[] | undefined;
 
-              fight.states.current.teams.forEach((t) => {
-                if (!t.find((team) => team.character === userName)) {
-                  enemyTeam = t;
-                }
-              });
+            fight.states.current.teams.forEach((t) => {
+              if (!t.find((team) => team.character === userName)) {
+                enemyTeam = t;
+              }
+            });
 
-              return { ...a, target: enemyTeam ? enemyTeam.map((e) => e.character) : [] };
-            })
+            return { ...a, target: enemyTeam ? enemyTeam.map((e) => e.character) : [] };
+          })
         : baseCommands.filter((c) => (c.action as EUserActions) !== EUserActions.Choose);
   }
 };

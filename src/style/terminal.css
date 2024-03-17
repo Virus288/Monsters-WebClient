@@ -38,8 +38,8 @@
 .terminal__line {
     line-height: 2;
     white-space: pre-wrap;
-
-    max-width: 40%;
+width: 100%;
+    max-width: 680px;
 }
 
 .terminal__prompt {
