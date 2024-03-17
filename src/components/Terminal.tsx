@@ -31,8 +31,10 @@ const Terminal = forwardRef((props: TerminalProps) => {
   }, []);
 
   useEffect(() => {
-    const msg = initMessage();
-    add(msg.target, msg.message);
+    if (history.length === 0) {
+      const msg = initMessage();
+      add(msg.target, msg.message);
+    }
 
     if (!profile?.initialized && profile && account.login) {
       uninitializedProfile(account.login, add);
@@ -98,19 +100,21 @@ const Terminal = forwardRef((props: TerminalProps) => {
       {history.map((c, index) => {
         // const action = Commands[target as keyof typeof Commands];
 
-if(c.target !== undefined && c.target !== '' ){
-  return (
-     <div className="terminal__line" key={`terminal-line-${index}-${c.message}`}>
-      <span ><span className='font-semibold text-violet-200'>{c.target} : </span>{c.message}</span>
-      </div>
-  );
-}
-    return (
-     <div className="terminal__line" key={`terminal-line-${index}-${c.message}`}>
-      <span>{c.message}</span>
-      </div>
-  );
-
+        if (c.target !== undefined && c.target !== '') {
+          return (
+            <div className="terminal__line" key={`terminal-line-${index}-${c.message}`}>
+              <span>
+                <span className="font-semibold text-violet-200">{c.target} : </span>
+                {c.message}
+              </span>
+            </div>
+          );
+        }
+        return (
+          <div className="terminal__line" key={`terminal-line-${index}-${c.message}`}>
+            <span>{c.message}</span>
+          </div>
+        );
       })}
       <div className="terminal__prompt">
         <div className="terminal__prompt__label">{promptLabel}</div>
