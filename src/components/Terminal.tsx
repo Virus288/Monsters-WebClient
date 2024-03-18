@@ -11,6 +11,7 @@ import { reportBug } from '../communication';
 
 const Terminal = forwardRef((props: TerminalProps) => {
   const inputRef = useRef<HTMLInputElement>();
+  const [isReportFormOpen, setIsReportFormOpen] = useState(false);
 
   const [input, setInputValue] = useState<string>('');
   const [terminalRef, setDomNode] = useState<HTMLDivElement>();
@@ -58,6 +59,8 @@ const Terminal = forwardRef((props: TerminalProps) => {
   useEffect(() => {
     focusInput();
   });
+
+
 
   /**
    * When user types something, update input value
@@ -133,10 +136,16 @@ const Terminal = forwardRef((props: TerminalProps) => {
 
       <div className="fixed top-2 right-[170px]">
         <Portal
-          button={<Button className="bg-rose-900 hover:bg-rose-800 font-semibold">Report Bug</Button>}
+
+          handleClose={() => setIsReportFormOpen(prevSate => !prevSate)}
+          confirmButtonLabel='Submit'
+          cancelButtonLabel='Cancel'
+          openButton={<Button className="bg-rose-900 hover:bg-rose-800 font-semibold" onClick={() => setIsReportFormOpen(true)} >Report Bug</Button>}
+          isPortalOpen={isReportFormOpen}
           triggerFn={() => {
             reportBug(bugReport)
               .then(() => add('System', 'Bug reported'))
+              .then(setIsReportFormOpen(false))
               .catch(() => add('System', "Couldn't send bug report"));
           }}
         >
