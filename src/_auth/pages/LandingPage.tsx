@@ -7,15 +7,15 @@ import Portal from '../../components/Portal';
 
 const LandingPage: React.FC = () => {
 
-  const [isPrivacyPopupVisible, setIsPrivacyPopupVisible] = useState(true);
+  const [isPrivacyPopupVisible, setIsPrivacyPopupVisible] = useState(false);
 
 
   useEffect(() => {
     const privacyPolicy = localStorage.getItem('privacyPolicy');
 
 
-    if (privacyPolicy) {
-      setIsPrivacyPopupVisible(false);
+    if (!privacyPolicy) {
+      setIsPrivacyPopupVisible(true);
     }
 
 
