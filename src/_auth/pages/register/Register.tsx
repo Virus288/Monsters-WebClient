@@ -34,9 +34,8 @@ const Register: React.FC = () => {
     const hasLowerCase = /[a-z]/.test(val);
     const hasUpperCase = /[A-Z]/.test(val);
     const hasLetter = /[a-zA-Z]/.test(val);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(val);
 
-    return hasDigit && hasLowerCase && hasUpperCase && hasLetter && hasSpecialChar;
+    return hasDigit && hasLowerCase && hasUpperCase && hasLetter;
   };
 
 
@@ -85,7 +84,7 @@ const Register: React.FC = () => {
               type="password"
               className="border rounded w-full py-2 px-2 font-normal bg-dark-4 outline-none border-none focus:ring focus:ring-violet-800 text-slate-200 placeholder:text-xs"
               {...register('password', {
-                validate: (val) => validatePassword(val) || 'Password should contain at least 8 characters with at least 1 digit, 1 letter, 1 upper case letter, 1 lower case letter, and 1 special character',
+                validate: (val) => validatePassword(val) || 'Password should contain 8 characters with at least 1 digit, 1 letter, 1 upper case letter, 1 lower case letter.',
               })}
             />
             {errors.password && <span className="text-rose-800  text-xs mt-1 px-2 md:px-0 max-w-[280px] md:max-w[400px] lg:max-w-[390px]  mx-auto  ">{errors.password.message}</span>}
