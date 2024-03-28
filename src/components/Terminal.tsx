@@ -60,8 +60,6 @@ const Terminal = forwardRef((props: TerminalProps) => {
     focusInput();
   });
 
-
-
   /**
    * When user types something, update input value
    */
@@ -145,7 +143,7 @@ const Terminal = forwardRef((props: TerminalProps) => {
           triggerFn={() => {
             reportBug(bugReport)
               .then(() => add('System', 'Bug reported'))
-              .then(setIsReportFormOpen(false))
+              .then(() => setIsReportFormOpen(false))
               .catch(() => add('System', "Couldn't send bug report"));
           }}
         >
