@@ -248,7 +248,6 @@ export const newUserCommand = async (
       } else {
         const data = await chooseRace(prepared[2], add);
         addProfile({ ...profile, ...data.data.state })
-        console.log(data.data.state)
       }
       break;
     case EUserActions.Show:
