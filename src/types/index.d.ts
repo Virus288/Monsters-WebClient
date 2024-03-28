@@ -8,3 +8,4 @@ export * from './commands';
 export * from './fights';
 export * from './websocket';
 export * from './logs';
+export * from './deleteAccountForm';

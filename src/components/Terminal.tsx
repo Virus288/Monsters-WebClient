@@ -1,17 +1,21 @@
 import '../style/terminal.css';
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import type { TerminalProps } from '../types';
-import { newUserCommand } from '../controllers';
+import { logout, newUserCommand } from '../controllers';
 import { useAccountStore, useFightsStore, useHistoryStore } from '../zustand/store';
+import { IoSettings } from "react-icons/io5";
 import Portal from './Portal';
 import { Button } from './ui/button';
 import ReportBugForm from './forms/ReportBugForm';
 import { initMessage, uninitializedProfile } from '../controllers/responses';
-import { reportBug } from '../communication';
+import { deleteAccount, reportBug } from '../communication';
+import UserAccountForm from './forms/UserAccountForm';
 
 const Terminal = forwardRef((props: TerminalProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const [isReportFormOpen, setIsReportFormOpen] = useState(false);
+  const [isSettingsFormOpen, setIsSettingsFormOpen] = useState(false)
+
 
   const [input, setInputValue] = useState<string>('');
   const [terminalRef, setDomNode] = useState<HTMLDivElement>();
@@ -132,9 +136,9 @@ const Terminal = forwardRef((props: TerminalProps) => {
         </div>
       </div>
 
-      <div className="fixed top-2 right-[170px]">
+      <div className="fixed top-2 right-[170px] flex gap-x-6">
         <Portal
-
+          className="min-w-[270px]  bg-dark-2 border-dark-4 md:min-w-[700px] lg:min-w-[900px] h-[500px]  flex flex-col justify-between gap-8  "
           handleClose={() => setIsReportFormOpen(prevSate => !prevSate)}
           confirmButtonLabel='Submit'
           cancelButtonLabel='Cancel'
@@ -149,8 +153,23 @@ const Terminal = forwardRef((props: TerminalProps) => {
         >
           <ReportBugForm setBugReport={setBugReport} />
         </Portal>
+        <Portal
+          className="min-w-[250px]  bg-dark-2 border-dark-4 md:min-w-[350px] lg:min-w-[400px] h-[380px]  flex flex-col justify-between gap-8  "
+          isPortalOpen={isSettingsFormOpen}
+          openButton={<IoSettings className='mr-4 w-6 h-auto' onClick={() => setIsSettingsFormOpen(true)} />}
+
+          cancelButtonLabel='Cancel'
+          deleteButtonLabel="Delete account"
+          handleClose={() => setIsSettingsFormOpen(prevState => !prevState)}
+          triggerFn={(data) => {
+            deleteAccount(data)
+              .then(() => logout())
+          }}
+        >
+          <UserAccountForm userData={{ login: account.login, race: profile.race, lvl: profile.lvl }} />
+        </Portal>
       </div>
-    </div>
+    </div >
   );
 });
 

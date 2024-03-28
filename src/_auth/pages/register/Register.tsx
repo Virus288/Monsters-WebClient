@@ -7,10 +7,11 @@ import { createAccount } from '../../../communication';
 
 const Register: React.FC = () => {
   const [err, setErr] = useState<string | undefined>(undefined);
+  const [successMessage, setSuccessMessage] = useState<string>('')
 
   const {
     register,
-    watch,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IRegisterFormValues>();
@@ -18,6 +19,10 @@ const Register: React.FC = () => {
   const mutation = useMutation(createAccount, {
     // onSuccess: (data) => console.log(data.data),
     onError: (error: Error) => setErr(error.message),
+    onSuccess: () => {
+      reset();
+      setSuccessMessage('Your account has been created')
+    }
   });
 
   const onSubmit = handleSubmit((data) => {
@@ -34,8 +39,9 @@ const Register: React.FC = () => {
     const hasLowerCase = /[a-z]/.test(val);
     const hasUpperCase = /[A-Z]/.test(val);
     const hasLetter = /[a-zA-Z]/.test(val);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(val);
 
-    return hasDigit && hasLowerCase && hasUpperCase && hasLetter;
+    return hasDigit && hasLowerCase && hasUpperCase && hasLetter && hasSpecialChar;
   };
 
 
@@ -84,13 +90,14 @@ const Register: React.FC = () => {
               type="password"
               className="border rounded w-full py-2 px-2 font-normal bg-dark-4 outline-none border-none focus:ring focus:ring-violet-800 text-slate-200 placeholder:text-xs"
               {...register('password', {
-                validate: (val) => validatePassword(val) || 'Password should contain 8 characters with at least 1 digit, 1 letter, 1 upper case letter, 1 lower case letter.',
+                validate: (val) => validatePassword(val) || 'Password should contain at least 8 characters with at least 1 digit, 1 letter, 1 upper case letter, 1 lower case letter, and 1 special character',
               })}
             />
             {errors.password && <span className="text-rose-800  text-xs mt-1 px-2 md:px-0 max-w-[280px] md:max-w[400px] lg:max-w-[390px]  mx-auto  ">{errors.password.message}</span>}
           </label>
 
         </div>
+        {successMessage && <span className='text-violet-800 font-semibold text-base text-center '>{successMessage}</span>}
         <span className="text-slate-400 mx-auto text-base mt-3 mb-1">
           Already have an account?
           <Link to="/" className="ml-1 text-violet-400 font-semibold">
@@ -99,8 +106,9 @@ const Register: React.FC = () => {
         </span>
         <span className="">
           <button
+            disabled={mutation.isLoading}
             type="submit"
-            className="bg-violet-600 rounded-md text-white min-w-full p-2 font-bold hover:bg-violet-500 text-xl"
+            className="bg-violet-600 rounded-md text-white min-w-full p-2 font-bold hover:bg-violet-500 text-xl disabled:opacity-70 disabled:cursor-not-allowed"
           >
             Create Account
           </button>
