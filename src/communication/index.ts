@@ -203,3 +203,14 @@ export const reportBug = async (message: string): Promise<AxiosResponse<types.ID
     throw new Error((err as AxiosError<{ error: Error }>).response!.data.error.message);
   }
 };
+
+
+export const deleteAccount = async (password: string): Promise<AxiosResponse> => {
+
+  try {
+    const response = await getHttpClient().delete('/users', password);
+    return response;
+  } catch (err) {
+    throw new Error('something went wrong...');
+  }
+};
