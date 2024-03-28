@@ -1,10 +1,9 @@
 import nlp from 'compromise';
 import { ECharacterState, EShowOptions, EUserActions, EUserRace } from '../enums';
 import { handleAttackEnemy, show as showFn } from './responses';
-import type { IAvailableCommands, IFightEntity, IFightTeam, IUserProfile } from '../types';
+import type { IAvailableCommands, IFightEntity, IFightTeam, IUserProfile, IDefaultResponse } from '../types';
 import { createFight, getActiveFight, initProfile, leaveFight, saveLog, sendMessage } from '../communication';
 import type { AxiosResponse } from 'axios';
-import type { IDefaultResponse } from '../types';
 
 const baseCommands: IAvailableCommands[] = [
   { action: EUserActions.Attack, target: ['enemy'] },
